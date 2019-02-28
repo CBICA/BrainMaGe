@@ -10,3 +10,5 @@ A Skull Stripping pipeline for pathological brains.
 - [ ] Create Loss Functions
 - [ ] Create TF Dataset Reader with whatever is required
 - [ ] Run Tests
+- [x] Optimizers
+- [x] loss metrics
