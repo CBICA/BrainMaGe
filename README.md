@@ -4,7 +4,7 @@ A Skull Stripping pipeline for pathological brains.
 - [ ] Reshape images properly to 128*128*128 with proper resampling and padding
 - [ ] Pre-process Images
 - [ ] Create TFRecord for Image
-- [ ] Create TFRecord Reader
+- [x] Create TFRecord Reader
 - [ ] Create Helper Blocks for Network
 - [ ] Create Network
 - [ ] Create Loss Functions
