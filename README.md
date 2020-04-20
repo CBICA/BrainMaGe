@@ -10,6 +10,8 @@ Penn-BET -- model -- model.py           (The networks are defined in here)
                   -- data.py            (The dataloader for the particular problem)
                   -- losses.py          (Some of the loss functions collected over the years)
                   -- optimizers.py      (Fetching optimizers)
+                  -- preprocess_data.py (Some helper functions for preocessing)
+                  -- preprocess.py      (Preprocessing the data files)
          -- train.py                    (The function for training)
          -- train_params.cfg            (Config file for training)
 ```
@@ -29,3 +31,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
                ...
                patient_n -- ...
 ```
+
+In order to preprocess the patients:
+
+`python preprocess.py -i input_path -o output_path -t threads`
