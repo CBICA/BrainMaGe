@@ -26,6 +26,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
                          -- patient_1_t2.nii.gz
                          -- patient_1_t1ce.nii.gz
                          -- patient_1_flair.nii.gz
+                         -- patient_1_mask.nii.gz
                patient_2 -- ...
                ...
                ...
@@ -34,4 +35,4 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 
 In order to preprocess the patients:
 
-`python preprocess.py -i input_path -o output_path -t threads`
+```python preprocess.py -i input_path -o output_path -t threads```
