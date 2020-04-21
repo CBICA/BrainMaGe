@@ -53,7 +53,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 Use the following command for preprocessing:
 
 ```
-./env/python utils/preprocess.py -i input_path -o output_path -t threads
+./env/python utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
 
 
