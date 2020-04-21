@@ -50,7 +50,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 
 ## Preprocessing Data
 
-Use the following command for preprocessing:
+Use the following command for preprocessing, which will process all the modalities for a given subject together and write it in the specified output location:
 
 ```
 ./env/python utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
