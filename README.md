@@ -1,4 +1,31 @@
-Something to 3D Pytorch
+## Preprocessing Data
+
+Use the following command for preprocessing:
+
+```python preprocess.py -i input_path -o output_path -t threads```
+
+
+## Arranging Data
+
+The data needs to be preprocessed before fed to the network.
+
+The structure of the data needs to be as follows:
+If the data is structure like this, there is no need to provide the csv to the ```dataloader```.
+Although this is something that can be improved to make the ```dataloader``` more dynamic to support federated learning better, this is up for development.
+```
+Data_folder -- patient_1 -- patient_1_t1.nii.gz
+                         -- patient_1_t2.nii.gz
+                         -- patient_1_t1ce.nii.gz
+                         -- patient_1_flair.nii.gz
+                         -- patient_1_mask.nii.gz
+               patient_2 -- ...
+               ...
+               ...
+               patient_n -- ...
+```
+
+
+## Training
 
 The details of the files are as follows
 
@@ -15,24 +42,3 @@ Penn-BET -- model -- model.py           (The networks are defined in here)
          -- train.py                    (The function for training)
          -- train_params.cfg            (Config file for training)
 ```
-
-The data needs to be preprocessed before fed to the network.
-
-The structure of the data needs to be as follows:
-If the data is structure like this, there is no need to provide the csv to the dataloader.
-Although this is something that can be improved to make the dataloader more dynamic to support federated learning better, this is up for development.
-```
-Data_folder -- patient_1 -- patient_1_t1.nii.gz
-                         -- patient_1_t2.nii.gz
-                         -- patient_1_t1ce.nii.gz
-                         -- patient_1_flair.nii.gz
-                         -- patient_1_mask.nii.gz
-               patient_2 -- ...
-               ...
-               ...
-               patient_n -- ...
-```
-
-In order to preprocess the patients:
-
-```python preprocess.py -i input_path -o output_path -t threads```
