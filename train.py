@@ -69,25 +69,26 @@ def main():
 
     # PRINT PARSED ARGS
     print("\n\n")
-    print("Training Folder Dir     :", params['train_dir'])
-    print("Validation Dir          :", params['validation_dir'])
-    print("Epoch Dir               :", params['epoch_dir'])
-    print("Model Directory         :", params['model_dir'])
-    print("Mode                    :", params['mode'])
-    print("Number of modalities    :", params['num_channels'])
-    print("Modalities              :", params['modalities'])
-    print("Number of classes       :", params['num_classes'])
-    print("Max Number of epochs    :", params['max_epochs'])
-    print("Batch size              :", params['batch_size'])
-    print("Optimizer               :", params['optimizer'])
-    print("Learning Rate           :", params['learning_rate'])
-    print("Learning Rate Milestones:", params['lr_milestones'])
-    print("Patience to decay       :", params['decay_milestones'])
-    print("Early Stopping Patience :", params['early_stop_patience'])
-    print("Depth Layers            :", params['layers'])
-    print("Model used              :", params['model'])
-    print("Do you want to resume   :", params['load'])
-    print("Load Weights Dir        :", params['load_weights'])
+    print("Training Folder Dir    :", params['train_dir'])
+    print("Validation Dir         :", params['validation_dir'])
+    print("Epoch Dir              :", params['epoch_dir'])
+    print("Model Directory        :", params['model_dir'])
+    print("Mode                   :", params['mode'])
+    print("Number of modalities   :", params['num_modalities'])
+    print("Modalities             :", params['modalities'])
+    print("Number of classes      :", params['num_classes'])
+    print("Max Number of epochs   :", params['max_epochs'])
+    print("Batch size             :", params['batch_size'])
+    print("Optimizer              :", params['optimizer'])
+    print("Learning Rate          :", params['learning_rate'])
+    print("Decay Rate             :", params['decay_rate'])
+    print("Patience to decay      :", params['lr_decay_patience'])
+    print("Early Stopping Patience:", params['early_stop_patience'])
+    print("Depth Layers           :", params['layers'])
+    print("Verbosity              :", params['verbose'])
+    print("Model used             :", params['model'])
+    print("Do you want to resume  :", params['load'])
+    print("Load Weights Dir       :", params['load_weights'])
     sys.stdout.flush()
 
     # We generate CSV for training if not provided
@@ -117,12 +118,13 @@ def main():
     dataset_valid = WholeTumorDataset(validation_csv, params)
     validation_loader = DataLoader(dataset_valid, batch_size=1, shuffle=True,
                                    num_workers=1)
-    model = resunet(int(params['num_channels']),
+    model = resunet(int(params['num_modalities']),
                     int(params['num_classes']),
                     int(params['base_filters']))
 
     print("Training Data : ", len(train_loader.dataset))
     print("Test Data :", len(validation_loader.dataset))
+    print("Type of num:", type(params['num_modalities']))
     sys.stdout.flush()
 
     print("Current Device : ", torch.cuda.current_device())
@@ -509,7 +511,3 @@ def main():
         to_keep_list = temp_list.argsort()[:int(params['save_best'])]
             
         print("temp list :", temp_list)
-
-if __name__ == "__main__":
-    main()
-

@@ -9,9 +9,9 @@ Created on Sat Apr 18 21:54:06 2020
 import torch.nn.functional as F
 import torch.nn as nn
 import torch
-from .seg_modules import in_conv, DownsamplingModule, EncodingModule
-from .seg_modules import UpsamplingModule, DecodingModule
-from .seg_modules import out_conv, FCNUpsamplingModule
+from seg_modules import in_conv, DownsamplingModule, EncodingModule
+from seg_modules import UpsamplingModule, DecodingModule
+from seg_modules import out_conv, FCNUpsamplingModule
 
 
 class unet(nn.Module):
