@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr 18 21:54:06 2020
+Created on Sun May 24 06:16:01 2020
 
 @author: siddhesh
 """
 
-import torch.nn.functional as F
+import sys
 import torch.nn as nn
 import torch
-from seg_modules import in_conv, DownsamplingModule, EncodingModule
-from seg_modules import UpsamplingModule, DecodingModule
-from seg_modules import out_conv, FCNUpsamplingModule
+from .seg_modules import in_conv, DownsamplingModule, EncodingModule
+from .seg_modules import UpsamplingModule, DecodingModule
+from .seg_modules import out_conv, FCNUpsamplingModule
 
 
 class unet(nn.Module):
@@ -144,4 +144,17 @@ class fcn(nn.Module):
         u1 = self.us_0(x1)
         x = torch.cat([u5, u4, u3, u2, u1], dim=1)
         x = self.conv_0(x)
-        return F.sigmoid(x)
+        return torch.sigmoid(x)
+
+
+def fetch_model(modelname, num_channels, num_classes, num_filters):
+    if modelname == 'resunet':
+        model = resunet(num_channels, num_classes, num_filters)
+    elif modelname == 'unet':
+        model = resunet(num_channels, num_classes, num_filters)
+    elif modelname == 'fcn':
+        model = fcn(num_channels, num_classes, num_filters)
+    else:
+        print("Model Does not exist!")
+        sys.exit(0)
+    return model

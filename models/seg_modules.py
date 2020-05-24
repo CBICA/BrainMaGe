@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr 18 21:18:22 2020
+Created on Sun May 24 06:21:23 2020
 
 @author: siddhesh
 """
+
 
 import torch
 import torch.nn as nn
@@ -15,15 +16,12 @@ class in_conv(nn.Module):
                  dropout_p=0.3, leakiness=1e-2, conv_bias=True,
                  inst_norm_affine=True, res=False, lrelu_inplace=True):
         """[The initial convolution to enter the network, kind of like encode]
-
         [This function will create the input convolution]
-
         Arguments:
             input_channels {[int]} -- [the input number of channels, in our
                                        case the number of modalities]
             output_channels {[int]} -- [the output number of channels, will
                                         determine the upcoming channels]
-
         Keyword Arguments:
             kernel_size {number} -- [size of filter] (default: {3})
             dropout_p {number} -- [dropout probablity] (default: {0.3})
@@ -60,14 +58,11 @@ class in_conv(nn.Module):
 
     def forward(self, x):
         """The forward function for initial convolution
-
         input --> conv0 --> | --> in --> lrelu --> conv1 --> dropout --> in -|
                             |                                                |
                  output <-- + <-------------------------- conv2 <-- lrelu <--|
-
         Arguments:
             x {[Tensor]} -- [Takes in a type of torch Tensor]
-
         Returns:
             [Tensor] -- [Returns a torch Tensor]
         """
@@ -91,17 +86,14 @@ class DownsamplingModule(nn.Module):
                  dropout_p=0.3, kernel_size=3, conv_bias=True,
                  inst_norm_affine=True, lrelu_inplace=True):
         """[To Downsample a given input with convolution operation]
-
         [This one will be used to downsample a given comvolution while doubling
         the number filters]
-
         Arguments:
             input_channels {[int]} -- [The input number of channels are taken
                                        and then are downsampled to double
                                        usually]
             output_channels {[int]} -- [the output number of channels are
                                         usually the double of what of input]
-
         Keyword Arguments:
             leakiness {float} -- [the negative leakiness] (default: {1e-2})
             conv_bias {bool} -- [to use the bias in filters] (default: {True})
@@ -125,12 +117,9 @@ class DownsamplingModule(nn.Module):
 
     def forward(self, x):
         """[This is a forward function for ]
-
         [input -- > in --> lrelu --> ConvDS --> output]
-
         Arguments:
             x {[Tensor]} -- [Takes in a type of torch Tensor]
-
         Returns:
             [Tensor] -- [Returns a torch Tensor]
         """
@@ -144,16 +133,13 @@ class EncodingModule(nn.Module):
                  dropout_p=0.3, leakiness=1e-2, conv_bias=True,
                  inst_norm_affine=True, res=False, lrelu_inplace=True):
         """[The Encoding convolution module to learn the information and use]
-
             [This function will create the Learning convolutions]
-
             Arguments:
                 input_channels {[int]} -- [the input number of channels, in our
                                            case the number of channels from
                                            downsample]
                 output_channels {[int]} -- [the output number of channels, will
                                             determine the upcoming channels]
-
             Keyword Arguments:
                 kernel_size {number} -- [size of filter] (default: {3})
                 dropout_p {number} -- [dropout probablity] (default: {0.3})
@@ -190,14 +176,11 @@ class EncodingModule(nn.Module):
 
     def forward(self, x):
         """The forward function for initial convolution
-
         [input --> | --> in --> lrelu --> conv0 --> dropout --> in -|
                    |                                                |
         output <-- + <-------------------------- conv1 <-- lrelu <--|]
-
         Arguments:
             x {[Tensor]} -- [Takes in a type of torch Tensor]
-
         Returns:
             [Tensor] -- [Returns a torch Tensor]
         """
@@ -235,13 +218,10 @@ class UpsamplingModule(nn.Module):
                  lrelu_inplace=True, kernel_size=3, scale_factor=2,
                  conv_bias=True, inst_norm_affine=True):
         """[summary]
-
         [description]
-
         Arguments:
             input__channels {[type]} -- [description]
             output_channels {[type]} -- [description]
-
         Keyword Arguments:
             leakiness {number} -- [description] (default: {1e-2})
             lrelu_inplace {bool} -- [description] (default: {True})
@@ -263,9 +243,7 @@ class UpsamplingModule(nn.Module):
 
     def forward(self, x):
         """[summary]
-
         [description]
-
         Extends:
         """
         x = self.conv0(self.interpolate(x))
@@ -276,13 +254,10 @@ class FCNUpsamplingModule(nn.Module):
                  lrelu_inplace=True, kernel_size=3, scale_factor=2,
                  conv_bias=True, inst_norm_affine=True):
         """[summary]
-
         [description]
-
         Arguments:
             input__channels {[type]} -- [description]
             output_channels {[type]} -- [description]
-
         Keyword Arguments:
             leakiness {number} -- [description] (default: {1e-2})
             lrelu_inplace {bool} -- [description] (default: {True})
@@ -304,9 +279,7 @@ class FCNUpsamplingModule(nn.Module):
 
     def forward(self, x):
         """[summary]
-
         [description]
-
         Extends:
         """
         x = self.interpolate(self.conv0(x))
@@ -318,16 +291,13 @@ class DecodingModule(nn.Module):
                  res=True, lrelu_inplace=True):
         """[The Decoding convolution module to learn the information and use
             later]
-
         [This function will create the Learning convolutions]
-
         Arguments:
             input_channels {[int]} -- [the input number of channels, in our
                                        case the number of channels from
                                        downsample]
             output_channels {[int]} -- [the output number of channels, will
                                         determine the upcoming channels]
-
         Keyword Arguments:
             kernel_size {number} -- [size of filter] (default: {3})
             leakiness {number} -- [the negative leakiness] (default: {1e-2})
@@ -380,16 +350,13 @@ class out_conv(nn.Module):
                  kernel_size=3, conv_bias=True, inst_norm_affine=True,
                  res=True, lrelu_inplace=True):
         """[The Out convolution module to learn the information and use later]
-
         [This function will create the Learning convolutions]
-
         Arguments:
             input_channels {[int]} -- [the input number of channels, in our
                                        case the number of channels from
                                        downsample]
             output_channels {[int]} -- [the output number of channels, will
                                         determine the upcoming channels]
-
         Keyword Arguments:
             kernel_size {number} -- [size of filter] (default: {3})
             leakiness {number} -- [the negative leakiness] (default: {1e-2})
@@ -445,5 +412,5 @@ class out_conv(nn.Module):
         if self.res:
             x = x + skip
         x = F.leaky_relu(self.in_3(x))
-        x = F.sigmoid(self.conv3(x))
+        x = torch.sigmoid(self.conv3(x))
         return x

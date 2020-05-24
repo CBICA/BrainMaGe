@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 15 17:11:07 2019
+Created on Sun May 24 06:33:50 2020
 
 @author: siddhesh
 """
+
 
 import os
 import sys
@@ -14,10 +15,8 @@ import re
 
 def rex_o4a_csv(folder_path, to_save, ftype, modalities):
     """[CSV generation for OneForAll]
-
     [This function is used to generate a csv for OneForAll mode and creates a
     csv]
-
     Arguments:
         folder_path {[string]} -- [Takes the folder to see where to look for
                                    the different modaliies]
@@ -59,9 +58,7 @@ def rex_o4a_csv(folder_path, to_save, ftype, modalities):
 
 def rex_sin_csv(folder_path, to_save, ftype, modalities):
     """[CSV generation for Single Modalities]
-
     [This function is used to generate a csv for Single mode and creates a csv]
-
     Arguments:
         folder_path {[string]} -- [Takes the folder to see where to look for
                                    the different modaliies]
@@ -107,9 +104,7 @@ def rex_sin_csv(folder_path, to_save, ftype, modalities):
 
 def rex_mul_csv(folder_path, to_save, ftype, modalities):
     """[CSV generation for Multi Modalities]
-
     [This function is used to generate a csv for multi mode and creates a csv]
-
     Arguments:
         folder_path {[string]} -- [Takes the folder to see where to look for
                                    the different modaliies]
@@ -160,10 +155,8 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
 
 def generate_csv(folder_path, to_save, mode, ftype, modalities):
     """[Function to generate CSV]
-
     [This function takes a look at the data directory and the modes and
      generates a csv]
-
     Arguments:
         folder_path {[strin]} -- [description]
         to_save {[strin]} -- [description]
@@ -181,4 +174,3 @@ def generate_csv(folder_path, to_save, mode, ftype, modalities):
     else:
         print("Sorry, this mode is not supported")
         sys.exit(0)
-
