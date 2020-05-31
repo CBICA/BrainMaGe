@@ -9,11 +9,11 @@ Created on Sun May 24 06:12:55 2020
 import torch
 from torch.utils.data import DataLoader
 import pytorch_lightning as ptl
-from utils.cyclicLR import CyclicCosAnnealingLR
-from utils.losses import dice_loss, dice
-from utils.data import WholeTumorDataset
-from utils.optimizers import fetch_optimizer
-from models.networks import fetch_model
+from Penn_BET.models.networks import fetch_model
+from Penn_BET.utils.cyclicLR import CyclicCosAnnealingLR
+from Penn_BET.utils.losses import dice_loss, dice
+from Penn_BET.utils.data import SkullStripDataset
+from Penn_BET.utils.optimizers import fetch_optimizer
 
 
 class SkullStripper(ptl.LightningModule):
@@ -83,7 +83,7 @@ class SkullStripper(ptl.LightningModule):
 
     @ptl.data_loader
     def train_dataloader(self):
-        dataset_train = WholeTumorDataset(self.params['train_csv'], self.params,
+        dataset_train = SkullStripDataset(self.params['train_csv'], self.params,
                                           test=False)
         return DataLoader(dataset_train,
                           batch_size=int(self.params['batch_size']),
@@ -92,7 +92,7 @@ class SkullStripper(ptl.LightningModule):
 
     @ptl.data_loader
     def val_dataloader(self):
-        dataset_valid = WholeTumorDataset(self.params['validation_csv'], self.params,
+        dataset_valid = SkullStripDataset(self.params['validation_csv'], self.params,
                                           test=False)
         return DataLoader(dataset_valid,
                           batch_size=int(self.params['batch_size']),

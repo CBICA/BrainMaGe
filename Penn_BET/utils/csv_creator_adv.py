@@ -34,26 +34,25 @@ def rex_o4a_csv(folder_path, to_save, ftype, modalities):
               something in the modalities field?")
         sys.exit(0)
     if ftype == 'test':
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,Image_Path\n')
     else:
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,Image_path\n')
     folders = os.listdir(folder_path)
     for folder in folders:
         for modality in modalities:
-            f1.write(folder+'_'+modality)
-            f1.write(',')
+            csv_file.write(folder+'_'+modality+',')
             if ftype != 'test':
-                gt = glob.glob(os.path.join(folder_path, folder,
-                                            '*maskFinal*.nii.gz'))[0]
-                f1.write(gt)
-                f1.write(',')
+                ground_truth = glob.glob(os.path.join(folder_path, folder,
+                                                      '*maskFinal*.nii.gz'))[0]
+                csv_file.write(ground_truth)
+                csv_file.write(',')
             img = glob.glob(os.path.join(folder_path, folder,
                                          '*'+modality+'*.nii.gz'))[0]
-            f1.write(img)
-            f1.write('\n')
-    f1.close()
+            csv_file.write(img)
+            csv_file.write('\n')
+    csv_file.close()
 
 
 def rex_sin_csv(folder_path, to_save, ftype, modalities):
@@ -79,27 +78,27 @@ def rex_sin_csv(folder_path, to_save, ftype, modalities):
               something in the modalities field?")
         sys.exit(0)
     if ftype == 'test':
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,')
     else:
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,')
     modality = modalities[0]
-    f1.write(modality+'_path\n')
+    csv_file.write(modality+'_path\n')
     folders = os.listdir(folder_path)
     for folder in folders:
-        f1.write(folder)
-        f1.write(',')
+        csv_file.write(folder)
+        csv_file.write(',')
         if ftype != 'test':
-            gt = glob.glob(os.path.join(folder_path, folder,
-                                        '*maskFinal*.nii.gz'))[0]
-            f1.write(gt)
-            f1.write(',')
+            ground_truth = glob.glob(os.path.join(folder_path, folder,
+                                                  '*maskFinal*.nii.gz'))[0]
+            csv_file.write(ground_truth)
+            csv_file.write(',')
         img = glob.glob(os.path.join(folder_path, folder,
                                      '*'+modality+'*.nii.gz'))[0]
-        f1.write(img)
-        f1.write('\n')
-    f1.close()
+        csv_file.write(img)
+        csv_file.write('\n')
+    csv_file.close()
 
 
 def rex_mul_csv(folder_path, to_save, ftype, modalities):
@@ -122,35 +121,35 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
               something in the modalities field?")
         sys.exit(0)
     if ftype == 'test':
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,')
     else:
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,')
     for modality in modalities[:-1]:
-        f1.write(modality+'_path,')
+        csv_file.write(modality+'_path,')
     modality = modalities[-1]
-    f1.write(modality+'_path\n')
+    csv_file.write(modality+'_path\n')
     folders = os.listdir(folder_path)
     for folder in folders:
-        f1.write(folder)
-        f1.write(',')
+        csv_file.write(folder)
+        csv_file.write(',')
         if ftype != 'test':
-            gt = glob.glob(os.path.join(folder_path, folder,
-                                        '*maskFinal*.nii.gz'))[0]
-            f1.write(gt)
-            f1.write(',')
+            ground_truth = glob.glob(os.path.join(folder_path, folder,
+                                                  '*maskFinal*.nii.gz'))[0]
+            csv_file.write(ground_truth)
+            csv_file.write(',')
         for modality in modalities[:-1]:
             img = glob.glob(os.path.join(folder_path, folder,
                                          '*'+modality+'*.nii.gz'))[0]
-            f1.write(img)
-            f1.write(',')
+            csv_file.write(img)
+            csv_file.write(',')
         modality = modalities[-1]
         img = glob.glob(os.path.join(folder_path, folder,
                                      '*'+modality+'*.nii.gz'))[0]
-        f1.write(img)
-        f1.write('\n')
-    f1.close()
+        csv_file.write(img)
+        csv_file.write('\n')
+    csv_file.close()
 
 
 def generate_csv(folder_path, to_save, mode, ftype, modalities):

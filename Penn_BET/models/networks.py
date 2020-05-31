@@ -6,12 +6,11 @@ Created on Sun May 24 06:16:01 2020
 @author: siddhesh
 """
 
-import sys
 import torch.nn as nn
 import torch
-from .seg_modules import in_conv, DownsamplingModule, EncodingModule
-from .seg_modules import UpsamplingModule, DecodingModule
-from .seg_modules import out_conv, FCNUpsamplingModule
+from Penn_BET.models.seg_modules import in_conv, DownsamplingModule, EncodingModule
+from Penn_BET.models.seg_modules import UpsamplingModule, DecodingModule
+from Penn_BET.models.seg_modules import out_conv, FCNUpsamplingModule
 
 
 class unet(nn.Module):
@@ -155,6 +154,6 @@ def fetch_model(modelname, num_channels, num_classes, num_filters):
     elif modelname == 'fcn':
         model = fcn(num_channels, num_classes, num_filters)
     else:
-        print("Model Does not exist!")
-        sys.exit(0)
+        raise ValueError('Check Model spelling, should be one of resunet, unet, fcn in the config'+\
+                         'file!')
     return model

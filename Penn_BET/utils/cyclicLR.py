@@ -6,11 +6,9 @@ Created on Thu Jan 23 00:08:56 2020
 """
 
 import math
-from bisect import bisect_right,bisect_left
-import torch
-import numpy as np
+from bisect import bisect_right
 from torch.optim.lr_scheduler import _LRScheduler
-from torch.optim.optimizer import Optimizer
+
 
 class CyclicCosAnnealingLR(_LRScheduler):
     r"""

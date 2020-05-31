@@ -1,0 +1,99 @@
+#!usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Created on Sat May 30 01:05:59 2020
+
+@author: siddhesh
+"""
+
+from __future__ import absolute_import, print_function, division
+import argparse
+import os
+from Penn_BET.trainer import trainer_main
+from Penn_BET.tester import test_ma, test_multi_4
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog='PennBET', formatter_class=argparse.RawTextHelpFormatter,
+                                     description='\nThis code was implemented for Deep Learning '+\
+    'based training and inference of 3D-U-Net,\n3D-Res-U-Net models for '+\
+    'Brain Extraction a.k.a Skull Stripping in biomedical NIFTI volumes.\n'+\
+    'The project is hosted at: https://github.com/Geeks-Sid/Penn-BET * \n'+\
+    'See the documentation for details on its use.\n'+\
+    'If you are using this tool, please cite out paper.'
+    'This software accompanies the research presented in:\n'+\
+    'Thakur et al, \'Brain Extraction on MRI Scans in Presence of Diffuse\n'+\
+    'Glioma:Multi-institutional Performance Evaluation of Deep Learning Methods'+\
+    'and Robust Modality-Agnostic Training\'.\n'+\
+    'We hope our work helps you in your endeavours.\n'+\
+    'For questions and feedback contact: software@cbica.upenn.edu')
+
+    parser.add_argument('-params', dest='params', type=str,
+                        help='Specify the architecture of the model to be used, by providing a\n'+\
+                             'config file [PARAMS_CFG]. A sample of the files is stored in\n'+\
+                             'Penn_BET/config folder for the train, test. Checkout the parameter\n'+\
+                             'explanation in the Readme.md for more details.\n',
+                        required=True)
+
+    parser.add_argument('-train', dest='train', type=str,
+                        help='Should be set to "True" (without the quotes) if you are trying to\n'+\
+                             'run training, temporarily we not planning to support in this\n'+\
+                             'release stay tuned for the next release.\n')
+
+    parser.add_argument('-test', dest='test', type=str,
+                        help='Should be set to "True" (without the quotes) if you are trying\n'+\
+                             'to run inference, do not set the training to true as testing\n'+\
+                             'will be overridden.\n')
+
+    parser.add_argument('-dev', default='0', dest='device', type=str,
+                        help='used to set on which device the prediction will run.\n'+
+                             'Must be either int or str. Use int for GPU id or\n'+
+                             '\'cpu\' to run on CPU. Avoid training on CPU. \n'+
+                             'Default for selecting first GPU is set to -dev 0\n',
+                        required=False)
+
+    parser.add_argument('-mode', dest='mode', type=str,
+                        help='Should be one of "MA" or "Mulit-4" without the quotes so that \n'+
+                             'the appropriate weight files are loaded automatically during\n'+\
+                             'the test time.')
+
+    parser.add_argument('-save_brain', default=1, type=int, required=False, dest='save_brain',
+                        help='if set to 0 the segmentation mask will be only produced and\n'+\
+                             'and the mask will not be applied on the input image to produce\n'+\
+                             ' a brain. This step is to be only applied if you trust this\n'+\
+                             'software and do not feel the need for Manual QC. This will save\n'+\
+                             ' you some time. This is useless for training though.')
+    args = parser.parse_args()
+
+    params_file = os.path.abspath(args.params)
+    DEVICE = args.device
+    mode = args.mode
+    save_brain = args.save_brain
+
+    if DEVICE == 'cpu':
+        pass
+    else:
+        DEVICE = int(DEVICE)
+
+    if args.save_brain == 0:
+        args.save_brain = False
+    elif args.save_brain == 1:
+        args.save_brain = True
+    else:
+        raise ValueError('Unknown value for save brain:')
+        
+    if args.train == 'True':
+        trainer_main.train_network(params_file, DEVICE)
+    elif args.test == 'True':
+        if args.mode == 'MA':
+            test_ma.infer_ma(params_file, DEVICE, args.save_brain)
+        elif args.mode == 'Multi-4':
+            test_multi_4.infer_multi_4(params_file, DEVICE, args.save_brain)
+        else :
+            raise ValueError('Unknown value for mode. Expected one of "MA" or "Multi-4" without the quotes.',
+                             'We received : ', args.mode,
+                             'Common mistakes include spelling mistakes, check it to make sure.')
+    else:
+        raise ValueError("Expected the modes to be set with either -train True or -test True.\n"+\
+                         "Please try again!")
+            
