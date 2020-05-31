@@ -74,7 +74,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 - Please note that the if you wish to use your own weights, you can use the `-load` option, but we suggest you to use our weights that are provided in the weights folder.
 - Using this software is pretty trivial as long as instructions are followed. 
 - You can use it in any terminal on a supported system. 
-- The hd-bet command gets installed automatically. 
+- The penn_bet_run command gets installed automatically. 
 - We provide CPU (untested as of 2020/05/31) as well as GPU support. 
   - Running on GPU is a lot faster though and should always be preferred. 
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
