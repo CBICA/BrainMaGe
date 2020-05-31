@@ -27,8 +27,7 @@ Use the following command for preprocessing, which will process all the modaliti
 ./env/python PENN_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
 ## Installation Instructions
-Please note that you need to have a python3 installation for Penn-BET, but conda is preferred.
-How to create conda environements
+Please note that you need to have a python3 installation for Penn-BET, but [conda](https://www.anaconda.com/) is preferred.
 
 ```bash
 conda create -n pbet python=3.6 -y
@@ -39,21 +38,28 @@ pip install -e .
 pip install requirements.txt
 ```
 
-## How to Run
+## Running Instructions
 
-We have two modes in here : `train` and `test`
-## Training
+We have two modes in here : `train` and `test`.
+
+### Training
 
 - Populate a config file with required parameters (please see [train_params.cfg](./Penn_BET/config/train_params.cfg) for an example)
-- Note that preprocessed data should be used.
+- Note that preprocessed data in the specific format [ref](##Arranging-Data) should be used.
 - Invoke the following command:
 ```
 penn_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
 ```
-## Inference
 
-- We have three modes here. MA, Multi-4, Single(Not supported yet)(weights for it would be updated soon) 
-- Populate a config file with required parameters (please see [test_params.cfg](./Penn_BET/config/test_params_multi_4.cfg) for an example of Multi-4 and [test_params_ma.cfg](./Penn_BET/config/test_params_ma.cfg) for an example of MA mode)
+### Inference
+
+- We have three modes here:
+  - Modality Agnostic (MA)
+  - Multi-4, i.e., all 4 modalities getting used
+  - Single (**not yet** yet and its weights would be updated soon) 
+- Populate a config file with required parameters. Examples:
+  - MA: [test_params_ma.cfg](./Penn_BET/config/test_params_ma.cfg)
+  - Multi-4: [test_params.cfg](./Penn_BET/config/test_params_multi_4.cfg)
 - It is highly suggested that Multi-4 should be only run with some certain preprocesing steps(link goes here) mentioned below.
 - Invoke the following command:
 ```
@@ -62,10 +68,22 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode MA
 ```
 penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 ```
--Please note that the if you wish to use your own weights, you can use the `-load` option, but we suggest you to use our weights that are provided in the weights folder.
--Using this software is pretty trivial as long as instructions are followed. You can use it in any terminal on your linux system. The hd-bet command was installed automatically. We provide CPU as well as GPU support. Running on GPU is a lot faster though and should always be preferred. And we have not currently run tests on CPU. We might in the next version.
--You need an approxiamate GPU memory of ~5-6GB for testing and atleast ~8GB for training.
+
+## Notes
+
+- Please note that the if you wish to use your own weights, you can use the `-load` option, but we suggest you to use our weights that are provided in the weights folder.
+- Using this software is pretty trivial as long as instructions are followed. 
+- You can use it in any terminal on a supported system. 
+- The hd-bet command gets installed automatically. 
+- We provide CPU (untested as of 2020/05/31) as well as GPU support. 
+  - Running on GPU is a lot faster though and should always be preferred. 
+  - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
 
 ## TO-DO
--Add CCA for postprocessing
--Test on CPU
+- Add CCA for postprocessing
+- Add link to CaPTk as suggested mechanism for preprocessing (can refer to "BraTSPipeline" application)
+- Test on CPU
+
+## Contact
+
+Please email software@cbica.upenn.edu with questions.
