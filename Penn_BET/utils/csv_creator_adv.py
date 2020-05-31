@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 15 17:11:07 2019
+Created on Sun May 24 06:33:50 2020
 
 @author: siddhesh
 """
+
 
 import os
 import sys
@@ -14,10 +15,8 @@ import re
 
 def rex_o4a_csv(folder_path, to_save, ftype, modalities):
     """[CSV generation for OneForAll]
-
     [This function is used to generate a csv for OneForAll mode and creates a
     csv]
-
     Arguments:
         folder_path {[string]} -- [Takes the folder to see where to look for
                                    the different modaliies]
@@ -35,33 +34,30 @@ def rex_o4a_csv(folder_path, to_save, ftype, modalities):
               something in the modalities field?")
         sys.exit(0)
     if ftype == 'test':
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,Image_Path\n')
     else:
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,Image_path\n')
     folders = os.listdir(folder_path)
     for folder in folders:
         for modality in modalities:
-            f1.write(folder+'_'+modality)
-            f1.write(',')
+            csv_file.write(folder+'_'+modality+',')
             if ftype != 'test':
-                gt = glob.glob(os.path.join(folder_path, folder,
-                                            '*maskFinal*.nii.gz'))[0]
-                f1.write(gt)
-                f1.write(',')
+                ground_truth = glob.glob(os.path.join(folder_path, folder,
+                                                      '*maskFinal*.nii.gz'))[0]
+                csv_file.write(ground_truth)
+                csv_file.write(',')
             img = glob.glob(os.path.join(folder_path, folder,
                                          '*'+modality+'*.nii.gz'))[0]
-            f1.write(img)
-            f1.write('\n')
-    f1.close()
+            csv_file.write(img)
+            csv_file.write('\n')
+    csv_file.close()
 
 
 def rex_sin_csv(folder_path, to_save, ftype, modalities):
     """[CSV generation for Single Modalities]
-
     [This function is used to generate a csv for Single mode and creates a csv]
-
     Arguments:
         folder_path {[string]} -- [Takes the folder to see where to look for
                                    the different modaliies]
@@ -82,34 +78,32 @@ def rex_sin_csv(folder_path, to_save, ftype, modalities):
               something in the modalities field?")
         sys.exit(0)
     if ftype == 'test':
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,')
     else:
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,')
     modality = modalities[0]
-    f1.write(modality+'_path\n')
+    csv_file.write(modality+'_path\n')
     folders = os.listdir(folder_path)
     for folder in folders:
-        f1.write(folder)
-        f1.write(',')
+        csv_file.write(folder)
+        csv_file.write(',')
         if ftype != 'test':
-            gt = glob.glob(os.path.join(folder_path, folder,
-                                        '*maskFinal*.nii.gz'))[0]
-            f1.write(gt)
-            f1.write(',')
+            ground_truth = glob.glob(os.path.join(folder_path, folder,
+                                                  '*maskFinal*.nii.gz'))[0]
+            csv_file.write(ground_truth)
+            csv_file.write(',')
         img = glob.glob(os.path.join(folder_path, folder,
                                      '*'+modality+'*.nii.gz'))[0]
-        f1.write(img)
-        f1.write('\n')
-    f1.close()
+        csv_file.write(img)
+        csv_file.write('\n')
+    csv_file.close()
 
 
 def rex_mul_csv(folder_path, to_save, ftype, modalities):
     """[CSV generation for Multi Modalities]
-
     [This function is used to generate a csv for multi mode and creates a csv]
-
     Arguments:
         folder_path {[string]} -- [Takes the folder to see where to look for
                                    the different modaliies]
@@ -127,43 +121,41 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
               something in the modalities field?")
         sys.exit(0)
     if ftype == 'test':
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,')
     else:
-        f1 = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        f1.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,')
     for modality in modalities[:-1]:
-        f1.write(modality+'_path,')
+        csv_file.write(modality+'_path,')
     modality = modalities[-1]
-    f1.write(modality+'_path\n')
+    csv_file.write(modality+'_path\n')
     folders = os.listdir(folder_path)
     for folder in folders:
-        f1.write(folder)
-        f1.write(',')
+        csv_file.write(folder)
+        csv_file.write(',')
         if ftype != 'test':
-            gt = glob.glob(os.path.join(folder_path, folder,
-                                        '*maskFinal*.nii.gz'))[0]
-            f1.write(gt)
-            f1.write(',')
+            ground_truth = glob.glob(os.path.join(folder_path, folder,
+                                                  '*maskFinal*.nii.gz'))[0]
+            csv_file.write(ground_truth)
+            csv_file.write(',')
         for modality in modalities[:-1]:
             img = glob.glob(os.path.join(folder_path, folder,
                                          '*'+modality+'*.nii.gz'))[0]
-            f1.write(img)
-            f1.write(',')
+            csv_file.write(img)
+            csv_file.write(',')
         modality = modalities[-1]
         img = glob.glob(os.path.join(folder_path, folder,
                                      '*'+modality+'*.nii.gz'))[0]
-        f1.write(img)
-        f1.write('\n')
-    f1.close()
+        csv_file.write(img)
+        csv_file.write('\n')
+    csv_file.close()
 
 
 def generate_csv(folder_path, to_save, mode, ftype, modalities):
     """[Function to generate CSV]
-
     [This function takes a look at the data directory and the modes and
      generates a csv]
-
     Arguments:
         folder_path {[strin]} -- [description]
         to_save {[strin]} -- [description]
@@ -181,4 +173,3 @@ def generate_csv(folder_path, to_save, mode, ftype, modalities):
     else:
         print("Sorry, this mode is not supported")
         sys.exit(0)
-

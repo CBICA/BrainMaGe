@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 26 10:42:48 2019
+Created on Sun May 24 14:26:17 2020
 
 @author: siddhesh
 """
+
 
 import numpy as np
 from skimage.transform import resize
@@ -12,13 +13,10 @@ from skimage.transform import resize
 
 def pad_image(image):
     """[To pad the image to particular space]
-
     [This function will pad the image to a space of [240, 240, 160] and will
     automatically pad everything with zeros to this size]
-
     Arguments:
         image {[numpy image]} -- [Image of any standard shape[x, y. z]]
-
     Returns:
         [padded_image] -- [returns a padded image]
     """
@@ -50,19 +48,15 @@ def pad_image(image):
 def preprocess_image(image, is_mask=False,
                      target_spacing=(1.875, 1.875, 1.25)):
     """[To preprocess an image depending on whether it a mask image or not]
-
     [This function in general will try to preprocess a given image to a partic-
     -ular image resolution and try to return a preprocessed image]
-
     Arguments:
         image {[nibabel image]} -- [Expecting a nibabel image to be handled]
-
     Keyword Arguments:
         is_mask {bool} -- [If the incoming image is a mask] (default: {False})
         target_spacing {tuple} -- [What should be a current given target
                                    spacing to be used]
                                   (default: {(1.875, 1.875, 1.25)})
-
     Returns:
         [preprocessed image] -- [Returning a properly preprocessed and a norma-
         -lized image]
@@ -83,7 +77,6 @@ def preprocess_image(image, is_mask=False,
                 shape      |   Yes   |     No    |     _|
                 resolution_|___Yes___|_____No____|______|
                 pad________|_________|___________|__No__|
-
                 [An ideal image would be to have a shape of (240, 240, 160)
                 with an isotropic resolution of (1.0, 1.0, 1.0), then we would
                 just resize the image to (128, 128, 128)]
@@ -98,7 +91,6 @@ def preprocess_image(image, is_mask=False,
                 shape      |   No    |     Yes   |     |
                 resolution_|___Yes___|_____No____|_____|
                 pad________|_________|___________|_Yes_|
-
                 [An ideal image would be to have a shape of (240, 240, 160)
                 with a isotropic resolution of (1.0, 1.0, 1.0), then we would
                 just resize the image to (128, 128, 128)]
@@ -115,7 +107,6 @@ def preprocess_image(image, is_mask=False,
             shape      |   No    |     Yes   |     |
             resolution_|___Yes___|_____No____|_____|
             pad________|_________|___________|_Yes_|
-
             [An ideal image would be to have a shape of (240, 240, 160) with
             a isotropic resolution of (1.0, 1.0, 1.0), then we would just
             resize the image to (128, 128, 128)]

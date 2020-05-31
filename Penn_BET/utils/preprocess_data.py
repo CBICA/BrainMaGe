@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun May 24 13:49:24 2020
+
+@author: siddhesh
+"""
+
+
 import numpy as np
 import os
 import glob
@@ -11,15 +20,15 @@ from multiprocessing import Pool, cpu_count
 #    format.
 # ---main_folder
 #     |---Patient1
-#          |---something_t1_LPS_r.nii.gz
-#          |---something_t2_LPS_r.nii.gz
-#          |---something_t1ce_LPS_r.nii.gz
-#          |---something_flair_LPS_r.nii.gz
+#          |---something_t1.nii.gz
+#          |---something_t2.nii.gz
+#          |---something_t1ce.nii.gz
+#          |---something_flair.nii.gz
 #     |---Patient2
-#          |---something_t1_LPS_r.nii.gz
-#          |---something_t2_LPS_r.nii.gz
-#          |---something_t1ce_LPS_r.nii.gz
-#          |---something_flair_LPS_r.nii.gz
+#          |---something_t1.nii.gz
+#          |---something_t2.nii.gz
+#          |---something_t1ce.nii.gz
+#          |---something_flair.nii.gz
 #     |---Patient3
 #     .
 #     .
