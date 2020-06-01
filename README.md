@@ -23,7 +23,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 
 Use the following command for preprocessing, which will process all the modalities for a given subject together and write it in the specified output location:
 
-```
+```bash
 ./env/python PENN_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
 ## Installation Instructions
@@ -47,7 +47,7 @@ We have two modes in here : `train` and `test`.
 - Populate a config file with required parameters (please see [train_params.cfg](./Penn_BET/config/train_params.cfg) for an example)
 - Note that preprocessed data in the specific format [ref](##Arranging-Data) should be used.
 - Invoke the following command:
-```
+```bash
 penn_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
 ```
 
@@ -62,10 +62,11 @@ penn_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckp
   - Multi-4: [test_params.cfg](./Penn_BET/config/test_params_multi_4.cfg)
 - It is highly suggested that Multi-4 should be only run with some certain preprocesing steps(link goes here) mentioned below.
 - Invoke the following command:
-```
+
+```bash
 penn_bet_run -params $test_params.cfg -test True -dev $device -mode MA
 ```
-```
+```bash
 penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 ```
 
