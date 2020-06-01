@@ -21,7 +21,7 @@ class SkullStripper(ptl.LightningModule):
         super(SkullStripper, self).__init__()
         self.params = params
         self.model = fetch_model(params['model'],
-                                 int(self.params['num_channels']),
+                                 int(self.params['num_modalities']),
                                  int(self.params['num_classes']),
                                  int(self.params['base_filters']))
 
@@ -33,7 +33,7 @@ class SkullStripper(ptl.LightningModule):
         return loss
 
     def training_step(self, batch, batch_nb):
-        image, mask = batch['image_data'], batch['gt_data']
+        image, mask = batch['image_data'], batch['ground_truth_data']
         output = self.forward(image)
         loss = self.my_loss(output, mask)
         dice_score = dice(output, mask)
@@ -44,12 +44,12 @@ class SkullStripper(ptl.LightningModule):
                 'log': tensorboard_logs}
 
     def validation_step(self, batch, batch_nb):
-        image, mask = batch['image_data'], batch['gt_data']
+        image, mask = batch['image_data'], batch['ground_truth_data']
         output = self.forward(image)
         loss = self.my_loss(output, mask)
         dice_score = dice(output, mask)
         tensorboard_logs = {'val_loss': loss.cpu().data.item(),
-                            'va;dice': dice_score.cpu().data.item()}
+                            'val_dice': dice_score.cpu().data.item()}
         return {'val_loss': loss,
                 'val_dice': dice_score,
                 'val_log': tensorboard_logs}

@@ -18,7 +18,7 @@ from pytorch_lightning.logging import TensorBoardLogger
 from Penn_BET.utils.csv_creator_adv import generate_csv
 from Penn_BET.trainer.lightning_networks import SkullStripper
 
-def train_network(cfg, device):
+def train_network(cfg, device, weights):
     """
     Receiving a configuration file and a device, the training is pushed through this file
 
@@ -52,8 +52,12 @@ def train_network(cfg, device):
 
     # Reading in all the parameters
     params = {}
-    params = params_df.to_dict()
-
+    for i in range(params_df.shape[0]):
+        params[params_df.iloc[i, 0]] = params_df.iloc[i, 1]
+    print(type(device), device)
+    if type(device) != str:
+        params['device'] = str(device)
+    params['weights'] = weights
     # Although uneccessary, we still do this
     if not os.path.isdir(str(params['model_dir'])):
         os.mkdir(params['model_dir'])
@@ -64,7 +68,7 @@ def train_network(cfg, device):
     print("Validation Dir          :", params['validation_dir'])
     print("Model Directory         :", params['model_dir'])
     print("Mode                    :", params['mode'])
-    print("Number of modalities    :", params['num_channels'])
+    print("Number of modalities    :", params['num_modalities'])
     print("Modalities              :", params['modalities'])
     print("Number of classes       :", params['num_classes'])
     print("Max Number of epochs    :", params['max_epochs'])
@@ -76,8 +80,7 @@ def train_network(cfg, device):
     print("Early Stopping Patience :", params['early_stop_patience'])
     print("Depth Layers            :", params['layers'])
     print("Model used              :", params['model'])
-    print("Do you want to resume   :", params['load'])
-    print("Load Weights Dir        :", params['load_weights'])
+    print("Weights used            :", params['weights'])
     sys.stdout.flush()
     print("Device Given :", device)
     sys.stdout.flush()
@@ -135,7 +138,7 @@ def train_network(cfg, device):
     tensorboard_logger = TensorBoardLogger(params['model_dir'], name="my_model")
     model = SkullStripper(params)
 
-    res_ckpt = params['load_weights'] if params['load'] == 'True' else None
+    res_ckpt = weights
     trainer = Trainer(logger=tensorboard_logger,
                       checkpoint_callback=checkpoint_callback,
                       early_stop_callback=stop_callback,

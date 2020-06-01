@@ -22,7 +22,7 @@ from Penn_BET.utils.utils_test import pad_image, process_image, interpolate_imag
     padder_and_cropper
 
 
-def infer_ma(cfg, device, save_brain):
+def infer_ma(cfg, device, save_brain, weights):
 
     cfg = os.path.abspath(cfg)
 
@@ -36,6 +36,7 @@ def infer_ma(cfg, device, save_brain):
     params = {}
     for i in range(params_df.shape[0]):
         params[params_df.iloc[i, 0]] = params_df.iloc[i, 1]
+    params['weights'] = weights
     start = time.asctime()
     startstamp = time.time()
     print("\nHostname   :" + str(os.getenv("HOSTNAME")))
@@ -158,7 +159,7 @@ def infer_ma(cfg, device, save_brain):
             to_save_final[to_save_final > 0] = 1
             to_save_final_nib = nib.Nifti1Image(to_save_final,
                                                 current_patient_dict['old_affine'])
-            os.makedirs(os.path.join(params['model_dir'], patient[0]))
+            os.makedirs(os.path.join(params['model_dir'], patient[0]), exist_ok=True)
 
             nib.save(to_save_final_nib, os.path.join(params['model_dir'],
                                                      patient[0],

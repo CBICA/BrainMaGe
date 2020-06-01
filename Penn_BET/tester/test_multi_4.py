@@ -21,7 +21,7 @@ from Penn_BET.utils.utils_test import interpolate_image, unpad_image
 from Penn_BET.utils.preprocess import preprocess_image
 
 
-def infer_multi_4(cfg, device, save_brain):
+def infer_multi_4(cfg, device, save_brain, weights):
     """
     Inference using multi modality network
 
@@ -49,6 +49,7 @@ def infer_multi_4(cfg, device, save_brain):
         print('Missing test_params.cfg file? Please give one!')
         sys.exit(0)
     params = {}
+    params['weights'] = weights
     for i in range(params_df.shape[0]):
         params[params_df.iloc[i, 0]] = params_df.iloc[i, 1]
     start = time.asctime()
@@ -88,7 +89,7 @@ def infer_multi_4(cfg, device, save_brain):
     os.makedirs(temp_dir, exist_ok=True)
 
     for patient in tqdm.tqdm(test_df.values):
-        os.makedirs(os.path.join(params['model_dir'], patient[0]))
+        os.makedirs(os.path.join(params['model_dir'], patient[0]), exist_ok=True)
         nmods = params['num_modalities']
         stack = np.zeros([int(nmods), 128, 128, 128], dtype=np.float32)
         for i in range(int(nmods)):
