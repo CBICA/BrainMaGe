@@ -75,7 +75,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 
 ## Notes
 
-- Please note that the if you wish to use your own weights, you can use the `-load` option, but we suggest you to use our weights that are provided in the weights folder.
+- Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
 - Using this software is pretty trivial as long as instructions are followed. 
 - You can use it in any terminal on a supported system. 
 - The penn_bet_run command gets installed automatically. 
@@ -85,7 +85,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 
 ## TO-DO
 - Add CCA for postprocessing
-- Add link to CaPTk as suggested mechanism for preprocessing (can refer to "BraTSPipeline" application)
+- Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application)
 - Test on CPU
 
 ## Contact
