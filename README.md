@@ -47,9 +47,12 @@ We have two modes in here : `train` and `test`.
 - Populate a config file with required parameters (please see [train_params.cfg](./Penn_BET/config/train_params.cfg) for an example)
 - Note that preprocessed data in the specific format [ref](##Arranging-Data) should be used.
 - Invoke the following command:
+
 ```bash
 penn_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
 ```
+
+Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
 
 ### Inference
 
