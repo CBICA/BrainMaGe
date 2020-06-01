@@ -19,14 +19,8 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
                patient_n -- ...
 ```
 
-## Preprocessing Data
-
-Use the following command for preprocessing, which will process all the modalities for a given subject together and write it in the specified output location:
-
-```bash
-./env/python PENN_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
-```
 ## Installation Instructions
+
 Please note that you need to have a python3 installation for Penn-BET, but [conda](https://www.anaconda.com/) is preferred.
 
 ```bash
@@ -36,6 +30,14 @@ git clone https://github.com/Geeks-Sid/Penn-BET
 python setup.py install
 pip install -e .
 pip install requirements.txt
+```
+
+## Preprocessing Data
+
+Use the following command for preprocessing, which will process all the modalities for a given subject together and write it in the specified output location:
+
+```bash
+./env/python PENN_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
 
 ## Running Instructions
@@ -84,9 +86,11 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
 
 ## TO-DO
-- Add CCA for postprocessing
+
+- Add CCA for post-processing
 - Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application)
 - Test on CPU
+- Please post any requests as issues on this repository or send email to software@cbica.upenn.edu
 
 ## Contact
 
