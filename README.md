@@ -75,6 +75,8 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode MA
 penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 ```
 
+```$device``` refers to the GPU device where you want your code to run or the CPU.
+
 ## Notes
 
 - Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
