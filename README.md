@@ -24,11 +24,15 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 Please note that you need to have a python3 installation for Penn-BET, but [conda](https://www.anaconda.com/) is preferred.
 
 ```bash
-conda create -n pbet python=3.6 -y
-conda activate pbet
-git clone https://github.com/Geeks-Sid/Penn-BET
-python setup.py install
-pip install -e .
+git clone https://github.com/CBICA/Penn-BET.git
+cd Penn-BET
+conda create -n pbet python=3.6 -y # create a virtual environment
+conda activate pbet # activate it
+latesttag=$(git describe --tags) # get the latest tag [bash-only]
+echo checking out ${latesttag}
+git checkout ${latesttag}
+python setup.py install # install dependencies
+pip install -e . # install Penn-BET with a reference to scripts
 pip install requirements.txt
 ```
 
