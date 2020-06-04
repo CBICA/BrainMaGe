@@ -7,6 +7,16 @@ The data needs to be preprocessed before fed to the network.
 The structure of the data needs to be as follows:
 If the data is structure like this, there is no need to provide the csv to the ```dataloader```.
 Although this is something that can be improved to make the ```dataloader``` more dynamic to support federated learning better, this is up for development.
+
+The following steps need to be followed for preprocessing brain data:
+- Re-orientation to LPS/RAI
+- N4 Bias correction
+- Co-registration to T1CE modality
+- Registration to [SRI-24 atlas](https://www.nitrc.org/projects/sri24/)
+- Apply registration to re-oriented image to maximize image fidelity
+
+Users can use the ```BraTSPipeline``` executable from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier.
+
 ```
 Data_folder -- patient_1 -- patient_1_t1.nii.gz
                          -- patient_1_t2.nii.gz
