@@ -98,6 +98,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 - Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application)
 - Test on CPU
 - Put option to write logs to specific files in output directory
+- Remove ```-mode``` parameter in ```penn_bet_run```
 - Please post any requests as issues on this repository or send email to software@cbica.upenn.edu
 
 ## Contact
