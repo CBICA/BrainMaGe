@@ -112,6 +112,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device
 - Add version in the ```-h``` command using https://stackoverflow.com/a/2073599/1228757
 - Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application)
 - Test on CPU
+- Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
 - Remove ```-mode``` parameter in ```penn_bet_run```
 - Please post any requests as issues on this repository or send email to software@cbica.upenn.edu
