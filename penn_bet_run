@@ -15,7 +15,7 @@ import pkg_resources
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(prog='PennBET', formatter_class=argparse.RawTextHelpFormatter,
+    parser = argparse.ArgumentParser(prog='Deep-BET', formatter_class=argparse.RawTextHelpFormatter,
                                      description='\nThis code was implemented for Deep Learning '+\
     'based training and inference of 3D-U-Net,\n3D-Res-U-Net models for '+\
     'Brain Extraction a.k.a Skull Stripping in biomedical NIFTI volumes.\n'+\
@@ -65,8 +65,9 @@ if __name__ == '__main__':
                              'are overridden to apply these weights to the model. We warn against\n'+\
                              'the usage of this unless you know what you are passing. C')
     
-    parser.add_argument('-version', action='version', version=pkg_resources.require("Deep-BET")[0].version)
-
+    parser.add_argument('-v', '--version', action='version',
+                        version=pkg_resources.require("Deep-BET")[0].version, help="Show program's version number and exit.")
+                        
     args = parser.parse_args()
 
     params_file = os.path.abspath(args.params)
