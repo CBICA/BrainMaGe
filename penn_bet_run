@@ -11,6 +11,7 @@ import argparse
 import os
 from Penn_BET.trainer import trainer_main
 from Penn_BET.tester import test_ma, test_multi_4
+import pkg_resources
 
 
 if __name__ == '__main__':
@@ -63,6 +64,8 @@ if __name__ == '__main__':
                         help='If the location of the weight file is passed, the internal methods\n'+\
                              'are overridden to apply these weights to the model. We warn against\n'+\
                              'the usage of this unless you know what you are passing. C')
+    
+    parser.add_argument('-version', action='version', version=pkg_resources.require("Deep-BET")[0].version)
 
     args = parser.parse_args()
 
