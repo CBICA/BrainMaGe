@@ -70,7 +70,7 @@ Note that ```-load $resume.ckpt``` is only needed if you are resuming your train
 - Populate a config file with required parameters. Examples:
   - MA: [test_params_ma.cfg](./Penn_BET/config/test_params_ma.cfg)
   - Multi-4: [test_params.cfg](./Penn_BET/config/test_params_multi_4.cfg)
-- It is highly suggested that Multi-4 should be only run with some certain preprocesing steps(link goes here) mentioned below.
+- It is highly suggested that Multi-4 should be only run with some certain preprocessing steps (link goes here) mentioned below.
 - Invoke the following command:
 
 ```bash
