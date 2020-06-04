@@ -60,15 +60,15 @@ def infer_multi_4(cfg, device, save_brain, weights):
     sys.stdout.flush()
 
     print("Generating Test csv")
-    if not os.path.exists(os.path.join(params['model_dir'])):
-        os.mkdir(params['model_dir'])
+    if not os.path.exists(os.path.join(params['results_dir'])):
+        os.mkdir(params['results_dir'])
     if not params['csv_provided'] == 'True':
         print('Since CSV were not provided, we are gonna create for you')
         csv_creator_adv.generate_csv(params['test_dir'],
-                                     to_save=params['model_dir'],
+                                     to_save=params['results_dir'],
                                      mode=params['mode'], ftype='test',
                                      modalities=params['modalities'])
-        test_csv = os.path.join(params['model_dir'], 'test.csv')
+        test_csv = os.path.join(params['results_dir'], 'test.csv')
     else:
         test_csv = params['test_csv']
 
@@ -80,7 +80,7 @@ def infer_multi_4(cfg, device, save_brain, weights):
                         int(params['base_filters']))
     if device != 'cpu':
         model.cuda()
-    temp_dir = os.path.join(params['model_dir'], 'Temp')
+    temp_dir = os.path.join(params['results_dir'], 'Temp')
 
     checkpoint = torch.load(str(params['weights']))
     model.load_state_dict(checkpoint['model_state_dict'])
@@ -89,7 +89,7 @@ def infer_multi_4(cfg, device, save_brain, weights):
     os.makedirs(temp_dir, exist_ok=True)
 
     for patient in tqdm.tqdm(test_df.values):
-        os.makedirs(os.path.join(params['model_dir'], patient[0]), exist_ok=True)
+        os.makedirs(os.path.join(params['results_dir'], patient[0]), exist_ok=True)
         nmods = params['num_modalities']
         stack = np.zeros([int(nmods), 128, 128, 128], dtype=np.float32)
         for i in range(int(nmods)):
@@ -110,14 +110,14 @@ def infer_multi_4(cfg, device, save_brain, weights):
             to_save[to_save >= 0.9] = 1
             to_save[to_save < 0.9] = 0
             to_save_mask = nib.Nifti1Image(to_save, patient_nib.affine)
-            nib.save(to_save_mask, os.path.join(params['model_dir'], patient[0],
+            nib.save(to_save_mask, os.path.join(params['results_dir'], patient[0],
                                                 patient[0]+'_mask.nii.gz'))
     print("Done with running the model.")
     if save_brain:
         print("You chose to save the brain. We are now saving it with the masks.")
         for patient in tqdm.tqdm(test_df.values):
             nmods = params['num_modalities']
-            mask_nib = nib.load(os.path.join(params['model_dir'], patient[0],
+            mask_nib = nib.load(os.path.join(params['results_dir'], patient[0],
                                              patient[0]+'_mask.nii.gz'))
             mask_data = mask_nib.get_fdata().astype(np.int8)
             for i in range(int(nmods)):
@@ -127,10 +127,10 @@ def infer_multi_4(cfg, device, save_brain, weights):
                 image_data = patient_nib.get_fdata()
                 image_data[mask_data == 0] = 0
                 to_save_image = nib.Nifti1Image(image_data, patient_nib.affine)
-                nib.save(to_save_image, os.path.join(params['model_dir'],
+                nib.save(to_save_image, os.path.join(params['results_dir'],
                                                      patient[0],
                                                      image_name+'_brain.nii.gz'))
 
-    print("Final output stored in : %s" % (params['model_dir']))
+    print("Final output stored in : %s" % (params['results_dir']))
     print("Thank you for using Penn-BET")
     print('*'*60)

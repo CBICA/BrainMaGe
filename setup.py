@@ -9,7 +9,7 @@ Created on Sat May 30 01:05:59 2020
 
 from setuptools import setup
 
-setup(name='Penn-BET',
+setup(name='Deep-BET',
       version='1.0.0.Alpha',
       description='Skull stripping using multiple and single modalities',
       url='https://github.com/CBICA/Penn-BET',

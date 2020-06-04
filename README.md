@@ -86,10 +86,10 @@ Note that ```-load $resume.ckpt``` is only needed if you are resuming your train
 - Invoke the following command:
 
 ```bash
-penn_bet_run -params $test_params.cfg -test True -dev $device -mode MA
+penn_bet_run -params $test_params.cfg -test True -dev $device
 ```
 ```bash
-penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
+penn_bet_run -params $test_params.cfg -test True -dev $device
 ```
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.

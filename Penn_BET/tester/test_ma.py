@@ -45,20 +45,20 @@ def infer_ma(cfg, device, save_brain, weights):
     sys.stdout.flush()
 
     print("Generating Test csv")
-    if not os.path.exists(os.path.join(params['model_dir'])):
-        os.mkdir(params['model_dir'])
+    if not os.path.exists(os.path.join(params['results_dir'])):
+        os.mkdir(params['results_dir'])
     if not params['csv_provided'] == 'True':
         print('Since CSV were not provided, we are gonna create for you')
         csv_creator_adv.generate_csv(params['test_dir'],
-                                     to_save=params['model_dir'],
+                                     to_save=params['results_dir'],
                                      mode=params['mode'], ftype='test',
                                      modalities=params['modalities'])
-        test_csv = os.path.join(params['model_dir'], 'test.csv')
+        test_csv = os.path.join(params['results_dir'], 'test.csv')
     else:
         test_csv = params['test_csv']
 
     test_df = pd.read_csv(test_csv)
-    temp_dir = os.path.join(params['model_dir'], 'Temp')
+    temp_dir = os.path.join(params['results_dir'], 'Temp')
     os.makedirs(temp_dir, exist_ok=True)
 
     patients_dict = {}
@@ -159,9 +159,9 @@ def infer_ma(cfg, device, save_brain, weights):
             to_save_final[to_save_final > 0] = 1
             to_save_final_nib = nib.Nifti1Image(to_save_final,
                                                 current_patient_dict['old_affine'])
-            os.makedirs(os.path.join(params['model_dir'], patient[0]), exist_ok=True)
+            os.makedirs(os.path.join(params['results_dir'], patient[0]), exist_ok=True)
 
-            nib.save(to_save_final_nib, os.path.join(params['model_dir'],
+            nib.save(to_save_final_nib, os.path.join(params['results_dir'],
                                                      patient[0],
                                                      patient[0]+'_mask.nii.gz'))
 
@@ -171,18 +171,18 @@ def infer_ma(cfg, device, save_brain, weights):
         for patient in tqdm.tqdm(test_df.values):
             image = nib.load(patient[1])
             image_data = image.get_fdata()
-            mask = nib.load(os.path.join(params['model_dir'],
+            mask = nib.load(os.path.join(params['results_dir'],
                                          patient[0],
                                          patient[0]+'_mask.nii.gz'))
             mask_data = mask.get_fdata().astype(np.int8)
             image_data[mask_data == 0] = 0
             to_save_brain = nib.Nifti1Image(image_data, image.affine)
-            nib.save(to_save_brain, os.path.join(params['model_dir'],
+            nib.save(to_save_brain, os.path.join(params['results_dir'],
                                                  patient[0],
                                                  patient[0]+'_brain.nii.gz'))
 
     print("Please check the %s folder for the intermediate outputs if you\"+\
-          would like to see some intermediate steps." % (os.path.join(params['model_dir'], 'Temp')))
-    print("Final output stored in : %s" % (params['model_dir']))
+          would like to see some intermediate steps." % (os.path.join(params['results_dir'], 'Temp')))
+    print("Final output stored in : %s" % (params['results_dir']))
     print("Thank you for using Penn-BET")
     print('*'*60)
