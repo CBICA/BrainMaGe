@@ -67,7 +67,7 @@ if __name__ == '__main__':
     
     parser.add_argument('-v', '--version', action='version',
                         version=pkg_resources.require("Deep-BET")[0].version, help="Show program's version number and exit.")
-                        
+                            
     args = parser.parse_args()
 
     params_file = os.path.abspath(args.params)
