@@ -95,6 +95,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device -mode Multi-4
 ## TO-DO
 
 - Document information about ```csv_provided``` flag in configuration
+- In inference, rename ```model_dir``` to ```results_dir``` for clarity in the configuration and script(s)
 - Add CCA for post-processing
 - Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application)
 - Test on CPU
