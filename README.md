@@ -43,6 +43,7 @@ Use the following command for preprocessing, which will process all the modaliti
 ```bash
 ./env/python PENN_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
+**Note**: ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](##Arranging-Data). 
 
 ## Running Instructions
 
