@@ -79,7 +79,7 @@ Note that ```-load $resume.ckpt``` is only needed if you are resuming your train
 - We have three modes here:
   - Modality Agnostic (MA)
   - Multi-4, i.e., all 4 modalities getting used
-  - Single (**not yet** yet and its weights would be updated soon) 
+  - Single (weights would be updated soon) 
 - Populate a config file with required parameters. Examples:
   - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
   - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
