@@ -49,9 +49,9 @@ python setup.py install # install dependencies
 pip install -e . # install Deep-BET with a reference to scripts
 ```
 
-## Preprocessing Data
+## Standardizing Dataset Intensities
 
-Use the following command for preprocessing, which will process all the modalities for a given subject together and write it in the specified output location:
+Use the following command for preprocessing, which will standardize the intensities of all the modalities for a given subject and write it in the specified output location:
 
 ```bash
 ./env/python Deep_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
