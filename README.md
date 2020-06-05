@@ -103,6 +103,7 @@ If you use this package, please cite the following paper:
 
 ## Notes
 
+- **IMPORTANT** This application is neither FDA approved nor CE marked, so the use of this package and any associated risks are the users' responsibility.
 - Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
 - Using this software is pretty trivial as long as instructions are followed. 
 - You can use it in any terminal on a supported system. 
