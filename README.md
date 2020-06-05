@@ -118,7 +118,6 @@ If you use this package, please cite the following paper:
 - Document information about ```csv_provided``` flag in configuration
 - In inference, rename ```model_dir``` to ```results_dir``` for clarity in the configuration and script(s)
 - Add CCA for post-processing
-- Add version in the ```-h``` command using https://stackoverflow.com/a/2073599/1228757
 - Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application after my [PR](https://github.com/CBICA/CaPTk/pull/1061) gets merged to master)
 - Test on CPU
 - Move all dependencies to ```setup.py``` for consistency 
