@@ -10,7 +10,7 @@ The following steps need to be followed for preprocessing brain data:
 - Re-orientation to LPS/RAI
 - N4 Bias correction
 - Co-registration to T1CE modality
-- Registration to [SRI-24 atlas](https://www.nitrc.org/projects/sri24/)
+- Registration to [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space
 - Apply registration to re-oriented image to maximize image fidelity
 
 Users can use the ```BraTSPipeline``` executable from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier.
@@ -109,7 +109,7 @@ deep_bet_run -params $test_params.cfg -test True -dev $device
 - In inference, rename ```model_dir``` to ```results_dir``` for clarity in the configuration and script(s)
 - Add CCA for post-processing
 - Add version in the ```-h``` command using https://stackoverflow.com/a/2073599/1228757
-- Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application)
+- Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application after my [PR](https://github.com/CBICA/CaPTk/pull/1061) gets merged to master)
 - Test on CPU
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
