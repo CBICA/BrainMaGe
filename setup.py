@@ -12,7 +12,7 @@ from setuptools import setup
 setup(name='Deep-BET',
       version='1.0.0.Alpha',
       description='Skull stripping using multiple and single modalities',
-      url='https://github.com/CBICA/Penn-BET',
+      url='https://github.com/CBICA/Deep-BET',
       python_requires='>=3.6',
       author='Siddhesh Thakur',
       author_email='software@cbica.upenn.edu',
@@ -25,7 +25,7 @@ setup(name='Deep-BET',
       'nibabel',
       'pytorch-lightning'
       ],
-      scripts=['penn_bet_run'],
+      scripts=['deep_bet_run'],
       classifiers=[
           'Intended Audience :: Science/Research',
           'Programming Language :: Python',

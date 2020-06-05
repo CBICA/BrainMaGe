@@ -184,5 +184,5 @@ def infer_ma(cfg, device, save_brain, weights):
     print("Please check the %s folder for the intermediate outputs if you\"+\
           would like to see some intermediate steps." % (os.path.join(params['results_dir'], 'Temp')))
     print("Final output stored in : %s" % (params['results_dir']))
-    print("Thank you for using Penn-BET")
+    print("Thank you for using Deep-BET")
     print('*'*60)
