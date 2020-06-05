@@ -1,6 +1,6 @@
 # Deep-BET 
 
-## Arranging Data
+## Arranging and Processing Data
 
 The data needs to be preprocessed before fed to the network.
 
