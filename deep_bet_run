@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='Deep-BET', formatter_class=argparse.RawTextHelpFormatter,
                                      description='\nThis code was implemented for Deep Learning '+\
     'based training and inference of 3D-U-Net,\n3D-Res-U-Net models for '+\
-    'Brain Extraction a.k.a Skull Stripping in biomedical NIFTI volumes.\n'+\
+    'Brain Extraction a.k.a Skull Stripping in biomedical NIfTI volumes.\n'+\
     'The project is hosted at: https://github.com/CBICA/Deep-BET * \n'+\
     'See the documentation for details on its use.\n'+\
     'If you are using this tool, please cite out paper.'
