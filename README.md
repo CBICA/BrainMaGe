@@ -52,7 +52,7 @@ pip install -e . # install Penn-BET with a reference to scripts
 Use the following command for preprocessing, which will process all the modalities for a given subject together and write it in the specified output location:
 
 ```bash
-./env/python PENN_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
+./env/python Deep_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
 **Note**: ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](##Arranging-Data). 
 
@@ -62,12 +62,12 @@ We have two modes in here : `train` and `test`.
 
 ### Training
 
-- Populate a config file with required parameters (please see [train_params.cfg](./Penn_BET/config/train_params.cfg) for an example)
+- Populate a config file with required parameters (please see [train_params.cfg](./Deep_BET/config/train_params.cfg) for an example)
 - Note that preprocessed data in the specific format [ref](##Arranging-Data) should be used.
 - Invoke the following command:
 
 ```bash
-penn_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
+deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
 ```
 
 Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
@@ -79,16 +79,16 @@ Note that ```-load $resume.ckpt``` is only needed if you are resuming your train
   - Multi-4, i.e., all 4 modalities getting used
   - Single (**not yet** yet and its weights would be updated soon) 
 - Populate a config file with required parameters. Examples:
-  - MA: [test_params_ma.cfg](./Penn_BET/config/test_params_ma.cfg)
-  - Multi-4: [test_params.cfg](./Penn_BET/config/test_params_multi_4.cfg)
+  - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
+  - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
 - It is highly suggested that Multi-4 should be only run with some certain preprocessing steps (link goes here) mentioned below.
 - Invoke the following command:
 
 ```bash
-penn_bet_run -params $test_params.cfg -test True -dev $device
+deep_bet_run -params $test_params.cfg -test True -dev $device
 ```
 ```bash
-penn_bet_run -params $test_params.cfg -test True -dev $device
+deep_bet_run -params $test_params.cfg -test True -dev $device
 ```
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
@@ -98,7 +98,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device
 - Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
 - Using this software is pretty trivial as long as instructions are followed. 
 - You can use it in any terminal on a supported system. 
-- The ```penn_bet_run``` command gets installed automatically. 
+- The ```deep_bet_run``` command gets installed automatically. 
 - We provide CPU (untested as of 2020/05/31) as well as GPU support. 
   - Running on GPU is a lot faster though and should always be preferred. 
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
@@ -113,7 +113,7 @@ penn_bet_run -params $test_params.cfg -test True -dev $device
 - Test on CPU
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
-- Remove ```-mode``` parameter in ```penn_bet_run```
+- Remove ```-mode``` parameter in ```deep_bet_run```
 - Please post any requests as issues on this repository or send email to software@cbica.upenn.edu
 
 ## Contact

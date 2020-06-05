@@ -9,8 +9,8 @@ Created on Sat May 30 01:05:59 2020
 from __future__ import absolute_import, print_function, division
 import argparse
 import os
-from Penn_BET.trainer import trainer_main
-from Penn_BET.tester import test_ma, test_multi_4
+from Deep_BET.trainer import trainer_main
+from Deep_BET.tester import test_ma, test_multi_4
 import pkg_resources
 
 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('-params', dest='params', type=str,
                         help='Specify the architecture of the model to be used, by providing a\n'+\
                              'config file [PARAMS_CFG]. A sample of the files is stored in\n'+\
-                             'Penn_BET/config folder for the train, test. Checkout the parameter\n'+\
+                             'Deep_BET/config folder for the train, test. Checkout the parameter\n'+\
                              'explanation in the Readme.md for more details.\n',
                         required=True)
 
@@ -114,9 +114,9 @@ if __name__ == '__main__':
         elif args.test == 'True':
             base_dir = os.path.dirname(os.path.realpath(__file__))
             if args.mode == 'MA':
-                weights = os.path.join(base_dir, 'Penn_BET/weights/resunet_ma.pt')
+                weights = os.path.join(base_dir, 'Deep_BET/weights/resunet_ma.pt')
             elif args.mode == 'Multi-4':
-                weights = os.path.join(base_dir, 'Penn_BET/weights/resunet_multi_4.pt')
+                weights = os.path.join(base_dir, 'Deep_BET/weights/resunet_multi_4.pt')
         else:
             raise ValueError('Unknown value for mode. Expected one of "MA" or "Multi-4" without the quotes.',
                              'We received : ', args.mode,

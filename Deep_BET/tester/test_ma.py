@@ -16,9 +16,9 @@ import nibabel as nib
 import tqdm
 import numpy as np
 from skimage.transform import resize
-from Penn_BET.models.networks import fetch_model
-from Penn_BET.utils import csv_creator_adv
-from Penn_BET.utils.utils_test import pad_image, process_image, interpolate_image,\
+from Deep_BET.models.networks import fetch_model
+from Deep_BET.utils import csv_creator_adv
+from Deep_BET.utils.utils_test import pad_image, process_image, interpolate_image,\
     padder_and_cropper
 
 
