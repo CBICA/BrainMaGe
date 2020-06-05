@@ -7,6 +7,8 @@ The data needs to be preprocessed before fed to the network.
 ### Brain Preprocessing steps
 
 The following steps need to be followed for preprocessing brain data:
+
+- DICOM to NIfTI conversion
 - Re-orientation to LPS/RAI
 - N4 Bias correction
 - Co-registration to T1CE modality
