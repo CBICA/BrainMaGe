@@ -95,6 +95,14 @@ deep_bet_run -params $test_params.cfg -test True -dev $device
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
+## Citation
+
+If you use this package, please cite the following paper:
+
+```
+Thakur, S.P., Doshi, J., Pati, S., Ha, S.M., Sako, C., Talbar, S., Kulkarni, U., Davatzikos, C., Erus, G. and Bakas, S., 2019, October. Skull-Stripping of Glioblastoma MRI Scans Using 3D Deep Learning. In International MICCAI Brainlesion Workshop (pp. 57-68). Springer, Cham. DOI:10.1007/978-3-030-46640-4_6
+```
+
 ## Notes
 
 - Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
