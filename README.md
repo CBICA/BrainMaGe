@@ -38,14 +38,13 @@ Please note that you need to have a python3 installation for Penn-BET, but [cond
 ```bash
 git clone https://github.com/CBICA/Penn-BET.git
 cd Penn-BET
-conda create -n pbet python=3.6 -y # create a virtual environment
-conda activate pbet # activate it
+conda env create -f requirements.yml # create a virtual environment named deepbet
+conda activate deepbet # activate it
 latesttag=$(git describe --tags) # get the latest tag [bash-only]
 echo checking out ${latesttag}
 git checkout ${latesttag}
 python setup.py install # install dependencies
 pip install -e . # install Penn-BET with a reference to scripts
-pip install requirements.txt
 ```
 
 ## Preprocessing Data
