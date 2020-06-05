@@ -1,4 +1,4 @@
-# Penn-BET 
+# Deep-BET 
 
 ## Arranging Data
 
@@ -33,18 +33,18 @@ This can be circumvented by using a data CSV via the ```csv_provided``` paramete
 
 ## Installation Instructions
 
-Please note that you need to have a python3 installation for Penn-BET, but [conda](https://www.anaconda.com/) is preferred.
+Please note that you need to have a python3 installation for Deep-BET, but [conda](https://www.anaconda.com/) is preferred.
 
 ```bash
-git clone https://github.com/CBICA/Penn-BET.git
-cd Penn-BET
+git clone https://github.com/CBICA/Deep-BET.git
+cd Deep-BET
 conda env create -f requirements.yml # create a virtual environment named deepbet
 conda activate deepbet # activate it
 latesttag=$(git describe --tags) # get the latest tag [bash-only]
 echo checking out ${latesttag}
 git checkout ${latesttag}
 python setup.py install # install dependencies
-pip install -e . # install Penn-BET with a reference to scripts
+pip install -e . # install Deep-BET with a reference to scripts
 ```
 
 ## Preprocessing Data
