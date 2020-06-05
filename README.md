@@ -114,6 +114,7 @@ deep_bet_run -params $test_params.cfg -test True -dev $device
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
 - Remove ```-mode``` parameter in ```deep_bet_run```
+- Windows support (this currently works but needs a few work-arounds)
 - Please post any requests as issues on this repository or send email to software@cbica.upenn.edu
 
 ## Contact
