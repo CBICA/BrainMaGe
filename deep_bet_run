@@ -54,6 +54,11 @@ if __name__ == '__main__':
                              'Default for selecting first GPU is set to -dev 0\n',
                         required=False)
 
+    parser.add_argument('-mode', dest='mode', type=str,
+                        help='Should be one of "MA" or "Mulit-4" without the quotes so that \n'+
+                             'the appropriate weight files are loaded automatically during\n'+\
+                             'the test time.')
+
     parser.add_argument('-save_brain', default=1, type=int, required=False, dest='save_brain',
                         help='if set to 0 the segmentation mask will be only produced and\n'+\
                              'and the mask will not be applied on the input image to produce\n'+\
@@ -74,17 +79,7 @@ if __name__ == '__main__':
     params_file = os.path.abspath(args.params)
     DEVICE = args.device
     # Reading in all the parameters
-    if os.path.isfile(params_file):
-        params_df = pd.read_csv(cfg, sep=' = ', names=['param_name', 'param_value'],
-                                comment='#', skip_blank_lines=True,
-                                engine='python').fillna(' ')
-    else:
-        print('Missing train_params.cfg file?')
-        sys.exit(0)
-    params = {}
-    for i in range(params_df.shape[0]):
-        params[params_df.iloc[i, 0]] = params_df.iloc[i, 1]
-    mode = params['mode']
+    mode = args.mode
     save_brain = args.save_brain
     if args.load is not None:
         weights = os.path.abspath(args.load)
@@ -139,9 +134,9 @@ if __name__ == '__main__':
     if args.train == 'True':
         trainer_main.train_network(params_file, DEVICE, weights)
     elif args.test == 'True':
-        if args.mode == 'MA':
+        if args.mode.lower() == 'ma':
             test_ma.infer_ma(params_file, DEVICE, args.save_brain, weights)
-        elif args.mode == 'Multi-4':
+        elif args.mode.lower() == 'multi-4':
             test_multi_4.infer_multi_4(params_file, DEVICE, args.save_brain, weights)
         else :
             raise ValueError('Unknown value for mode. Expected one of "MA" or "Multi-4" without the quotes.',

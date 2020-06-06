@@ -164,11 +164,11 @@ def generate_csv(folder_path, to_save, mode, ftype, modalities):
         modalities {[string]} -- [description]
     """
     print("Generating", ftype, '.csv')
-    if mode == 'one4all':
+    if mode.lower() == 'ma':
         rex_o4a_csv(folder_path, to_save, ftype, modalities)
-    elif mode == 'ma':
+    elif mode.lower() == 'single':
         rex_sin_csv(folder_path, to_save, ftype, modalities)
-    elif mode == 'multi':
+    elif mode.lower() == 'multi':
         rex_mul_csv(folder_path, to_save, ftype, modalities)
     else:
         print("Sorry, this mode is not supported")

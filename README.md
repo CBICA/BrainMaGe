@@ -84,13 +84,14 @@ Note that ```-load $resume.ckpt``` is only needed if you are resuming your train
   - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
   - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
 - It is highly suggested that Multi-4 should be only run with some certain preprocessing steps (link goes here) mentioned below.
+- Mode refers to the inference type that you wish to run which is necessary
 - Invoke the following command:
 
 ```bash
-deep_bet_run -params $test_params.cfg -test True -dev $device
+deep_bet_run -params $test_params_ma.cfg -test True -mode MA -dev $device
 ```
 ```bash
-deep_bet_run -params $test_params.cfg -test True -dev $device
+deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $device
 ```
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
