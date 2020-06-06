@@ -9,6 +9,7 @@ Created on Sat May 30 01:05:59 2020
 from __future__ import absolute_import, print_function, division
 import argparse
 import os
+import pandas as pd
 from Deep_BET.trainer import trainer_main
 from Deep_BET.tester import test_ma, test_multi_4
 import pkg_resources
