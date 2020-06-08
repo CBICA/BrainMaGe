@@ -31,7 +31,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
                patient_n -- ...
 ```
 
-This can be circumvented by using a data CSV via the ```csv_provided``` parameter.
+This can be circumvented by using a data CSV via a [data file](##Data-File-usage), using the ```csv_provided``` parameter.
 
 ## Installation Instructions
 
@@ -56,7 +56,7 @@ Use the following command for preprocessing, which will standardize the intensit
 ```bash
 ./env/python Deep_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
 ```
-**Note**: ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](##Arranging-Data). 
+**Note**: ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
 
 ## Running Instructions
 
@@ -65,7 +65,7 @@ We have two modes in here : `train` and `test`.
 ### Training
 
 - Populate a config file with required parameters (please see [train_params.cfg](./Deep_BET/config/train_params.cfg) for an example)
-- Note that preprocessed data in the specific format [ref](##Arranging-Data) should be used.
+- Note that preprocessed data in the specific format [ref](###Expected-Directory-structure-for-data) should be used.
 - Invoke the following command:
 
 ```bash
@@ -96,22 +96,29 @@ deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $dev
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
-## csv_provided option usage
+## Data File usage
 
-if your data is organized according to the instructions, you can set `csv_provided` to `False` and provided no csv file, and CSV file would be generated according to what you insert in the `modalities` [line](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L19).
+If the data is organized according to the above [instructions](###Expected-Directory-structure-for-data), the `csv_provided` variable can be set to `False`, and CSV file would be generated according to what is inserted in the `modalities` [line](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L19).
 
-for example:
+For example:
 ```
 modalities = ['T1', 'T2', 'T1ce', 'Flair']
 ```
-would result in the csv created in the following format for
-Training
-`Patient_ID,gt_path,T1_path,T2_path,T1ce_path,Flair_path`
-Testing
-`Patient_ID,T1_path,T2_path,T1ce_path,Flair_path`
+would result in the CSV created in the following format:
 
-Now, if the data isn't organized in such a manner, then you can create a CSV with the above mentioned format and
-set the `csv_provided` to `True` and provide the csv files in [`test_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L15), [`train_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L17) and [`validation_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L18)
+- Training
+
+  `Patient_ID,gt_path,T1_path,T2_path,T1ce_path,Flair_path`
+- Testing
+
+  `Patient_ID,T1_path,T2_path,T1ce_path,Flair_path`
+
+Now, if the data isn't organized, a CSV can be created in the above mentioned format and the `csv_provided` variable can be set to `True` and the CSV files can be provided in the following locations:
+
+- [`test_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L15)
+- [`train_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L17)
+- [`validation_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L18).
+
 ## Citation
 
 If you use this package, please cite the following paper:
