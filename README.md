@@ -96,6 +96,22 @@ deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $dev
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
+## csv_provided option usage
+
+if your data is organized according to the instructions, you can set `csv_provided` to `False` and provided no csv file, and CSV file would be generated according to what you insert in the `modalities` [line](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L19).
+
+for example:
+```
+modalities = ['T1', 'T2', 'T1ce', 'Flair']
+```
+would result in the csv created in the following format for
+Training
+`Patient_ID,gt_path,T1_path,T2_path,T1ce_path,Flair_path`
+Testing
+`Patient_ID,T1_path,T2_path,T1ce_path,Flair_path`
+
+Now, if the data isn't organized in such a manner, then you can create a CSV with the above mentioned format and
+set the `csv_provided` to `True` and provide the csv files in [`test_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L15), [`train_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L17) and [`validation_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L18)
 ## Citation
 
 If you use this package, please cite the following paper:
