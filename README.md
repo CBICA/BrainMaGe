@@ -14,8 +14,9 @@ The following steps need to be followed for preprocessing brain data:
 - Co-registration to T1CE modality
 - Registration to [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space
 - Apply registration to re-oriented image to maximize image fidelity
-https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities
-Users can use the ```BraTSPipeline``` executable from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above) are also saved.
+- https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities
+
+Users can use the ```BraTSPipeline``` executable from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
 ### Expected Directory structure for data
 
