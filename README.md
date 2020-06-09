@@ -14,7 +14,7 @@ The following steps need to be followed for preprocessing brain data:
 - Co-registration to T1CE modality
 - Registration to [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space
 - Apply registration to re-oriented image to maximize image fidelity
-
+https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities
 Users can use the ```BraTSPipeline``` executable from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above) are also saved.
 
 ### Expected Directory structure for data
@@ -54,9 +54,30 @@ pip install -e . # install Deep-BET with a reference to scripts
 Use the following command for preprocessing, which will standardize the intensities of all the modalities for a given subject and write it in the specified output location:
 
 ```bash
-./env/python Deep_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t threads
+./env/python Deep_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
 ```
 **Note**: ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
+Here `${threads}` are the maximum number of threads you are willing to commit for preprocessing, generally depending on the  number of cpu cores you have. Should be of type `int` and should follow 0 < ${threads} < maximum_cpu_cores. Depending on the type of cpu you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [64](https://www.amd.com/en/products/cpu/amd-ryzen-threadripper-3990x) cores.
+
+## How to prepare your files
+
+### For training
+If you wish to train the network on your own, then you need to :
+ - Step 1:
+Set the dataset in the above mentioned [format](https://github.com/CBICA/Deep-BET#expected-directory-structure-for-data)
+ - Step 2:
+Follow the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)
+- Step 3:
+Follow the Skull Stripping intensity Standardization preprocessing mentioned [here](https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities)
+ - Step 4:
+Insert these generated preprocessed files from *Step 3* in the config file. Following the similar steps for your validation dataset, and it's not option since it is a good practice to validate your model against something to avoid overfitting in while Training CNN. (You could still use the training data as validation but it's not a good practice)
+
+### For testing
+If you wish to utilize to infer using the files, the following steps need to be followed:
+#### MA
+If you are inferring using modality agnostic inference, you don't need to preprocess your files, as everything is handled internally
+#### Multi-4
+If you are using Multi-Modality inference ie;  t1, t2, t1gd, t2-flair, you need to preprocess your files as mentioned in the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps) and then pass these files over to the network in the config files
 
 ## Running Instructions
 
@@ -96,6 +117,15 @@ deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $dev
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
+## Converting weights after training
+If you have trained your own weights, you will receive a .ckpt file instead of .pt
+We have provided (convert_ckpt_to_pt.py)[https://github.com/CBICA/Deep-BET/blob/master/Deep_BET/utils/convert_ckpt_to_pt.py]
+which is required to convert the file. It takes in two parameters as follow
+```bash
+./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
+```
+- Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
+
 ## Data File usage
 
 If the data is organized according to the above [instructions](###Expected-Directory-structure-for-data), the `csv_provided` variable can be set to `False`, and CSV file would be generated according to what is inserted in the `modalities` [line](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L19).
@@ -128,7 +158,6 @@ If you use this package, please cite the following paper:
 ## Notes
 
 - **IMPORTANT**: This application is neither FDA approved nor CE marked, so the use of this package and any associated risks are the users' responsibility.
-- Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
 - Using this software is pretty trivial as long as instructions are followed. 
 - You can use it in any terminal on a supported system. 
 - The ```deep_bet_run``` command gets installed automatically. 
