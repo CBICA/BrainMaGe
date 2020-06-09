@@ -124,13 +124,14 @@ deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $dev
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
 ## Converting weights after training
-If you have trained your own weights, you will receive a .ckpt file instead of .pt
-We have provided (convert_ckpt_to_pt.py)[https://github.com/CBICA/Deep-BET/blob/master/Deep_BET/utils/convert_ckpt_to_pt.py]
-which is required to convert the file. It takes in two parameters as follow
-```bash
-./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
-```
-- Please note that the if you wish to use your own weights, you can use the ```-load``` option, but we suggest you to use our weights that are provided in the weights folder.
+
+- After training a custom model, you shall have a `.ckpt` file instead of a `.pt` file.
+- The file (convert_ckpt_to_pt.py)[https://github.com/CBICA/Deep-BET/blob/master/Deep_BET/utils/convert_ckpt_to_pt.py] can be used  to convert the file. 
+  - Example:
+    ```bash
+    ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
+    ```
+- Please note that the if you wish to use your own weights, you can use the ```-load``` option.
 
 ## Data File usage
 
