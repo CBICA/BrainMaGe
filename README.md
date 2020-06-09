@@ -72,11 +72,18 @@ Use the following command for preprocessing, which will standardize the intensit
 -# Follow similar steps for the validation dataset.
 
 ### For Testing
-If you wish to utilize to infer using the files, the following steps need to be followed:
+
 #### MA
-If you are inferring using modality agnostic inference, you don't need to preprocess your files, as everything is handled internally
+
+This inference type does not need any preprocessing of input files, as everything is handled internally.
+
+The input images can be directly passed to the [config file](./Deep_BET/config/test_params_ma.cfg).
+
 #### Multi-4
-If you are using Multi-Modality inference ie;  t1, t2, t1gd, t2-flair, you need to preprocess your files as mentioned in the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps) and then pass these files over to the network in the config files
+
+If all the structural modalities (i.e., `T1, T2, T1ce, Flair`) are being used, processing the input data (as mentioned in the [Brain Preprocessing section](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)) is required. 
+
+Pass the processed images over to the network via the [config files](./Deep_BET/config/test_params_multi_4.cfg).
 
 ## Running Instructions
 
