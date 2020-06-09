@@ -55,7 +55,7 @@ pip install -e . # install Deep-BET with a reference to scripts
 Use the following command for preprocessing, which will standardize the intensities of all the modalities for a given subject and write it in the specified output location:
 
 ```bash
-./env/python Deep_BET/utils/preprocess.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
+./env/python Deep_BET/utils/preprocess_data.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
 ```
 **Notes**: 
 - ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
