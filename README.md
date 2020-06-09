@@ -61,20 +61,17 @@ Use the following command for preprocessing, which will standardize the intensit
 - ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
 - `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [64](https://www.amd.com/en/products/cpu/amd-ryzen-threadripper-3990x) threads.
 
-## How to prepare your files
+## Preparing Files
 
-### For training
-If you wish to train the network on your own, then you need to :
- - Step 1:
-Set the dataset in the above mentioned [format](https://github.com/CBICA/Deep-BET#expected-directory-structure-for-data)
- - Step 2:
-Follow the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)
-- Step 3:
-Follow the Skull Stripping intensity Standardization preprocessing mentioned [here](https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities)
- - Step 4:
-Insert these generated preprocessed files from *Step 3* in the config file. Following the similar steps for your validation dataset, and it's not option since it is a good practice to validate your model against something to avoid overfitting in while Training CNN. (You could still use the training data as validation but it's not a good practice)
+### For Training
 
-### For testing
+-# Set the dataset in the above mentioned [format](https://github.com/CBICA/Deep-BET#expected-directory-structure-for-data)
+-# Follow the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)
+-# Follow the Skull Stripping intensity Standardization preprocessing mentioned [here](https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities)
+-# Insert these generated preprocessed files from *Step 3* in the config file. 
+-# Follow similar steps for the validation dataset.
+
+### For Testing
 If you wish to utilize to infer using the files, the following steps need to be followed:
 #### MA
 If you are inferring using modality agnostic inference, you don't need to preprocess your files, as everything is handled internally
