@@ -16,7 +16,7 @@ setup(name='Deep-BET',
       python_requires='>=3.6',
       author='Siddhesh Thakur',
       author_email='software@cbica.upenn.edu',
-      license='Apache 2.0',
+      license='BSD-3-Clause',
       zip_safe=False,
       install_requires=[
       'numpy',
