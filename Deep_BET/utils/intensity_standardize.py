@@ -12,7 +12,7 @@ import os
 import glob
 import nibabel as nib
 import argparse
-from utils.preprocess_data import preprocess_image
+from Deep_BET.utils.preprocess_data import preprocess_image
 from multiprocessing import Pool, cpu_count
 
 
