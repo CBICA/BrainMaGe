@@ -37,22 +37,16 @@ class SkullStripper(ptl.LightningModule):
         output = self.forward(image)
         loss = self.my_loss(output, mask)
         dice_score = dice(output, mask)
-        tensorboard_logs = {'train_loss': loss.cpu().data.item(),
-                            'train_dice': dice_score.cpu().data.item()}
         return {'loss': loss,
-                'dice': dice_score,
-                'log': tensorboard_logs}
+                'dice': dice_score}
 
     def validation_step(self, batch, batch_nb):
         image, mask = batch['image_data'], batch['ground_truth_data']
         output = self.forward(image)
         loss = self.my_loss(output, mask)
         dice_score = dice(output, mask)
-        tensorboard_logs = {'val_loss': loss.cpu().data.item(),
-                            'val_dice': dice_score.cpu().data.item()}
         return {'val_loss': loss,
-                'val_dice': dice_score,
-                'val_log': tensorboard_logs}
+                'val_dice': dice_score}
 
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()

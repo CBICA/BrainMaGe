@@ -14,7 +14,6 @@ import torch
 import pandas as pd
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-from pytorch_lightning.logging import TensorBoardLogger
 from Deep_BET.utils.csv_creator_adv import generate_csv
 from Deep_BET.trainer.lightning_networks import SkullStripper
 
@@ -135,12 +134,10 @@ def train_network(cfg, device, weights):
     stop_callback = EarlyStopping(monitor='val_loss', mode='auto',
                                   patience=int(params['early_stop_patience']),
                                   verbose=True)
-    tensorboard_logger = TensorBoardLogger(params['model_dir'], name="my_model")
     model = SkullStripper(params)
 
     res_ckpt = weights
-    trainer = Trainer(logger=tensorboard_logger,
-                      checkpoint_callback=checkpoint_callback,
+    trainer = Trainer(checkpoint_callback=checkpoint_callback,
                       early_stop_callback=stop_callback,
                       default_save_path=params['model_dir'],
                       gpus=params['device'],
