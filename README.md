@@ -126,7 +126,7 @@ deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $dev
 ## Converting weights after training
 
 - After training a custom model, you shall have a `.ckpt` file instead of a `.pt` file.
-- The file (convert_ckpt_to_pt.py)[https://github.com/CBICA/Deep-BET/blob/master/Deep_BET/utils/convert_ckpt_to_pt.py] can be used  to convert the file. 
+- The file [convert_ckpt_to_pt.py](./Deep_BET/utils/convert_ckpt_to_pt.py) can be used  to convert the file. 
   - Example:
     ```bash
     ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
