@@ -16,7 +16,7 @@ The following steps need to be followed for preprocessing brain data:
 - Apply registration to re-oriented image to maximize image fidelity
 - https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities
 
-Users can use the ```BraTSPipeline``` executable from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+Users can use the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
 ### Expected Directory structure for data
 
