@@ -139,25 +139,16 @@ def train_network(cfg, device, weights):
     res_ckpt = weights
     trainer = Trainer(checkpoint_callback=checkpoint_callback,
                       early_stop_callback=stop_callback,
-                      default_save_path=params['model_dir'],
+                      default_root_dir=params['model_dir'],
                       gpus=params['device'],
-                      log_gpu_memory='min_max',
-                      show_progress_bar=False,
-                      check_val_every_n_epoch=1,
                       fast_dev_run=False,
                       max_epochs=int(params['max_epochs']),
                       min_epochs=int(params['min_epochs']),
-                      train_percent_check=1.0,
-                      val_percent_check=1.0,
-                      val_check_interval=1.0,
-                      log_save_interval=100,
-                      row_log_interval=10,
-                      distributed_backend=None,
-                      use_amp=False,  # Do you need 16 bit?
+                      distributed_backend='ddp',
                       weights_summary='full',
                       weights_save_path=params['model_dir'],
                       amp_level='O1',
                       num_sanity_val_steps=5,
-                      resume_from_checkpoint=res_ckpt
+                      resume_from_checkpoint=res_ckpt,
                       )
     trainer.fit(model)

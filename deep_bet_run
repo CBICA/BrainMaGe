@@ -55,7 +55,7 @@ if __name__ == '__main__':
                         required=False)
 
     parser.add_argument('-mode', dest='mode', type=str,
-                        help='Should be one of "MA" or "Mulit-4" without the quotes so that \n'+
+                        help='Should be one of "MA" or "Multi-4" without the quotes so that \n'+
                              'the appropriate weight files are loaded automatically during\n'+\
                              'the test time.')
 
@@ -81,11 +81,17 @@ if __name__ == '__main__':
     # Reading in all the parameters
     mode = args.mode
     save_brain = args.save_brain
+
+    #  If weights are given in params, then set weights to given params
+    # else set weights to None
     if args.load is not None:
         weights = os.path.abspath(args.load)
     else:
         weights = None
-
+    # If weights are not None, which meeans the weights are given
+    # Then check if weeightss are .ckpt for training
+    # and .pt for testing
+    # Else raise value error
     if weights is not None:
         if os.path.exists(weights):
             if args.train == 'True':
@@ -94,7 +100,8 @@ if __name__ == '__main__':
                     raise ValueError("The extension was not a .ckpt file for training to enable proper\n"+\
                                      "resume during training. Please pass a .ckpt file.")
             elif args.test == 'True':
-                if args.mode == 'MA' or args.mode == 'Multi_4':
+                print(args.mode)
+                if args.mode.lower() == 'ma' or args.mode.lower == 'multi_4':
                     _, ext = os.path.splitext(weights)
                     if ext != '.pt':
                         raise ValueError("Expected a .pt file, got a file with %s extension. If it is a\n"+\
@@ -109,9 +116,9 @@ if __name__ == '__main__':
             pass
         elif args.test == 'True':
             base_dir = os.path.dirname(os.path.realpath(__file__))
-            if args.mode == 'MA':
+            if args.mode.lower() == 'ma':
                 weights = os.path.join(base_dir, 'Deep_BET/weights/resunet_ma.pt')
-            elif args.mode == 'Multi-4':
+            elif args.mode.lower() == 'multi-4':
                 weights = os.path.join(base_dir, 'Deep_BET/weights/resunet_multi_4.pt')
         else:
             raise ValueError('Unknown value for mode. Expected one of "MA" or "Multi-4" without the quotes.',
