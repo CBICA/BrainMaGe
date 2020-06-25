@@ -45,7 +45,7 @@ def rex_o4a_csv(folder_path, to_save, ftype, modalities):
             csv_file.write(folder+'_'+modality+',')
             if ftype != 'test':
                 ground_truth = glob.glob(os.path.join(folder_path, folder,
-                                                      '*maskFinal*.nii.gz'))[0]
+                                                      '*mask.nii.gz'))[0]
                 csv_file.write(ground_truth)
                 csv_file.write(',')
             img = glob.glob(os.path.join(folder_path, folder,
@@ -91,7 +91,7 @@ def rex_sin_csv(folder_path, to_save, ftype, modalities):
         csv_file.write(',')
         if ftype != 'test':
             ground_truth = glob.glob(os.path.join(folder_path, folder,
-                                                  '*maskFinal*.nii.gz'))[0]
+                                                  '*mask.nii.gz'))[0]
             csv_file.write(ground_truth)
             csv_file.write(',')
         img = glob.glob(os.path.join(folder_path, folder,
@@ -136,7 +136,7 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
         csv_file.write(',')
         if ftype != 'test':
             ground_truth = glob.glob(os.path.join(folder_path, folder,
-                                                  '*maskFinal*.nii.gz'))[0]
+                                                  '*mask.nii.gz'))[0]
             csv_file.write(ground_truth)
             csv_file.write(',')
         for modality in modalities[:-1]:
