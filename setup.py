@@ -31,5 +31,7 @@ setup(name='Deep-BET',
           'Programming Language :: Python',
           'Topic :: Scientific/Engineering',
           'Operating System :: Unix'
-      ]
+      ],
+      data_files = [ ("weights",  [ './Deep_BET/weights/resunet_ma.pt',
+                                    './Deep_BET/weights/resunet_multi_4.pt']) ]
       )
