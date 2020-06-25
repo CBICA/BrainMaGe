@@ -8,6 +8,7 @@ Created on Sat May 30 01:05:59 2020
 
 
 from setuptools import setup
+import setuptools
 
 setup(name='Deep-BET',
       version='1.0.0.Alpha',
@@ -32,6 +33,6 @@ setup(name='Deep-BET',
           'Topic :: Scientific/Engineering',
           'Operating System :: Unix'
       ],
-      data_files = [ ("weights",  [ './Deep_BET/weights/resunet_ma.pt',
-                                    './Deep_BET/weights/resunet_multi_4.pt']) ]
+      packages=setuptools.find_packages(),
+      include_package_data=True
       )

@@ -46,8 +46,7 @@ conda activate deepbet # activate it
 latesttag=$(git describe --tags) # get the latest tag [bash-only]
 echo checking out ${latesttag}
 git checkout ${latesttag}
-python setup.py install # install dependencies
-pip install -e . # install Deep-BET with a reference to scripts
+python setup.py install # install dependencies and Deep-BET
 ```
 
 ## Standardizing Dataset Intensities
