@@ -15,7 +15,7 @@ git checkout ${latesttag}
 python setup.py install # install dependencies and Deep-BET
 ```
 
-## Generating brain mask for your data using our pre-trained models
+## Generating brain masks for your data using our pre-trained models
 
 - This application currently has two modes (more coming soon):
   - Modality Agnostic (MA)
@@ -25,9 +25,9 @@ python setup.py install # install dependencies and Deep-BET
 
 1. Co-registration within patient to the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space.
 
-    An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+    An easy way to do this is using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/). This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
-2. Make Input CSV
+2. Make an Input CSV including paths to the co-registered images (prepared in the previous step) that you wish to make brain masks.
 
   - Multi-4 (use all 4 structural modalities): Prepare a CSV file with the following headers:
   `Patient_ID,T1_path,T2_path,T1ce_path,Flair_path`
@@ -36,7 +36,7 @@ python setup.py install # install dependencies and Deep-BET
   `Patient_ID_Modality,image_path`
 
 
-2. Make config files:
+3. Make config files:
 
     Populate a config file with required parameters. Examples:
     - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
@@ -46,7 +46,7 @@ python setup.py install # install dependencies and Deep-BET
 
     **Note**: Alternatively, you can use the diretory structure similar to the training as desribed in the next section.
 
-3. Run the application:
+4. Run the application:
 
     ```bash
     deep_bet_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
@@ -59,16 +59,16 @@ python setup.py install # install dependencies and Deep-BET
 
 ## [ADVANCED] Train your own model
 
-1. Co-registration within patient in a common atlas space such the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space. 
+1. Co-registration within patient in a common atlas space such as the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space. 
 
-    An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+    An easy way to do this is using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/). This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
-**Note**: Any changes done in this step needs to be reflected during the inference process.
+    **Note**: Any changes done in this step needs to be reflected during the inference process.
 
-2. Arranging the Input Data
+2. Arranging the Input Data, co-registered in the previous step, to the following folder structure. Please note files must be named exactly as below (e.g. ${subjectName}_t1, ${subjectName}_maskFinal.nii.gz etc.) 
 
 ```
-Data_folder -- patient_1 -- patient_1_t1.nii.gz
+Input_Data_folder -- patient_1 -- patient_1_t1.nii.gz
                          -- patient_1_t2.nii.gz
                          -- patient_1_t1ce.nii.gz
                          -- patient_1_flair.nii.gz
@@ -87,7 +87,7 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
     python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
     ```
 
-    - ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
+    - ```${inputSubjectDirectory}``` needs to be structured as described in the previous step [Arranging Data](###Expected-Directory-structure-for-data)
     - `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [112](https://www.intel.com/content/www/us/en/products/processors/xeon/scalable/platinum-processors/platinum-9282.html) threads.
 
 4. Prepare configuration file
