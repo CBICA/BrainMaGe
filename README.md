@@ -25,7 +25,7 @@ python setup.py install # install dependencies and Deep-BET
 
 1. Co-registration within patient to the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space.
 
-An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+    An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
 2. Make Input CSV
 
@@ -38,30 +38,30 @@ An easy way to do this using the [```BraTSPipeline``` application](https://cbica
 
 2. Make config files:
 
-Populate a config file with required parameters. Examples:
-  - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
-  - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
+    Populate a config file with required parameters. Examples:
+    - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
+    - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
 
-`mode` refers to the inference type, which is a required parameter
+    Where `mode` refers to the inference type, which is a required parameter
 
-**Note**: Alternatively, you can use the diretory structure similar to the training as desribed in the next section.
+    **Note**: Alternatively, you can use the diretory structure similar to the training as desribed in the next section.
 
 3. Run the application:
 
-```bash
-deep_bet_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
-```
+    ```bash
+    deep_bet_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
+    ```
 
-Where:
-- ```$mode``` can be ```MA``` for modality agnostic or ```Mult-4```.
-- ```$device``` refers to the GPU device where you want your code to run or the CPU.
+    Where:
+    - ```$mode``` can be ```MA``` for modality agnostic or ```Mult-4```.
+    - ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
 
 ## [ADVANCED] Train your own model
 
 1. Co-registration within patient in a common atlas space such the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space. 
 
-An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+    An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
 **Note**: Any changes done in this step needs to be reflected during the inference process.
 
@@ -81,28 +81,28 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 
 3. Standardizing Dataset Intensities
 
-Use the following command to standardize intensities for both training and validation data:
+    Use the following command to standardize intensities for both training and validation data:
 
-```bash
-python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
-```
+    ```bash
+    python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
+    ```
 
-- ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
-- `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [112](https://www.intel.com/content/www/us/en/products/processors/xeon/scalable/platinum-processors/platinum-9282.html) threads.
+    - ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
+    - `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [112](https://www.intel.com/content/www/us/en/products/processors/xeon/scalable/platinum-processors/platinum-9282.html) threads.
 
 4. Prepare configuration file
 
-Populate a config file with required parameters. Example: [train_params.cfg](./Deep_BET/config/train_params.cfg)
+    Populate a config file with required parameters. Example: [train_params.cfg](./Deep_BET/config/train_params.cfg)
 
-Change the ```mode``` variable in the config file based on what kind of model you want to train (either modality agnostic or multi-4).
+    Change the ```mode``` variable in the config file based on what kind of model you want to train (either modality agnostic or multi-4).
 
 5. Run the training:
 
-```bash
-deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
-```
+    ```bash
+    deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
+    ```
 
-Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
+    Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
 
 6. [OPTIONAL] Converting weights after training
 
