@@ -1,12 +1,60 @@
 # Deep-BET 
 
+## Installation Instructions
+
+Please note that python3 is required and [conda](https://www.anaconda.com/) is preferred.
+
+```bash
+git clone https://github.com/CBICA/Deep-BET.git
+cd Deep-BET
+conda env create -f requirements.yml # create a virtual environment named deepbet
+conda activate deepbet # activate it
+latesttag=$(git describe --tags) # get the latest tag [bash-only]
+echo checking out ${latesttag}
+git checkout ${latesttag}
+python setup.py install # install dependencies and Deep-BET
+```
+
+## Generating brain mask for your data using our pre-trained models
+
+To run the models we provide, the only step that is needed is co-registration within patient to the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space.
+
+An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+
+### Running the Inference
+
+- This application has three modes:
+  - Modality Agnostic (MA)
+  - Multi-4, i.e., all 4 modalities getting used
+  - Single (weights would be updated soon) 
+- Populate a config file with required parameters. Examples:
+  - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
+  - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
+- It is highly suggested that Multi-4 should be only run with the [specified preprocessing steps](##preprocessing-steps) or by using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/).
+- `mode` refers to the inference type, which is a required parameter
+- Invoke the following command:
+
+```bash
+deep_bet_run -params $test_params_ma.cfg -test True -mode MA -dev $device
+```
+```bash
+deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $device
+```
+
+```$device``` refers to the GPU device where you want your code to run or the CPU.
+
+
+## Train a new model based on new data
+
+
+
 ## Arranging and Processing Data
 
 The data needs to be preprocessed before fed to the network.
 
-### Brain Preprocessing steps
+### Preprocessing Steps
 
-The following steps need to be followed for preprocessing brain data:
+These are the steps we have used to train the provided models:
 
 - DICOM to NIfTI conversion
 - Re-orientation to LPS/RAI
@@ -34,21 +82,6 @@ Data_folder -- patient_1 -- patient_1_t1.nii.gz
 
 This can be circumvented by using a data CSV via a [data file](##Data-File-usage), using the ```csv_provided``` parameter.
 
-## Installation Instructions
-
-Please note that you need to have a python3 installation for Deep-BET, but [conda](https://www.anaconda.com/) is preferred.
-
-```bash
-git clone https://github.com/CBICA/Deep-BET.git
-cd Deep-BET
-conda env create -f requirements.yml # create a virtual environment named deepbet
-conda activate deepbet # activate it
-latesttag=$(git describe --tags) # get the latest tag [bash-only]
-echo checking out ${latesttag}
-git checkout ${latesttag}
-python setup.py install # install dependencies and Deep-BET
-```
-
 ## Standardizing Dataset Intensities
 
 Use the following command for preprocessing, which will standardize the intensities of all the modalities for a given subject and write it in the specified output location:
@@ -61,14 +94,6 @@ Use the following command for preprocessing, which will standardize the intensit
 - `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [64]() threads.
 
 ## Preparing Files
-
-### For Training
-
--# Set the dataset in the above mentioned [format](https://github.com/CBICA/Deep-BET#expected-directory-structure-for-data)
--# Follow the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)
--# Follow the Skull Stripping intensity Standardization preprocessing mentioned [here](https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities)
--# Insert these generated preprocessed files from *Step 3* in the config file. 
--# Follow similar steps for the validation dataset.
 
 ### For Testing
 
@@ -84,21 +109,17 @@ If all the structural modalities (i.e., `T1, T2, T1ce, Flair`) are being used, p
 
 Pass the processed images over to the network via the [config files](./Deep_BET/config/test_params_multi_4.cfg).
 
+### For Training
+
+-# Set the dataset in the above mentioned [format](https://github.com/CBICA/Deep-BET#expected-directory-structure-for-data)
+-# Follow the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)
+-# Follow the Skull Stripping intensity Standardization preprocessing mentioned [here](https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities)
+-# Insert these generated preprocessed files from *Step 3* in the config file. 
+-# Follow similar steps for the validation dataset.
+
 ## Running Instructions
 
 We have two modes in here : `train` and `test`.
-
-### Training
-
-- Populate a config file with required parameters (please see [train_params.cfg](./Deep_BET/config/train_params.cfg) for an example)
-- Note that preprocessed data in the specific format [ref](###Expected-Directory-structure-for-data) should be used.
-- Invoke the following command:
-
-```bash
-deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
-```
-
-Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
 
 ### Inference
 
@@ -121,6 +142,18 @@ deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $dev
 ```
 
 ```$device``` refers to the GPU device where you want your code to run or the CPU.
+
+### Training
+
+- Populate a config file with required parameters (please see [train_params.cfg](./Deep_BET/config/train_params.cfg) for an example)
+- Note that preprocessed data in the specific format [ref](###Expected-Directory-structure-for-data) should be used.
+- Invoke the following command:
+
+```bash
+deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
+```
+
+Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
 
 ## Converting weights after training
 
