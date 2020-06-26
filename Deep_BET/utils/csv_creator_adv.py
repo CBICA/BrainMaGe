@@ -49,7 +49,7 @@ def rex_o4a_csv(folder_path, to_save, ftype, modalities):
                 csv_file.write(ground_truth)
                 csv_file.write(',')
             img = glob.glob(os.path.join(folder_path, folder,
-                                         '*'+modality+'*.nii.gz'))[0]
+                                         '*'+modality+'.nii.gz'))[0]
             csv_file.write(img)
             csv_file.write('\n')
     csv_file.close()
@@ -95,7 +95,7 @@ def rex_sin_csv(folder_path, to_save, ftype, modalities):
             csv_file.write(ground_truth)
             csv_file.write(',')
         img = glob.glob(os.path.join(folder_path, folder,
-                                     '*'+modality+'*.nii.gz'))[0]
+                                     '*'+modality+'.nii.gz'))[0]
         csv_file.write(img)
         csv_file.write('\n')
     csv_file.close()
@@ -141,12 +141,12 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
             csv_file.write(',')
         for modality in modalities[:-1]:
             img = glob.glob(os.path.join(folder_path, folder,
-                                         '*'+modality+'*.nii.gz'))[0]
+                                         '*'+modality+'.nii.gz'))[0]
             csv_file.write(img)
             csv_file.write(',')
         modality = modalities[-1]
         img = glob.glob(os.path.join(folder_path, folder,
-                                     '*'+modality+'*.nii.gz'))[0]
+                                     '*'+modality+'.nii.gz'))[0]
         csv_file.write(img)
         csv_file.write('\n')
     csv_file.close()

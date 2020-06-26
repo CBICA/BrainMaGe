@@ -121,7 +121,7 @@ def infer_multi_4(cfg, device, save_brain, weights):
                                              patient[0]+'_mask.nii.gz'))
             mask_data = mask_nib.get_fdata().astype(np.int8)
             for i in range(int(nmods)):
-                image_name = os.path.basename(patient[i+1])[:-7]
+                image_name = os.path.basename(patient[i+1]).strip('.nii.gz')
                 image_path = patient[i+1]
                 patient_nib = nib.load(image_path)
                 image_data = patient_nib.get_fdata()
