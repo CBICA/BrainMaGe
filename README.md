@@ -61,23 +61,23 @@ python setup.py install # install dependencies and Deep-BET
 
 1. Co-registration within patient in a common atlas space such as the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space. 
 
-    An easy way to do this is using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/). This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
+    An easy way to do this is using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/).
 
     **Note**: Any changes done in this step needs to be reflected during the inference process.
 
 2. Arranging the Input Data, co-registered in the previous step, to the following folder structure. Please note files must be named exactly as below (e.g. ${subjectName}_t1, ${subjectName}_maskFinal.nii.gz etc.) 
 
-```
-Input_Data_folder -- patient_1 -- patient_1_t1.nii.gz
-                         -- patient_1_t2.nii.gz
-                         -- patient_1_t1ce.nii.gz
-                         -- patient_1_flair.nii.gz
-                         -- patient_1_maskFinal.nii.gz
-               patient_2 -- ...
-               ...
-               ...
-               patient_n -- ...
-```
+    ```
+    Input_Data_folder -- patient_1 -- patient_1_t1.nii.gz
+                            -- patient_1_t2.nii.gz
+                            -- patient_1_t1ce.nii.gz
+                            -- patient_1_flair.nii.gz
+                            -- patient_1_maskFinal.nii.gz
+                  patient_2 -- ...
+                  ...
+                  ...
+                  patient_n -- ...
+    ```
 
 3. Standardizing Dataset Intensities
 
@@ -87,7 +87,7 @@ Input_Data_folder -- patient_1 -- patient_1_t1.nii.gz
     python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
     ```
 
-    - ```${inputSubjectDirectory}``` needs to be structured as described in the previous step [Arranging Data](###Expected-Directory-structure-for-data)
+    - ```${inputSubjectDirectory}``` needs to be structured as described in the previous step (Arranging Data).
     - `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [112](https://www.intel.com/content/www/us/en/products/processors/xeon/scalable/platinum-processors/platinum-9282.html) threads.
 
 4. Prepare configuration file
@@ -107,8 +107,7 @@ Input_Data_folder -- patient_1 -- patient_1_t1.nii.gz
 6. [OPTIONAL] Converting weights after training
 
   - After training a custom model, you shall have a `.ckpt` file instead of a `.pt` file.
-  - The file [convert_ckpt_to_pt.py](./Deep_BET/utils/convert_ckpt_to_pt.py) can be used  to convert the file. 
-    - Example:
+  - The file [convert_ckpt_to_pt.py](./Deep_BET/utils/convert_ckpt_to_pt.py) can be used  to convert the file. For example:
       ```bash
       ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
       ```
@@ -136,13 +135,12 @@ If you use this package, please cite the following paper:
 - Give example of skull stripping dataset 
 - In inference, rename ```model_dir``` to ```results_dir``` for clarity in the configuration and script(s)
 - Add CCA for post-processing
-- Add link to CaPTk as suggested mechanism for preprocessing (can refer to ```BraTSPipeline``` application after my [PR](https://github.com/CBICA/CaPTk/pull/1061) gets merged to master)
 - Test on CPU
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
 - Remove ```-mode``` parameter in ```deep_bet_run```
 - Windows support (this currently works but needs a few work-arounds)
-- Please post any requests as issues on this repository or send email to software@cbica.upenn.edu
+- Please post any requests as issues on this repository or contact us
 
 ## Contact
 
