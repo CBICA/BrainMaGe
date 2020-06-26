@@ -53,7 +53,7 @@ python setup.py install # install dependencies and Deep-BET
     ```
 
     Where:
-    - ```$mode``` can be ```MA``` for modality agnostic or ```Mult-4```.
+    - ```$mode``` can be ```MA``` for modality agnostic or ```Multi-4```.
     - ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
 
@@ -65,14 +65,14 @@ python setup.py install # install dependencies and Deep-BET
 
     **Note**: Any changes done in this step needs to be reflected during the inference process.
 
-2. Arranging the Input Data, co-registered in the previous step, to the following folder structure. Please note files must be named exactly as below (e.g. ${subjectName}_t1, ${subjectName}_maskFinal.nii.gz etc.) 
+2. Arranging the Input Data, co-registered in the previous step, to the following folder structure. Please note files must be named exactly as below (e.g. ${subjectName}_t1, ${subjectName}_mask.nii.gz etc.) 
 
     ```
     Input_Data_folder -- patient_1 -- patient_1_t1.nii.gz
                             -- patient_1_t2.nii.gz
                             -- patient_1_t1ce.nii.gz
                             -- patient_1_flair.nii.gz
-                            -- patient_1_maskFinal.nii.gz
+                            -- patient_1_mask.nii.gz
                   patient_2 -- ...
                   ...
                   ...
