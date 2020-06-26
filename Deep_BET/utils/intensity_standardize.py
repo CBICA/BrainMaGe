@@ -193,8 +193,8 @@ def normalize(folder, dest_folder, patient_name, test=False):
         test {[type]} -- [If doing it for the testing, we don't want to check
                           for ground truths]
     """
-    dest_folder = os.path.join(dest_folder, patient_name)
-    os.makedirs(dest_folder, exist_ok=True)
+    patient_dest_folder = os.path.join(dest_folder, patient_name)
+    os.makedirs(patient_dest_folder, exist_ok=True)
     t1 = glob.glob(os.path.join(folder, '*t1.nii.gz'))[0]
     t2 = glob.glob(os.path.join(folder, '*t2.nii.gz'))[0]
     t1ce = glob.glob(os.path.join(folder, '*t1ce.nii.gz'))[0]
@@ -202,7 +202,6 @@ def normalize(folder, dest_folder, patient_name, test=False):
     if not test:
         gt = glob.glob(os.path.join(folder, '*mask.nii.gz'))[0]
 
-    os.makedirs(os.path.join(dest_folder, folder), exist_ok=True)
     new_affine = np.array([[1.875, 0, 0],
                            [0, 1.875, 0],
                            [0, 0, 1.25]])
@@ -213,7 +212,10 @@ def normalize(folder, dest_folder, patient_name, test=False):
     temp_affine = t1_image.affine
     temp_affine[:3, :3] = new_affine
     resized_t1_image = nib.Nifti1Image(resized_t1_image, temp_affine)
-    nib.save(resized_t1_image, os.path.join(dest_folder, folder, folder +
+    print(patient_dest_folder)
+    print("Saving T1 at : ", os.path.join(patient_dest_folder, patient_name +
+                                            "_t1.nii.gz"))
+    nib.save(resized_t1_image, os.path.join(patient_dest_folder, patient_name +
                                             "_t1.nii.gz"))
 
     t2_image = nib.load(t2)
@@ -221,7 +223,7 @@ def normalize(folder, dest_folder, patient_name, test=False):
     temp_affine = t2_image.affine
     temp_affine[:3, :3] = new_affine
     resized_t2_image = nib.Nifti1Image(resized_t2_image, temp_affine)
-    nib.save(resized_t2_image, os.path.join(dest_folder, folder, folder +
+    nib.save(resized_t2_image, os.path.join(patient_dest_folder, patient_name +
                                             "_t2.nii.gz"))
 
     t1ce_image = nib.load(t1ce)
@@ -230,7 +232,7 @@ def normalize(folder, dest_folder, patient_name, test=False):
     temp_affine[:3, :3] = new_affine
     resized_t1ce_image = nib.Nifti1Image(resized_t1ce_image,
                                          t1ce_image.affine)
-    nib.save(resized_t1ce_image, os.path.join(dest_folder, folder, folder +
+    nib.save(resized_t1ce_image, os.path.join(patient_dest_folder, patient_name +
                                               "_t1ce.nii.gz"))
 
     flair_image = nib.load(flair)
@@ -239,7 +241,7 @@ def normalize(folder, dest_folder, patient_name, test=False):
     temp_affine[:3, :3] = new_affine
     resized_flair_image = nib.Nifti1Image(resized_flair_image,
                                           flair_image.affine)
-    nib.save(resized_flair_image, os.path.join(dest_folder, folder, folder
+    nib.save(resized_flair_image, os.path.join(patient_dest_folder, patient_name
                                                +
                                                "_flair.nii.gz"))
 
@@ -248,7 +250,7 @@ def normalize(folder, dest_folder, patient_name, test=False):
         resized_gt_image = preprocess_image(gt_image, is_mask=True)
         resized_gt_image = nib.Nifti1Image(resized_gt_image,
                                            gt_image.affine)
-        nib.save(resized_gt_image, os.path.join(dest_folder, folder, folder
+        nib.save(resized_gt_image, os.path.join(patient_dest_folder, patient_name
                                                 +"_mask.nii.gz"))
     return
 
