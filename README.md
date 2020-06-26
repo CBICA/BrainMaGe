@@ -17,137 +17,86 @@ python setup.py install # install dependencies and Deep-BET
 
 ## Generating brain mask for your data using our pre-trained models
 
-To run the models we provide, the only step that is needed is co-registration within patient to the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space.
+- This application currently has two modes (more coming soon):
+  - Modality Agnostic (MA)
+  - Multi-4, i.e., using all 4 structural modalities
+
+### Steps to run application
+
+1. Co-registration within patient to the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space.
 
 An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
-### Running the Inference
+2. Make Input CSV
 
-- This application has three modes:
-  - Modality Agnostic (MA)
-  - Multi-4, i.e., all 4 modalities getting used
-  - Single (weights would be updated soon) 
-- Populate a config file with required parameters. Examples:
+  - Multi-4 (use all 4 structural modalities): Prepare a CSV file with the following headers:
+  `Patient_ID,T1_path,T2_path,T1ce_path,Flair_path`
+
+  - Modality-agnostic (works with any structural modality): Prepare a CSV file with the following headers:
+  `Patient_ID_Modality,image_path`
+
+
+2. Make config files:
+
+Populate a config file with required parameters. Examples:
   - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
   - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
-- It is highly suggested that Multi-4 should be only run with the [specified preprocessing steps](##preprocessing-steps) or by using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/).
-- `mode` refers to the inference type, which is a required parameter
-- Invoke the following command:
+
+`mode` refers to the inference type, which is a required parameter
+
+**Note**: Alternatively, you can use the diretory structure similar to the training as desribed in the next section.
+
+3. Run the application:
 
 ```bash
-deep_bet_run -params $test_params_ma.cfg -test True -mode MA -dev $device
-```
-```bash
-deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $device
+deep_bet_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
 ```
 
-```$device``` refers to the GPU device where you want your code to run or the CPU.
+Where:
+- ```$mode``` can be ```MA``` for modality agnostic or ```Mult-4```.
+- ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
 
-## Train a new model based on new data
+## [ADVANCED] Train your own model
 
+1. Co-registration within patient in a common atlas space such the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space. 
 
+An easy way to do this using the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
 
-## Arranging and Processing Data
+**Note**: Any changes done in this step needs to be reflected during the inference process.
 
-The data needs to be preprocessed before fed to the network.
-
-### Preprocessing Steps
-
-These are the steps we have used to train the provided models:
-
-- DICOM to NIfTI conversion
-- Re-orientation to LPS/RAI
-- N4 Bias correction
-- Co-registration to T1CE modality
-- Registration to [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space
-- Apply registration to re-oriented image to maximize image fidelity
-- https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities
-
-Users can use the [```BraTSPipeline``` application](https://cbica.github.io/CaPTk/preprocessing_brats.html) from the [Cancer Imaging Phenomics Toolkit (CaPTk)](https://github.com/CBICA/CaPTk/) to make this process easier. This pipeline currently uses a pre-trained model to extract the skull but the processed images (in the order defined above till registration) are also saved.
-
-### Expected Directory structure for data
+2. Arranging the Input Data
 
 ```
 Data_folder -- patient_1 -- patient_1_t1.nii.gz
                          -- patient_1_t2.nii.gz
                          -- patient_1_t1ce.nii.gz
                          -- patient_1_flair.nii.gz
-                         -- patient_1_mask.nii.gz
+                         -- patient_1_maskFinal.nii.gz
                patient_2 -- ...
                ...
                ...
                patient_n -- ...
 ```
 
-This can be circumvented by using a data CSV via a [data file](##Data-File-usage), using the ```csv_provided``` parameter.
+3. Standardizing Dataset Intensities
 
-## Standardizing Dataset Intensities
-
-Use the following command for preprocessing, which will standardize the intensities of all the modalities for a given subject and write it in the specified output location:
+Use the following command to standardize intensities for both training and validation data:
 
 ```bash
-./env/python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
+python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
 ```
-**Notes**: 
+
 - ```${inputSubjectDirectory}``` needs to be in the same format as described in [Arranging Data](###Expected-Directory-structure-for-data) or you need to have a [data file](##Data-File-usage).
-- `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [64]() threads.
+- `${threads}` are the maximum number of threads that can be used for computation and is generally dependent on the number of available CPU cores. Should be of type `int` and should satisfy: `0 < ${threads} < maximum_cpu_cores`. Depending on the type of CPU you have, it can vary from [1](https://ark.intel.com/content/www/us/en/ark/products/37133/intel-core-2-solo-processor-ulv-su3500-3m-cache-1-40-ghz-800-mhz-fsb.html) to [112](https://www.intel.com/content/www/us/en/products/processors/xeon/scalable/platinum-processors/platinum-9282.html) threads.
 
-## Preparing Files
+4. Prepare configuration file
 
-### For Testing
+Populate a config file with required parameters. Example: [train_params.cfg](./Deep_BET/config/train_params.cfg)
 
-#### MA
+Change the ```mode``` variable in the config file based on what kind of model you want to train (either modality agnostic or multi-4).
 
-This inference type does not need any preprocessing of input files, as everything is handled internally.
-
-The input images can be directly passed to the [config file](./Deep_BET/config/test_params_ma.cfg).
-
-#### Multi-4
-
-If all the structural modalities (i.e., `T1, T2, T1ce, Flair`) are being used, processing the input data (as mentioned in the [Brain Preprocessing section](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)) is required. 
-
-Pass the processed images over to the network via the [config files](./Deep_BET/config/test_params_multi_4.cfg).
-
-### For Training
-
--# Set the dataset in the above mentioned [format](https://github.com/CBICA/Deep-BET#expected-directory-structure-for-data)
--# Follow the Brain Preprocessing steps mentioned [here](https://github.com/CBICA/Deep-BET#brain-preprocessing-steps)
--# Follow the Skull Stripping intensity Standardization preprocessing mentioned [here](https://github.com/CBICA/Deep-BET#standardizing-dataset-intensities)
--# Insert these generated preprocessed files from *Step 3* in the config file. 
--# Follow similar steps for the validation dataset.
-
-## Running Instructions
-
-We have two modes in here : `train` and `test`.
-
-### Inference
-
-- We have three modes here:
-  - Modality Agnostic (MA)
-  - Multi-4, i.e., all 4 modalities getting used
-  - Single (weights would be updated soon) 
-- Populate a config file with required parameters. Examples:
-  - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
-  - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
-- It is highly suggested that Multi-4 should be only run with some certain preprocessing steps (link goes here) mentioned below.
-- Mode refers to the inference type that you wish to run which is necessary
-- Invoke the following command:
-
-```bash
-deep_bet_run -params $test_params_ma.cfg -test True -mode MA -dev $device
-```
-```bash
-deep_bet_run -params $test_params_multi_4.cfg -test True -mode Multi-4 -dev $device
-```
-
-```$device``` refers to the GPU device where you want your code to run or the CPU.
-
-### Training
-
-- Populate a config file with required parameters (please see [train_params.cfg](./Deep_BET/config/train_params.cfg) for an example)
-- Note that preprocessed data in the specific format [ref](###Expected-Directory-structure-for-data) should be used.
-- Invoke the following command:
+5. Run the training:
 
 ```bash
 deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
@@ -155,45 +104,22 @@ deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckp
 
 Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
 
-## Converting weights after training
+6. [OPTIONAL] Converting weights after training
 
-- After training a custom model, you shall have a `.ckpt` file instead of a `.pt` file.
-- The file [convert_ckpt_to_pt.py](./Deep_BET/utils/convert_ckpt_to_pt.py) can be used  to convert the file. 
-  - Example:
-    ```bash
-    ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
-    ```
-- Please note that the if you wish to use your own weights, you can use the ```-load``` option.
-
-## Data File usage
-
-If the data is organized according to the above [instructions](###Expected-Directory-structure-for-data), the `csv_provided` variable can be set to `False`, and CSV file would be generated according to what is inserted in the `modalities` [line](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L19).
-
-For example:
-```
-modalities = ['T1', 'T2', 'T1ce', 'Flair']
-```
-would result in the CSV created in the following format:
-
-- Training
-
-  `Patient_ID,gt_path,T1_path,T2_path,T1ce_path,Flair_path`
-- Testing
-
-  `Patient_ID,T1_path,T2_path,T1ce_path,Flair_path`
-
-Now, if the data isn't organized, a CSV can be created in the above mentioned format and the `csv_provided` variable can be set to `True` and the CSV files can be provided in the following locations:
-
-- [`test_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/test_params_ma.cfg#L15)
-- [`train_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L17)
-- [`validation_csv`](https://github.com/CBICA/Deep-BET/blob/ce0463dad1eeb73cc78a5ef2b266f630723e009b/Deep_BET/config/train_params.cfg#L18).
+  - After training a custom model, you shall have a `.ckpt` file instead of a `.pt` file.
+  - The file [convert_ckpt_to_pt.py](./Deep_BET/utils/convert_ckpt_to_pt.py) can be used  to convert the file. 
+    - Example:
+      ```bash
+      ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
+      ```
+  - Please note that the if you wish to use your own weights, you can use the ```-load``` option.
 
 ## Citation
 
 If you use this package, please cite the following paper:
 
 - Thakur, S.P., Doshi, J., Pati, S., Ha, S.M., Sako, C., Talbar, S., Kulkarni, U., Davatzikos, C., Erus, G. and Bakas, S., 2019, October. Skull-Stripping of Glioblastoma MRI Scans Using 3D Deep Learning. In International MICCAI Brainlesion Workshop (pp. 57-68). Springer, Cham. DOI:10.1007/978-3-030-46640-4_6
-Thakur, S.P., Doshi, J., Pati, S., Ha, S.M., Sako, C., Talbar, S., Kulkarni, U., Davatzikos, C., Erus, G. and Bakas, S., Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage 2020 [Accepted]
+- Thakur, S.P., Doshi, J., Pati, S., Ha, S.M., Sako, C., Talbar, S., Kulkarni, U., Davatzikos, C., Erus, G. and Bakas, S., Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage 2020 [Accepted]
 
 ## Notes
 
