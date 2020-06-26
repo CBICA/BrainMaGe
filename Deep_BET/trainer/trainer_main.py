@@ -117,15 +117,13 @@ def train_network(cfg, device, weights):
         # Taken directly from params
         pass
     os.makedirs(params['model_dir'], exist_ok=True)
-    try:
-        log_dir = sorted(os.listdir(params['model_dir']))[-1]
-    except IndexError:
-        log_dir = os.path.join(params['model_dir'], 'version_0')
+    
+    log_dir = os.path.join(params['model_dir'])
     checkpoint_callback = ModelCheckpoint(filepath=os.path.join(log_dir,
                                                                 'checkpoints'),
                                           monitor='val_loss',
                                           verbose=True,
-                                          save_top_k=3,
+                                          save_top_k=1,
                                           mode='auto',
                                           save_weights_only=False,
                                           prefix=str('deep_resunet_'+
