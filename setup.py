@@ -21,7 +21,7 @@ setup(name='Deep-BET',
       zip_safe=False,
       install_requires=[
       'numpy',
-      'torch>=1.0.1',
+      'torch>=1.5.1',
       'scikit-image',
       'nibabel',
       'pytorch-lightning'

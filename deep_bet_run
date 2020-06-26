@@ -89,7 +89,7 @@ if __name__ == '__main__':
     else:
         weights = None
     # If weights are not None, which meeans the weights are given
-    # Then check if weeightss are .ckpt for training
+    # Then check if weights are .ckpt for training
     # and .pt for testing
     # Else raise value error
     if weights is not None:
@@ -115,16 +115,18 @@ if __name__ == '__main__':
         if args.train == 'True':
             pass
         elif args.test == 'True':
-            base_dir = os.path.dirname(os.path.realpath(__file__))
+            base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+            base_dir = os.path.join(os.path.dirname(base_dir), 'Deep_BET/weights')
             if args.mode.lower() == 'ma':
-                weights = os.path.join(base_dir, 'Deep_BET/weights/resunet_ma.pt')
+                weights = os.path.join(base_dir, 'resunet_ma.pt')
             elif args.mode.lower() == 'multi-4':
-                weights = os.path.join(base_dir, 'Deep_BET/weights/resunet_multi_4.pt')
+                weights = os.path.join(base_dir, 'resunet_multi_4.pt')
         else:
             raise ValueError('Unknown value for mode. Expected one of "MA" or "Multi-4" without the quotes.',
                              'We received : ', args.mode,
                              'Common mistakes include spelling mistakes, check it to make sure.')
     print("Weight file used :", weights)
+    print(__file__)
 
     if DEVICE == 'cpu':
         pass
