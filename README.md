@@ -1,4 +1,4 @@
-# Deep-BET 
+# BrainMaGe (Brain Mask Generator)
 
 ## Installation Instructions
 
