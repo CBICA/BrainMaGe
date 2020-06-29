@@ -117,8 +117,9 @@ python setup.py install # install dependencies and Deep-BET
 
 If you use this package, please cite the following paper:
 
-- Thakur, S.P., Doshi, J., Pati, S., Ha, S.M., Sako, C., Talbar, S., Kulkarni, U., Davatzikos, C., Erus, G. and Bakas, S., 2019, October. Skull-Stripping of Glioblastoma MRI Scans Using 3D Deep Learning. In International MICCAI Brainlesion Workshop (pp. 57-68). Springer, Cham. DOI:10.1007/978-3-030-46640-4_6
-- Thakur, S.P., Doshi, J., Pati, S., Ha, S.M., Sako, C., Talbar, S., Kulkarni, U., Davatzikos, C., Erus, G. and Bakas, S., Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage 2020 [Accepted]
+- S.Thakur, J.Doshi, S.Pati, S.Rathore, C.Sako, M.Bilello, S.M.Ha, G.Shukla, A.Flanders, A.Kotrotsou, M.Milchenko, S.Liem, G.S.Alexander, J.Lombardo, J.D.Palmer, P.LaMontagne, A.Nazeri, S.Talbar, U.Kulkarni, D.Marcus, R.Colen, C.Davatzikos, G.Erus, S.Bakas, "Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage, Epub-ahead-of-print, 2020. DOI: 10.1016/j.neuroimage.2020.117081
+(https://doi.org/10.1016/j.neuroimage.2020.117081)
+
 
 ## Notes
 
