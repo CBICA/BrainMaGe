@@ -11,7 +11,12 @@ If you use this package, please cite the following paper:
 [1] S.Thakur, J.Doshi, S.Pati, S.Rathore, C.Sako, M.Bilello, S.M.Ha, G.Shukla, A.Flanders, A.Kotrotsou, M.Milchenko, S.Liem, G.S.Alexander, J.Lombardo, J.D.Palmer, P.LaMontagne, A.Nazeri, S.Talbar, U.Kulkarni, D.Marcus, R.Colen, C.Davatzikos, G.Erus, S.Bakas, "Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage, Epub-ahead-of-print, 2020. DOI: 10.1016/j.neuroimage.2020.117081
 (https://doi.org/10.1016/j.neuroimage.2020.117081)
 
+The following citations are previous conference presentations of related results:  
+
 [2] S.P.Thakur, J.Doshi, S.Pati, S.M.Ha, C.Sako, S.Talbar, U.Kulkarni, C.Davatzikos, G.Erus, S.Bakas, "Skull-Stripping of Glioblastoma MRI Scans Using 3D Deep Learning". In International MICCAI BrainLes Workshop, Springer LNCS, 57-68, 2019. DOI: 10.1007/978-3-030-46640-4_6
+
+[3] S.Thakur, J.Doshi, S.M.Ha, G.Shukla, A.Kotrotsou, S.Talbar, U.Kulkarni, D.Marcus, R.Colen, C.Davatzikos, G.Erus, S.Bakas, "NIMG-40. ROBUST MODALITY-AGNOSTIC SKULL-STRIPPING IN PRESENCE OF DIFFUSE GLIOMA: A MULTI-INSTITUTIONAL STUDY", Neuro-Oncology, 21(Supplement_6): vi170, 2019. DOI: 10.1093/neuonc/noz175.710
+https://doi.org/10.1093/neuonc/noz175.710 
 
 
 ## Installation Instructions
