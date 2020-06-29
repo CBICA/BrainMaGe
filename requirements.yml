@@ -1,4 +1,4 @@
-name: deepbet
+name: brainmage
 channels:
   - pytorch
   - defaults
