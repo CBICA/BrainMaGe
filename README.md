@@ -1,5 +1,19 @@
 # BrainMaGe (Brain Mask Generator)
 
+## Introduction
+
+The Brain Mask Generator (BrainMaGe) is a deep-learning (DL) generalizable robust brain extraction (skull-stripping) tool explicitly developed for application in brain MRI scans with apparent pathologies, e.g., tumors. BrainMaGe introduces a modality-agnostic training method rather than one that needs a specific set or combination of modalities, and hence forces the model to learn the spatial relationships between the structures in the brain and its shape, as opposed to texture, and thereby overriding the need for a particular modality. If you want to read more about BrainMaGe, please use the link in "Citations" to read the full performance evaluation we conducted, where we have proved that such a model will have comparable (and in most cases better) accuracy to other DL methods while keeping minimal computational and logistical requirements.
+
+## Citations
+
+If you use this package, please cite the following paper:
+
+[1] S.Thakur, J.Doshi, S.Pati, S.Rathore, C.Sako, M.Bilello, S.M.Ha, G.Shukla, A.Flanders, A.Kotrotsou, M.Milchenko, S.Liem, G.S.Alexander, J.Lombardo, J.D.Palmer, P.LaMontagne, A.Nazeri, S.Talbar, U.Kulkarni, D.Marcus, R.Colen, C.Davatzikos, G.Erus, S.Bakas, "Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage, Epub-ahead-of-print, 2020. DOI: 10.1016/j.neuroimage.2020.117081
+(https://doi.org/10.1016/j.neuroimage.2020.117081)
+
+[2] S.P.Thakur, J.Doshi, S.Pati, S.M.Ha, C.Sako, S.Talbar, U.Kulkarni, C.Davatzikos, G.Erus, S.Bakas, "Skull-Stripping of Glioblastoma MRI Scans Using 3D Deep Learning". In International MICCAI BrainLes Workshop, Springer LNCS, 57-68, 2019. DOI: 10.1007/978-3-030-46640-4_6
+
+
 ## Installation Instructions
 
 Please note that python3 is required and [conda](https://www.anaconda.com/) is preferred.
@@ -112,13 +126,6 @@ python setup.py install # install dependencies and Deep-BET
       ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
       ```
   - Please note that the if you wish to use your own weights, you can use the ```-load``` option.
-
-## Citation
-
-If you use this package, please cite the following paper:
-
-- S.Thakur, J.Doshi, S.Pati, S.Rathore, C.Sako, M.Bilello, S.M.Ha, G.Shukla, A.Flanders, A.Kotrotsou, M.Milchenko, S.Liem, G.S.Alexander, J.Lombardo, J.D.Palmer, P.LaMontagne, A.Nazeri, S.Talbar, U.Kulkarni, D.Marcus, R.Colen, C.Davatzikos, G.Erus, S.Bakas, "Brain Extraction on MRI Scans in Presence of Diffuse Glioma: Multi-institutional Performance Evaluation of Deep Learning Methods and Robust Modality-Agnostic Training, NeuroImage, Epub-ahead-of-print, 2020. DOI: 10.1016/j.neuroimage.2020.117081
-(https://doi.org/10.1016/j.neuroimage.2020.117081)
 
 
 ## Notes
