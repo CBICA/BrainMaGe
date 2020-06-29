@@ -15,10 +15,10 @@ import torch
 import nibabel as nib
 import numpy as np
 import tqdm
-from Deep_BET.models.networks import fetch_model
-from Deep_BET.utils import csv_creator_adv
-from Deep_BET.utils.utils_test import interpolate_image, unpad_image
-from Deep_BET.utils.preprocess import preprocess_image
+from BrainMaGe.models.networks import fetch_model
+from BrainMaGe.utils import csv_creator_adv
+from BrainMaGe.utils.utils_test import interpolate_image, unpad_image
+from BrainMaGe.utils.preprocess import preprocess_image
 
 
 def infer_multi_4(cfg, device, save_brain, weights):

@@ -10,10 +10,10 @@ Created on Sat May 30 01:05:59 2020
 from setuptools import setup
 import setuptools
 
-setup(name='Deep-BET',
+setup(name='BrainMaGe',
       version='1.0.0.Alpha',
       description='Skull stripping using multiple and single modalities',
-      url='https://github.com/CBICA/Deep-BET',
+      url='https://github.com/CBICA/BrainMaGe',
       python_requires='>=3.6',
       author='Siddhesh Thakur',
       author_email='software@cbica.upenn.edu',
@@ -26,7 +26,7 @@ setup(name='Deep-BET',
       'nibabel',
       'pytorch-lightning'
       ],
-      scripts=['deep_bet_run'],
+      scripts=['brain_mage_run'],
       classifiers=[
           'Intended Audience :: Science/Research',
           'Programming Language :: Python',

@@ -10,17 +10,17 @@ from __future__ import absolute_import, print_function, division
 import argparse
 import os
 import pandas as pd
-from Deep_BET.trainer import trainer_main
-from Deep_BET.tester import test_ma, test_multi_4
+from BrainMaGe.trainer import trainer_main
+from BrainMaGe.tester import test_ma, test_multi_4
 import pkg_resources
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(prog='Deep-BET', formatter_class=argparse.RawTextHelpFormatter,
+    parser = argparse.ArgumentParser(prog='BrainMaGe', formatter_class=argparse.RawTextHelpFormatter,
                                      description='\nThis code was implemented for Deep Learning '+\
     'based training and inference of 3D-U-Net,\n3D-Res-U-Net models for '+\
     'Brain Extraction a.k.a Skull Stripping in biomedical NIfTI volumes.\n'+\
-    'The project is hosted at: https://github.com/CBICA/Deep-BET * \n'+\
+    'The project is hosted at: https://github.com/CBICA/BrainMaGe * \n'+\
     'See the documentation for details on its use.\n'+\
     'If you are using this tool, please cite out paper.'
     'This software accompanies the research presented in:\n'+\
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('-params', dest='params', type=str,
                         help='Specify the architecture of the model to be used, by providing a\n'+\
                              'config file [PARAMS_CFG]. A sample of the files is stored in\n'+\
-                             'Deep_BET/config folder for the train, test. Checkout the parameter\n'+\
+                             'BrainMaGe/config folder for the train, test. Checkout the parameter\n'+\
                              'explanation in the Readme.md for more details.\n',
                         required=True)
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
                              'the usage of this unless you know what you are passing. C')
     
     parser.add_argument('-v', '--version', action='version',
-                        version=pkg_resources.require("Deep-BET")[0].version, help="Show program's version number and exit.")
+                        version=pkg_resources.require("BrainMaGe")[0].version, help="Show program's version number and exit.")
                             
     args = parser.parse_args()
 
@@ -116,7 +116,7 @@ if __name__ == '__main__':
             pass
         elif args.test == 'True':
             base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            base_dir = os.path.join(os.path.dirname(base_dir), 'Deep_BET/weights')
+            base_dir = os.path.join(os.path.dirname(base_dir), 'BrainMaGe/weights')
             if args.mode.lower() == 'ma':
                 weights = os.path.join(base_dir, 'resunet_ma.pt')
             elif args.mode.lower() == 'multi-4':

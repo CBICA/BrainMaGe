@@ -8,9 +8,9 @@ Created on Sun May 24 06:16:01 2020
 
 import torch.nn as nn
 import torch
-from Deep_BET.models.seg_modules import in_conv, DownsamplingModule, EncodingModule
-from Deep_BET.models.seg_modules import UpsamplingModule, DecodingModule
-from Deep_BET.models.seg_modules import out_conv, FCNUpsamplingModule
+from BrainMaGe.models.seg_modules import in_conv, DownsamplingModule, EncodingModule
+from BrainMaGe.models.seg_modules import UpsamplingModule, DecodingModule
+from BrainMaGe.models.seg_modules import out_conv, FCNUpsamplingModule
 
 
 class unet(nn.Module):

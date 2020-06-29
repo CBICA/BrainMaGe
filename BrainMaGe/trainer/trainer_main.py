@@ -14,8 +14,8 @@ import torch
 import pandas as pd
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-from Deep_BET.utils.csv_creator_adv import generate_csv
-from Deep_BET.trainer.lightning_networks import SkullStripper
+from BrainMaGe.utils.csv_creator_adv import generate_csv
+from BrainMaGe.trainer.lightning_networks import SkullStripper
 
 def train_network(cfg, device, weights):
     """

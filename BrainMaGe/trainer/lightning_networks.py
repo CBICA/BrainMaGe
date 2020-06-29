@@ -9,11 +9,11 @@ Created on Sun May 24 06:12:55 2020
 import torch
 from torch.utils.data import DataLoader
 import pytorch_lightning as ptl
-from Deep_BET.models.networks import fetch_model
-from Deep_BET.utils.cyclicLR import CyclicCosAnnealingLR
-from Deep_BET.utils.losses import dice_loss, dice
-from Deep_BET.utils.data import SkullStripDataset
-from Deep_BET.utils.optimizers import fetch_optimizer
+from BrainMaGe.models.networks import fetch_model
+from BrainMaGe.utils.cyclicLR import CyclicCosAnnealingLR
+from BrainMaGe.utils.losses import dice_loss, dice
+from BrainMaGe.utils.data import SkullStripDataset
+from BrainMaGe.utils.optimizers import fetch_optimizer
 
 
 class SkullStripper(ptl.LightningModule):

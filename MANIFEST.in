@@ -1,2 +1,2 @@
 include README.md
-recursive-include Deep_BET/weights *
+recursive-include BrainMaGe/weights *

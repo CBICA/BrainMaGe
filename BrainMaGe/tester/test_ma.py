@@ -16,9 +16,9 @@ import nibabel as nib
 import tqdm
 import numpy as np
 from skimage.transform import resize
-from Deep_BET.models.networks import fetch_model
-from Deep_BET.utils import csv_creator_adv
-from Deep_BET.utils.utils_test import pad_image, process_image, interpolate_image,\
+from BrainMaGe.models.networks import fetch_model
+from BrainMaGe.utils import csv_creator_adv
+from BrainMaGe.utils.utils_test import pad_image, process_image, interpolate_image,\
     padder_and_cropper
 
 
