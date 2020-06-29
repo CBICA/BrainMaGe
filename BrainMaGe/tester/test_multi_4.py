@@ -132,5 +132,5 @@ def infer_multi_4(cfg, device, save_brain, weights):
                                                      image_name+'_brain.nii.gz'))
 
     print("Final output stored in : %s" % (params['results_dir']))
-    print("Thank you for using Deep-BET")
+    print("Thank you for using BrainMaGe")
     print('*'*60)
