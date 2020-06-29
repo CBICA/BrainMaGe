@@ -24,14 +24,14 @@ https://doi.org/10.1093/neuonc/noz175.710
 Please note that python3 is required and [conda](https://www.anaconda.com/) is preferred.
 
 ```bash
-git clone https://github.com/CBICA/Deep-BET.git
-cd Deep-BET
-conda env create -f requirements.yml # create a virtual environment named deepbet
-conda activate deepbet # activate it
+git clone https://github.com/CBICA/BrainMaGe.git
+cd BrainMaGe
+conda env create -f requirements.yml # create a virtual environment named brainmage
+conda activate brainmage # activate it
 latesttag=$(git describe --tags) # get the latest tag [bash-only]
 echo checking out ${latesttag}
 git checkout ${latesttag}
-python setup.py install # install dependencies and Deep-BET
+python setup.py install # install dependencies and BrainMaGe
 ```
 
 ## Generating brain masks for your data using our pre-trained models
@@ -58,8 +58,8 @@ python setup.py install # install dependencies and Deep-BET
 3. Make config files:
 
     Populate a config file with required parameters. Examples:
-    - MA: [test_params_ma.cfg](./Deep_BET/config/test_params_ma.cfg)
-    - Multi-4: [test_params.cfg](./Deep_BET/config/test_params_multi_4.cfg)
+    - MA: [test_params_ma.cfg](./BrainMaGe/config/test_params_ma.cfg)
+    - Multi-4: [test_params.cfg](./BrainMaGe/config/test_params_multi_4.cfg)
 
     Where `mode` refers to the inference type, which is a required parameter
 
@@ -68,7 +68,7 @@ python setup.py install # install dependencies and Deep-BET
 4. Run the application:
 
     ```bash
-    deep_bet_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
+    brain_mage_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
     ```
 
     Where:
@@ -103,7 +103,7 @@ python setup.py install # install dependencies and Deep-BET
     Use the following command to standardize intensities for both training and validation data:
 
     ```bash
-    python Deep_BET/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
+    python BrainMaGe/utils/intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
     ```
 
     - ```${inputSubjectDirectory}``` needs to be structured as described in the previous step (Arranging Data).
@@ -111,14 +111,14 @@ python setup.py install # install dependencies and Deep-BET
 
 4. Prepare configuration file
 
-    Populate a config file with required parameters. Example: [train_params.cfg](./Deep_BET/config/train_params.cfg)
+    Populate a config file with required parameters. Example: [train_params.cfg](./BrainMaGe/config/train_params.cfg)
 
     Change the ```mode``` variable in the config file based on what kind of model you want to train (either modality agnostic or multi-4).
 
 5. Run the training:
 
     ```bash
-    deep_bet_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
+    brain_mage_run -params train_params.cfg -train True -dev $device -load $resume.ckpt
     ```
 
     Note that ```-load $resume.ckpt``` is only needed if you are resuming your training. 
@@ -126,9 +126,9 @@ python setup.py install # install dependencies and Deep-BET
 6. [OPTIONAL] Converting weights after training
 
   - After training a custom model, you shall have a `.ckpt` file instead of a `.pt` file.
-  - The file [convert_ckpt_to_pt.py](./Deep_BET/utils/convert_ckpt_to_pt.py) can be used  to convert the file. For example:
+  - The file [convert_ckpt_to_pt.py](./BrainMaGe/utils/convert_ckpt_to_pt.py) can be used  to convert the file. For example:
       ```bash
-      ./env/python Deep_BET/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
+      ./env/python BrainMaGe/utils/convert_ckpt_to_pt.py -i ${path_to_ckpt_file_with_filename} -o {path_to_pt_file_with_filename}
       ```
   - Please note that the if you wish to use your own weights, you can use the ```-load``` option.
 
@@ -138,7 +138,7 @@ python setup.py install # install dependencies and Deep-BET
 - **IMPORTANT**: This application is neither FDA approved nor CE marked, so the use of this package and any associated risks are the users' responsibility.
 - Using this software is pretty trivial as long as instructions are followed. 
 - You can use it in any terminal on a supported system. 
-- The ```deep_bet_run``` command gets installed automatically. 
+- The ```brain_mage_run``` command gets installed automatically. 
 - We provide CPU (untested as of 2020/05/31) as well as GPU support. 
   - Running on GPU is a lot faster though and should always be preferred. 
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
@@ -151,7 +151,7 @@ python setup.py install # install dependencies and Deep-BET
 - Test on CPU
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
-- Remove ```-mode``` parameter in ```deep_bet_run```
+- Remove ```-mode``` parameter in ```brain_mage_run```
 - Windows support (this currently works but needs a few work-arounds)
 - Please post any requests as issues on this repository or contact us
 
