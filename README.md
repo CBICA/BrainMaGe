@@ -24,6 +24,7 @@ Please note that python3 is required and [conda](https://www.anaconda.com/) is p
 ```bash
 git clone https://github.com/CBICA/BrainMaGe.git
 cd BrainMaGe
+git lfs pull
 conda env create -f requirements.yml # create a virtual environment named brainmage
 conda activate brainmage # activate it
 latesttag=$(git describe --tags) # get the latest tag [bash-only]
