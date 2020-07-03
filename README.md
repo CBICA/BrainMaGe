@@ -67,13 +67,13 @@ python setup.py install # install dependencies and BrainMaGe
 4. Run the application:
 
     ```bash
+    conda activate brainmage
     brain_mage_run -params $test_params_ma.cfg -test True -mode $mode -dev $device
     ```
 
     Where:
     - ```$mode``` can be ```MA``` for modality agnostic or ```Multi-4```.
     - ```$device``` refers to the GPU device where you want your code to run or the CPU.
-
 
 ## [ADVANCED] Train your own model
 
