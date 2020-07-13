@@ -15,6 +15,7 @@ import torch
 import nibabel as nib
 import numpy as np
 import tqdm
+from scipy.ndimage.morphology import binary_fill_holes
 from BrainMaGe.models.networks import fetch_model
 from BrainMaGe.utils import csv_creator_adv
 from BrainMaGe.utils.utils_test import interpolate_image, unpad_image
@@ -80,13 +81,10 @@ def infer_multi_4(cfg, device, save_brain, weights):
                         int(params['base_filters']))
     if device != 'cpu':
         model.cuda()
-    temp_dir = os.path.join(params['results_dir'], 'Temp')
 
     checkpoint = torch.load(str(params['weights']))
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
-
-    os.makedirs(temp_dir, exist_ok=True)
 
     for patient in tqdm.tqdm(test_df.values):
         os.makedirs(os.path.join(params['results_dir'], patient[0]), exist_ok=True)
@@ -109,6 +107,9 @@ def infer_multi_4(cfg, device, save_brain, weights):
             to_save = unpad_image(to_save)
             to_save[to_save >= 0.9] = 1
             to_save[to_save < 0.9] = 0
+            for i in range(to_save.shape[2]):
+                if np.any(to_save[:, :, i]):
+                    to_save[:, :, i] = binary_fill_holes(to_save[:, :, i])
             to_save_mask = nib.Nifti1Image(to_save, patient_nib.affine)
             nib.save(to_save_mask, os.path.join(params['results_dir'], patient[0],
                                                 patient[0]+'_mask.nii.gz'))

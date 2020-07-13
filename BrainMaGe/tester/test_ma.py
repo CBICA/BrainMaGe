@@ -157,8 +157,12 @@ def infer_ma(cfg, device, save_brain, weights):
             to_save_final = resize(new_image, current_patient_dict['old_shape'], order=0,
                                    mode='edge', cval=0)
             to_save_final[to_save_final > 0] = 1
+            for i in range(to_save_final.shape[2]):
+                if np.any(to_save_final[:, :, i]):
+                    to_save_final[:, :, i] = binary_fill_holes(to_save_final[:, :, i])
             to_save_final_nib = nib.Nifti1Image(to_save_final,
                                                 current_patient_dict['old_affine'])
+
             os.makedirs(os.path.join(params['results_dir'], patient[0]), exist_ok=True)
 
             nib.save(to_save_final_nib, os.path.join(params['results_dir'],
