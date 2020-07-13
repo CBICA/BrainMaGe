@@ -16,6 +16,7 @@ import nibabel as nib
 import tqdm
 import numpy as np
 from skimage.transform import resize
+from scipy.ndimage.morphology import binary_fill_holes
 from BrainMaGe.models.networks import fetch_model
 from BrainMaGe.utils import csv_creator_adv
 from BrainMaGe.utils.utils_test import pad_image, process_image, interpolate_image,\
