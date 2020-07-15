@@ -144,6 +144,7 @@ python setup.py install # install dependencies and BrainMaGe
 
 ## TO-DO
 
+- Windows support (this currently works but needs a few work-arounds)
 - Give example of skull stripping dataset 
 - In inference, rename ```model_dir``` to ```results_dir``` for clarity in the configuration and script(s)
 - Add CCA for post-processing
@@ -151,7 +152,6 @@ python setup.py install # install dependencies and BrainMaGe
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
 - Remove ```-mode``` parameter in ```brain_mage_run```
-- Windows support (this currently works but needs a few work-arounds)
 - Please post any requests as issues on this repository or contact us
 
 ## Contact
