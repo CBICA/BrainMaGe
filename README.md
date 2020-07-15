@@ -141,12 +141,11 @@ python setup.py install # install dependencies and BrainMaGe
 - We provide CPU (untested as of 2020/05/31) as well as GPU support. 
   - Running on GPU is a lot faster though and should always be preferred. 
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
-
+- Added support for hole filling and largest CCA post processing
 ## TO-DO
 
 - Give example of skull stripping dataset 
 - In inference, rename ```model_dir``` to ```results_dir``` for clarity in the configuration and script(s)
-- Add CCA for post-processing
 - Test on CPU
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
