@@ -135,9 +135,8 @@ python setup.py install # install dependencies and BrainMaGe
 ## Notes
 
 - **IMPORTANT**: This application is neither FDA approved nor CE marked, so the use of this package and any associated risks are the users' responsibility.
-- Using this software is pretty trivial as long as instructions are followed. 
-- You can use it in any terminal on a supported system. 
-- The ```brain_mage_run``` command gets installed automatically. 
+- Please follow instructions carefully and for questions/suggestions, post an issue or [contact us](##Contact). 
+- The ```brain_mage_run``` command gets installed automatically in the virtual environment.
 - We provide CPU (untested as of 2020/05/31) as well as GPU support. 
   - Running on GPU is a lot faster though and should always be preferred. 
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
@@ -152,7 +151,6 @@ python setup.py install # install dependencies and BrainMaGe
 - Move all dependencies to ```setup.py``` for consistency 
 - Put option to write logs to specific files in output directory
 - Remove ```-mode``` parameter in ```brain_mage_run```
-- Please post any requests as issues on this repository or contact us
 
 ## Contact
 
