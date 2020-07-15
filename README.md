@@ -141,6 +141,7 @@ python setup.py install # install dependencies and BrainMaGe
   - Running on GPU is a lot faster though and should always be preferred. 
   - You need an GPU memory of ~5-6GB for testing and ~8GB for training.
 - Added support for hole filling and largest CCA post processing
+
 ## TO-DO
 
 - Windows support (this currently works but needs a few work-arounds)
