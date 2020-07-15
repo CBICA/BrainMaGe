@@ -115,7 +115,7 @@ def infer_multi_4(cfg, device, save_brain, weights):
             for i in range(to_save.shape[2]):
                 if np.any(to_save[:, :, i]):
                     to_save[:, :, i] = binary_fill_holes(to_save[:, :, i])
-            to_save = getLargestCC(to_save)
+            to_save = getLargestCC(to_save).astype(np.uint8)
             to_save_mask = nib.Nifti1Image(to_save, patient_nib.affine)
             nib.save(to_save_mask, os.path.join(params['results_dir'], patient[0],
                                                 patient[0]+'_mask.nii.gz'))
