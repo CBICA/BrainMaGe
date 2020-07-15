@@ -16,11 +16,16 @@ import nibabel as nib
 import numpy as np
 import tqdm
 from scipy.ndimage.morphology import binary_fill_holes
+from skimage.measure import label
 from BrainMaGe.models.networks import fetch_model
 from BrainMaGe.utils import csv_creator_adv
 from BrainMaGe.utils.utils_test import interpolate_image, unpad_image
 from BrainMaGe.utils.preprocess import preprocess_image
 
+def getLargestCC(segmentation):
+    labels = label(segmentation)
+    largestCC = labels == np.argmax(np.bincount(labels.flat))
+    return largestCC
 
 def infer_multi_4(cfg, device, save_brain, weights):
     """
@@ -110,6 +115,7 @@ def infer_multi_4(cfg, device, save_brain, weights):
             for i in range(to_save.shape[2]):
                 if np.any(to_save[:, :, i]):
                     to_save[:, :, i] = binary_fill_holes(to_save[:, :, i])
+            to_save = getLargestCC(to_save)
             to_save_mask = nib.Nifti1Image(to_save, patient_nib.affine)
             nib.save(to_save_mask, os.path.join(params['results_dir'], patient[0],
                                                 patient[0]+'_mask.nii.gz'))
