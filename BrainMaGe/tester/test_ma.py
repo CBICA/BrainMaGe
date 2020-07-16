@@ -163,7 +163,7 @@ def infer_ma(cfg, device, save_brain, weights):
             nib.save(to_save_new_nib, os.path.join(temp_dir,
                                                    patient[0],
                                                    patient[0]+'_resample111_mask.nii.gz'))
-            to_save_final = resize(new_image, current_patient_dict['old_shape'], order=0,
+            to_save_final = resize(new_image, current_patient_dict['old_shape'], order=3,
                                    mode='edge', cval=0)
             to_save_final[to_save_final > 0] = 1
             for i in range(to_save_final.shape[2]):
