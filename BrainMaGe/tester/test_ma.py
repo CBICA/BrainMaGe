@@ -23,10 +23,13 @@ from BrainMaGe.utils import csv_creator_adv
 from BrainMaGe.utils.utils_test import pad_image, process_image, interpolate_image,\
     padder_and_cropper
 
-def getLargestCC(segmentation):
-    labels = label(segmentation)
-    largestCC = labels == np.argmax(np.bincount(labels.flat))
-    return largestCC
+def postprocess_prediction(seg):
+    mask = seg != 0
+    lbls = label(mask, 8)
+    lbls_sizes = [np.sum(lbls == i) for i in np.unique(lbls)]
+    largest_region = np.argmax(lbls_sizes[1:]) + 1
+    seg[lbls != largest_region] = 0
+    return seg
 
 def infer_ma(cfg, device, save_brain, weights):
 
@@ -166,7 +169,7 @@ def infer_ma(cfg, device, save_brain, weights):
             for i in range(to_save_final.shape[2]):
                 if np.any(to_save_final[:, :, i]):
                     to_save_final[:, :, i] = binary_fill_holes(to_save_final[:, :, i])
-            to_save_final = getLargestCC(to_save_final).astype(np.uint8)
+            to_save_final = postprocess_prediction(to_save_final).astype(np.uint8)
             to_save_final_nib = nib.Nifti1Image(to_save_final,
                                                 current_patient_dict['old_affine'])
 
