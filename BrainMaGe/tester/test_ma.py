@@ -25,7 +25,7 @@ from BrainMaGe.utils.utils_test import pad_image, process_image, interpolate_ima
 
 def postprocess_prediction(seg):
     mask = seg != 0
-    lbls = label(mask, 8)
+    lbls = label(mask, connectivity=3)
     lbls_sizes = [np.sum(lbls == i) for i in np.unique(lbls)]
     largest_region = np.argmax(lbls_sizes[1:]) + 1
     seg[lbls != largest_region] = 0
