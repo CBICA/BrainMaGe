@@ -14,6 +14,7 @@ import nibabel as nib
 import argparse
 from skimage.transform import resize
 from multiprocessing import Pool, cpu_count
+import pkg_resources
 
 
 # """You can change the folder name here. The folders should be in the following
@@ -268,7 +269,10 @@ def batch_works(k):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog='intensity_standardize', formatter_class=argparse.RawTextHelpFormatter,
+                                     description='\nThis code was implemented to standardize intensities for skull stripping\n'+ '\n'\
+    'Copyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.\n'\
+    'For questions and feedback contact: software@cbica.upenn.edu')
 
     parser.add_argument('-i', '--input_path', dest='input_path',
                         help="input path for the tissues", required=True)
@@ -276,6 +280,10 @@ if __name__ == '__main__':
                         help="output path for saving the files", required=True)
     parser.add_argument('-t', '--threads', dest='threads',
                         help="number of threads, by default will use all")
+                        
+    parser.add_argument('-v', '--version', action='version',
+                        version=pkg_resources.require("BrainMaGe")[0].version + '\n\nCopyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.', help="Show program's version number and exit.")
+                
     args = parser.parse_args()
 
     if args.threads:
