@@ -41,12 +41,12 @@ if __name__ == '__main__':
     parser.add_argument('-train', dest='train', type=str,
                         help='Should be set to "True" (without the quotes) if you are trying to\n'+\
                              'run training, temporarily we not planning to support in this\n'+\
-                             'release stay tuned for the next release.\n')
+                             'release stay tuned for the next release.\n', default='False')
 
     parser.add_argument('-test', dest='test', type=str,
-                        help='Should be set to "True" (without the quotes) if you are trying\n'+\
-                             'to run inference, do not set the training to true as testing\n'+\
-                             'will be overridden.\n')
+                        help='Should be set to "False" (without the quotes) if you are trying\n'+\
+                             'to train a new model, do not set the training to true as testing\n'+\
+                             'will be overridden.\n', default='True')
 
     parser.add_argument('-dev', default='0', dest='device', type=str,
                         help='used to set on which device the prediction will run.\n'+
