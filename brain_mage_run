@@ -83,6 +83,9 @@ if __name__ == '__main__':
     mode = args.mode
     save_brain = args.save_brain
 
+    if args.train == args.test:
+        raise ValueError('Please enable either testing or training modes, not both')
+
     #  If weights are given in params, then set weights to given params
     # else set weights to None
     if args.load is not None:
