@@ -27,7 +27,8 @@ if __name__ == '__main__':
     'Thakur et al, \'Brain Extraction on MRI Scans in Presence of Diffuse\n'+\
     'Glioma:Multi-institutional Performance Evaluation of Deep Learning Methods'+\
     'and Robust Modality-Agnostic Training\'.\n'+\
-    'We hope our work helps you in your endeavours.\n'+\
+    'We hope our work helps you in your endeavours.\n'+ '\n'\
+    'Copyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.\n'\
     'For questions and feedback contact: software@cbica.upenn.edu')
 
     parser.add_argument('-params', dest='params', type=str,
@@ -72,7 +73,7 @@ if __name__ == '__main__':
                              'the usage of this unless you know what you are passing. C')
     
     parser.add_argument('-v', '--version', action='version',
-                        version=pkg_resources.require("BrainMaGe")[0].version, help="Show program's version number and exit.")
+                        version=pkg_resources.require("BrainMaGe")[0].version + '\n\nCopyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.', help="Show program's version number and exit.")
                             
     args = parser.parse_args()
 
