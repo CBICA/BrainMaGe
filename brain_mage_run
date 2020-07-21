@@ -24,9 +24,10 @@ if __name__ == '__main__':
     'See the documentation for details on its use.\n'+\
     'If you are using this tool, please cite out paper.'
     'This software accompanies the research presented in:\n'+\
-    'Thakur et al, \'Brain Extraction on MRI Scans in Presence of Diffuse\n'+\
+    'Thakur et al., \'Brain Extraction on MRI Scans in Presence of Diffuse\n'+\
     'Glioma:Multi-institutional Performance Evaluation of Deep Learning Methods'+\
     'and Robust Modality-Agnostic Training\'.\n'+\
+    'DOI: 10.1016/j.neuroimage.2020.117081\n' +\
     'We hope our work helps you in your endeavours.\n'+ '\n'\
     'Copyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.\n'\
     'For questions and feedback contact: software@cbica.upenn.edu')
