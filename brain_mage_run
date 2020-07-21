@@ -40,8 +40,8 @@ if __name__ == '__main__':
 
     parser.add_argument('-train', dest='train', type=str,
                         help='Should be set to "True" (without the quotes) if you are trying to\n'+\
-                             'run training, temporarily we not planning to support in this\n'+\
-                             'release stay tuned for the next release.\n', default='False')
+                             'run training, but make sure you intensity standardize the data \n'+\
+                             'before attempting to train.\n', default='False')
 
     parser.add_argument('-test', dest='test', type=str,
                         help='Should be set to "False" (without the quotes) if you are trying\n'+\
