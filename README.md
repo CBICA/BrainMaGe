@@ -102,7 +102,7 @@ python setup.py install # install dependencies and BrainMaGe
     Use the following command to standardize intensities for both training and validation data:
 
     ```bash
-    python brain_mage_intensity_standardize.py -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
+    brain_mage_intensity_standardize -i ${inputSubjectDirectory} -o ${outputSubjectDirectory} -t ${threads}
     ```
 
     - ```${inputSubjectDirectory}``` needs to be structured as described in the previous step (Arranging Data).
