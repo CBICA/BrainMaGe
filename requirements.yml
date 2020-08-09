@@ -333,4 +333,5 @@ dependencies:
     - rsa==4.6
     - tensorboard==2.2.2
     - tensorboard-plugin-wit==1.6.0.post3
+    - pybids==0.11.1
 prefix: /home/siddhesh/anaconda3/envs/deepbet
