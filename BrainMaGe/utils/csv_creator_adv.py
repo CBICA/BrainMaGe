@@ -199,11 +199,11 @@ def rex_bids_csv(folder_path, to_save, ftype):
             csv_file.write(',')
         for modality in modalities[:-1]:
             img = bids_modality_df[modality][bids_df['subject'] == sub].path.values
-            csv_file.write(img[1])
+            csv_file.write(img[0])
             csv_file.write(',')
         modality = modalities[-1]
         img = bids_modality_df[modality][bids_df['subject'] == sub].path.values
-        csv_file.write(img[1])
+        csv_file.write(img[0])
         csv_file.write('\n')
     csv_file.close()
 
