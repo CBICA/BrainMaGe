@@ -109,7 +109,7 @@ if __name__ == '__main__':
                                      "resume during training. Please pass a .ckpt file.")
             elif args.test == 'True':
                 print(args.mode)
-                if args.mode.lower() == 'ma' or args.mode.lower == 'multi_4':
+                if args.mode.lower() == 'ma' or args.mode.lower() == 'multi_4' or args.mode.lower() == 'bids':
                     _, ext = os.path.splitext(weights)
                     if ext != '.pt':
                         raise ValueError("Expected a .pt file, got a file with %s extension. If it is a\n"+\
@@ -125,7 +125,7 @@ if __name__ == '__main__':
         elif args.test == 'True':
             base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
             base_dir = os.path.join(os.path.dirname(base_dir), 'BrainMaGe/weights')
-            if args.mode.lower() == 'ma':
+            if args.mode.lower() == 'ma' or args.mode.lower() == 'bids':
                 weights = os.path.join(base_dir, 'resunet_ma.pt')
             elif args.mode.lower() == 'multi-4':
                 weights = os.path.join(base_dir, 'resunet_multi_4.pt')
@@ -151,7 +151,7 @@ if __name__ == '__main__':
     if args.train == 'True':
         trainer_main.train_network(params_file, DEVICE, weights)
     elif args.test == 'True':
-        if args.mode.lower() == 'ma':
+        if args.mode.lower() == 'ma' or args.mode.lower() == 'bids':
             test_ma.infer_ma(params_file, DEVICE, args.save_brain, weights)
         elif args.mode.lower() == 'multi-4':
             test_multi_4.infer_multi_4(params_file, DEVICE, args.save_brain, weights)

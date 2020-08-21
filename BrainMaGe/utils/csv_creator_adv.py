@@ -11,6 +11,7 @@ import os
 import sys
 import glob
 import re
+from bids import BIDSLayout
 
 
 def rex_o4a_csv(folder_path, to_save, ftype, modalities):
@@ -152,6 +153,60 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
     csv_file.close()
 
 
+def rex_bids_csv(folder_path, to_save, ftype):
+    """[CSV generation for BIDS datasets]
+    [This function is used to generate a csv for BIDS datasets]
+    Arguments:
+        folder_path {[string]} -- [Takes the folder to see where to look for
+                                   the different modaliies]
+        to_save {[string]} -- [Takes the folder as a string to save the csv]
+        ftype {[string]} -- [Are you trying to save train, validation or test,
+                             if file type is set to test, it does not look for
+                             ground truths]
+    """
+    if ftype == 'test':
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,')
+    else:
+        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
+        csv_file.write('ID,gt_path,')
+    # load BIDS dataset into memory
+    layout = BIDSLayout(folder_path)
+    bids_df = layout.to_df()
+    bids_modality_df = {
+        't1': bids_df[bids_df['suffix'] == "T1w"],
+        't2': bids_df[bids_df['suffix'] == "T2w"],
+        'flair': bids_df[bids_df['suffix'] == "FLAIR"],
+        't1ce': bids_df[bids_df['suffix'] == "T1CE"]
+    }
+    # check what modalities the dataset contains
+    modalities = []
+    for modality, df in bids_modality_df.items():
+        if not df.empty:
+            modalities.append(modality)
+    # write headers for those modalities
+    for modality in modalities[:-1]:
+        csv_file.write(modality+'_path,')
+    modality = modalities[-1]
+    csv_file.write(modality+'_path\n')
+    # write image paths for each subject
+    for sub in layout.get_subjects():
+        csv_file.write(sub)
+        csv_file.write(',')
+        if ftype != 'test':
+            ground_truth = glob.glob(os.path.join(folder_path, sub, '*mask.nii.gz'))[0]
+            csv_file.write(ground_truth)
+            csv_file.write(',')
+        for modality in modalities[:-1]:
+            img = bids_modality_df[modality][bids_df['subject'] == sub].path.values
+            csv_file.write(img[0])
+            csv_file.write(',')
+        modality = modalities[-1]
+        img = bids_modality_df[modality][bids_df['subject'] == sub].path.values
+        csv_file.write(img[0])
+        csv_file.write('\n')
+    csv_file.close()
+
 def generate_csv(folder_path, to_save, mode, ftype, modalities):
     """[Function to generate CSV]
     [This function takes a look at the data directory and the modes and
@@ -163,13 +218,15 @@ def generate_csv(folder_path, to_save, mode, ftype, modalities):
         ftype {[string]} -- [description]
         modalities {[string]} -- [description]
     """
-    print("Generating", ftype, '.csv')
+    print("Generating ", ftype, '.csv', sep='')
     if mode.lower() == 'ma':
         rex_o4a_csv(folder_path, to_save, ftype, modalities)
     elif mode.lower() == 'single':
         rex_sin_csv(folder_path, to_save, ftype, modalities)
     elif mode.lower() == 'multi':
         rex_mul_csv(folder_path, to_save, ftype, modalities)
+    elif mode.lower() == 'bids':
+        rex_bids_csv(folder_path, to_save, ftype)
     else:
         print("Sorry, this mode is not supported")
         sys.exit(0)

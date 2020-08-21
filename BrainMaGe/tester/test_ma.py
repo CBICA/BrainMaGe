@@ -67,6 +67,7 @@ def infer_ma(cfg, device, save_brain, weights):
         test_csv = params['test_csv']
 
     test_df = pd.read_csv(test_csv)
+    test_df.ID = test_df.ID.astype(str)
     temp_dir = os.path.join(params['results_dir'], 'Temp')
     os.makedirs(temp_dir, exist_ok=True)
 
