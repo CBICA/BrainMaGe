@@ -48,7 +48,7 @@ def infer_ma(cfg, device, save_brain, weights):
     params['weights'] = weights
     start = time.asctime()
     startstamp = time.time()
-    print("\nHostname   :" + str(os.getenv("HOSTNAME")))
+    # print("\nHostname   :" + str(os.getenv("HOSTNAME")))
     print("\nStart Time :" + str(start))
     print("\nStart Stamp:" + str(startstamp))
     sys.stdout.flush()
@@ -196,8 +196,8 @@ def infer_ma(cfg, device, save_brain, weights):
                                                  patient[0],
                                                  patient[0]+'_brain.nii.gz'))
 
-    print("Please check the %s folder for the intermediate outputs if you\"+\
-          would like to see some intermediate steps." % (os.path.join(params['results_dir'], 'Temp')))
-    print("Final output stored in : %s" % (params['results_dir']))
+    # print("Please check the %s folder for the intermediate outputs if you\"+\
+    #       would like to see some intermediate steps." % (os.path.join(params['results_dir'], 'Temp')))
+    # print("Final output stored in : %s" % (params['results_dir']))
     print("Thank you for using BrainMaGe")
     print('*'*60)
