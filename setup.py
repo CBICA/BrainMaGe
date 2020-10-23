@@ -24,7 +24,7 @@ setup(name='BrainMaGe',
       'torch>=1.5.1',
       'scikit-image',
       'nibabel',
-      'pytorch-lightning'
+      'pytorch-lightning==0.8.1'
       ],
       scripts=['brain_mage_run', 'brain_mage_intensity_standardize'],
       classifiers=[
