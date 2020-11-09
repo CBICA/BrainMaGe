@@ -27,6 +27,7 @@ cd BrainMaGe
 git lfs pull
 conda env create -f requirements.yml # create a virtual environment named brainmage
 conda activate brainmage # activate it
+conda install pytorch==1.6.0 torchvision==0.7.0 cudatoolkit=9.2 -c pytorch # change to specific cuda version here
 latesttag=$(git describe --tags) # get the latest tag [bash-only]
 echo checking out ${latesttag}
 git checkout ${latesttag}
