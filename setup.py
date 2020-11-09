@@ -11,7 +11,7 @@ from setuptools import setup
 import setuptools
 
 setup(name='BrainMaGe',
-      version='1.0.2',
+      version='1.0.3',
       description='Skull stripping using multiple and single modalities',
       url='https://github.com/CBICA/BrainMaGe',
       python_requires='>=3.6',
@@ -21,7 +21,7 @@ setup(name='BrainMaGe',
       zip_safe=False,
       install_requires=[
       'numpy',
-      'torch>=1.5.1',
+      'torch==1.6.0',
       'scikit-image',
       'nibabel',
       'pytorch-lightning==0.8.1'
