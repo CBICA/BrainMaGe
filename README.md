@@ -75,6 +75,19 @@ python setup.py install # install dependencies and BrainMaGe
     - ```$mode``` can be ```MA``` for modality agnostic or ```Multi-4```.
     - ```$device``` refers to the GPU device where you want your code to run or the CPU.
 
+### Steps to run application (Alternative)
+
+1.Although this method is much slower, and runs for single subject at a time, it works flawlessly on CPU's and GPU's.
+
+    conda activate brainmage
+    brain_mage_single_run -i $path_to_input.nii.gz -o $path_to_output_mask.nii.gz
+    \ -m  $path_to_output_brain.nii.gz -dev $device
+    
+    Where:
+    - `$path_to_input.nii.gz` can be path to the input file as a nifti.
+    - `$path_to_output_mask.nii.gz` is the output path to save the mask for the nifti
+    - `$path_to_output_brain.nii.gz` is the output path to brain for the nifti
+
 ## [ADVANCED] Train your own model
 
 1. Co-registration within patient in a common atlas space such as the [SRI-24 atlas](https://www.nitrc.org/projects/sri24/) in the LPS/RAI space. 
