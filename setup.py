@@ -26,7 +26,7 @@ setup(name='BrainMaGe',
       'nibabel',
       'pytorch-lightning==0.8.1'
       ],
-      scripts=['brain_mage_run', 'brain_mage_intensity_standardize'],
+      scripts=['brain_mage_run', 'brain_mage_single_run', 'brain_mage_intensity_standardize'],
       classifiers=[
           'Intended Audience :: Science/Research',
           'Programming Language :: Python',

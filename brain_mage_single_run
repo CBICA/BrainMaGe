@@ -9,107 +9,102 @@ Created on Sat May 30 01:05:59 2020
 from __future__ import absolute_import, print_function, division
 import argparse
 import os
-import pandas as pd
 from BrainMaGe.tester import test_single_run
 
 import pkg_resources
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(prog='BrainMaGe', formatter_class=argparse.RawTextHelpFormatter,
-                                 description='\nThis code was implemented for Deep Learning '+\
-    'based training and inference of 3D-U-Net,\n3D-Res-U-Net models for '+\
-    'Brain Extraction a.k.a Skull Stripping in biomedical NIfTI volumes.\n'+\
-    'The project is hosted at: https://github.com/CBICA/BrainMaGe * \n'+\
-    'See the documentation for details on its use.\n'+\
-    'If you are using this tool, please cite out paper.'
-    'This software accompanies the research presented in:\n'+\
-    'Thakur et al., \'Brain Extraction on MRI Scans in Presence of Diffuse\n'+\
-    'Glioma:Multi-institutional Performance Evaluation of Deep Learning Methods'+\
-    'and Robust Modality-Agnostic Training\'.\n'+\
-    'DOI: 10.1016/j.neuroimage.2020.117081\n' +\
-    'We hope our work helps you in your endeavours.\n'+ '\n'\
-    'Copyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.\n'\
-    'For questions and feedback contact: software@cbica.upenn.edu')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="BrainMaGe",
+        formatter_class=argparse.RawTextHelpFormatter,
+        description="\nThis code was implemented for Deep Learning "
+        + "based training and inference of 3D-U-Net,\n3D-Res-U-Net models for "
+        + "Brain Extraction a.k.a Skull Stripping in biomedical NIfTI volumes.\n"
+        + "The project is hosted at: https://github.com/CBICA/BrainMaGe * \n"
+        + "See the documentation for details on its use.\n"
+        + "If you are using this tool, please cite out paper."
+        "This software accompanies the research presented in:\n"
+        + "Thakur et al., 'Brain Extraction on MRI Scans in Presence of Diffuse\n"
+        + "Glioma:Multi-institutional Performance Evaluation of Deep Learning Methods"
+        + "and Robust Modality-Agnostic Training'.\n"
+        + "DOI: 10.1016/j.neuroimage.2020.117081\n"
+        + "We hope our work helps you in your endeavours.\n"
+        + "\n"
+        "Copyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.\n"
+        "For questions and feedback contact: software@cbica.upenn.edu",
+    )
 
-    parser.add_argument('-i', '--input',
-                        help='Should be either a file path of a modality or an input folder. 
-                             'If folder is passed all files ending with .nii.gz '
-                             'within that folder will be Skull Stripped.',
-                             required=True, type=str)
+    parser.add_argument(
+        "-i",
+        "--input",
+        dest="input_path",
+        help="Should be either a file path of a modality or an input folder.\n"
+        + "If folder is passed all files ending with .nii.gz "
+        + "within that folder will be Skull Stripped.",
+        required=True,
+        type=str,
+    )
 
-    parser.add_argument('-o', '--output',
-                        help='Should be either a filename or a folder.\n'+\
-                             'In the case of single file or a folder for input',
-                             required=False, type=str)
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output_path",
+        help="Should be either a filename or a folder.\n"
+        + "In the case of single file or a folder for input",
+        required=True,
+        type=str,
+    )
 
-    parser.add_argument('-dev', default='0', dest='device', type=str,
-                        help='used to set on which device the prediction will run.\n'+
-                             'Must be either int or str. Use int for GPU id or\n'+
-                             '\'cpu\' to run on CPU. Avoid training on CPU. \n'+
-                             'Default for selecting first GPU is set to -dev 0\n',
-                        required=False)
+    parser.add_argument(
+        "-m",
+        "--mask_path",
+        dest="mask_path",
+        help="Should be either a filename or a folder.\n"
+        + "In the case of single file or a folder for input",
+        required=False,
+        default=None,
+        type=str,
+    )
 
-    parser.add_argument('-load', default=None, dest='load', type=str,
-                        help='If the location of the weight file is passed, the internal methods\n'+\
-                             'are overridden to apply these weights to the model. We warn against\n'+\
-                             'the usage of this unless you know what you are passing. C')
+    parser.add_argument(
+        "-dev",
+        default="0",
+        dest="device",
+        type=str,
+        help="used to set on which device the prediction will run.\n"
+        + "Must be either int or str. Use int for GPU id or\n"
+        + "'cpu' to run on CPU. Avoid training on CPU. \n"
+        + "Default for selecting first GPU is set to -dev 0\n",
+        required=False,
+    )
 
-    parser.add_argument('-v', '--version', action='version',
-                        version=pkg_resources.require("BrainMaGe")[0].version+'\n\nCopyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.', help="Show program's version number and exit.")
-
-    parser.add_argument('-save_brain', default=1, type=int, required=False, dest='save_brain',
-                        help='if set to 0 the segmentation mask will be only produced and\n'+\
-                             'and the mask will not be applied on the input image to produce\n'+\
-                             ' a brain. This step is to be only applied if you trust this\n'+\
-                             'software and do not feel the need for Manual QC. This will save\n'+\
-                             ' you some time. This is useless for training though.')
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=pkg_resources.require("BrainMaGe")[0].version
+        + "\n\nCopyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.",
+        help="Show program's version number and exit.",
+    )
 
     args = parser.parse_args()
+
+    input_path = args.input_path
+    output_path = args.output_path
+    mask_path = args.mask_path
     DEVICE = args.device
 
-    #  If weights are given in params, then set weights to given params
-    # else set weights to None
-    if args.load is not None:
-        weights = os.path.abspath(args.load)
-    else:
-        weights = None
-
-    if weights is not None:
-        _, ext = os.path.splitext(weights)
-        if os.path.exists(weights):
-            pass:
-        else:
-            raise ValueError("The weights file path you passed does not exist. Please check the File existence again.")
-    else: # If weights file are not passed
-        base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-        base_dir = os.path.join(os.path.dirname(base_dir), 'BrainMaGe/weights')
-        weights = os.path.join(base_dir, 'resunet_ma.pt')
+    base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    base_dir = os.path.join(os.path.dirname(base_dir), "BrainMaGe/weights")
+    weights = os.path.join(base_dir, "resunet_ma.pt")
 
     print("Weight file used :", weights)
 
-    if args.save_brain == 0:
-        args.save_brain = False
-    elif args.save_brain == 1:
-        args.save_brain = True
-    else:
-        raise ValueError('Unknown value for save brain : ', args.save_brain)
-
-    # Creating a Dictionary
-    hparams = {}
-    if os.path.isfile(args.input):
-        if os.path.exists(args.input)
-            subjects = [os.path.abspath(args.input)]
-        else:
-            print("The File for the subject does not exist!")
-    elif os.path.isdir(args.input):
-        if os.path.exists(args.input):
-            subjects = glob.glob(os.path.join())
-    hparams['subjects'] = subjects
 
     # Running Inference
-    test_single_run.infer_single_ma(input_subjects, output_path)
+    test_single_run.infer_single_ma(input_path, output_path, weights, mask_path, device=DEVICE)
 
-    print('*'*80)
+    print("*" * 80)
     print("Finished")
-    print('*'*80)
+    print("*" * 80)
