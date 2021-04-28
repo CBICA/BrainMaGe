@@ -36,7 +36,7 @@ def postprocess_prediction(seg):
     return seg
 
 
-def infer_single_ma(input_path, output_path, weights, mask_path=None, device='cpu'):
+def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cpu"):
     start = time.asctime()
     startstamp = time.time()
     print("\nHostname   :" + str(os.getenv("HOSTNAME")))

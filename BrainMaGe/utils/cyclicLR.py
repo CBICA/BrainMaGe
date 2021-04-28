@@ -35,11 +35,20 @@ class CyclicCosAnnealingLR(_LRScheduler):
         https://arxiv.org/abs/1608.03983
     """
 
-    def __init__(self, optimizer, milestones, decay_milestones=None, gamma=0.5,
-                 eta_min=1e-6, last_epoch=-1):
+    def __init__(
+        self,
+        optimizer,
+        milestones,
+        decay_milestones=None,
+        gamma=0.5,
+        eta_min=1e-6,
+        last_epoch=-1,
+    ):
         if not list(milestones) == sorted(milestones):
-            raise ValueError('Milestones should be a list of'
-                             ' increasing integers. Got {}', milestones)
+            raise ValueError(
+                "Milestones should be a list of" " increasing integers. Got {}",
+                milestones,
+            )
         self.eta_min = eta_min
         self.milestones = milestones
         self.milestones2 = decay_milestones
@@ -52,11 +61,27 @@ class CyclicCosAnnealingLR(_LRScheduler):
             return [self.eta_min for base_lr in self.base_lrs]
 
         idx = bisect_right(self.milestones, self.last_epoch)
-        left_barrier = 0 if idx == 0 else self.milestones[idx-1]
+        left_barrier = 0 if idx == 0 else self.milestones[idx - 1]
         right_barrier = self.milestones[idx]
         width = right_barrier - left_barrier
         curr_pos = self.last_epoch - left_barrier
         if self.milestones2:
-            return [self.eta_min + (base_lr*self.gamma**bisect_right(self.milestones2, self.last_epoch)-self.eta_min)*(1 + math.cos(math.pi * curr_pos/ width))/2 for base_lr in self.base_lrs]
+            return [
+                self.eta_min
+                + (
+                    base_lr
+                    * self.gamma ** bisect_right(self.milestones2, self.last_epoch)
+                    - self.eta_min
+                )
+                * (1 + math.cos(math.pi * curr_pos / width))
+                / 2
+                for base_lr in self.base_lrs
+            ]
         else:
-            return [self.eta_min + (base_lr - self.eta_min)*(1 + math.cos(math.pi * curr_pos/ width)) / 2 for base_lr in self.base_lrs]
+            return [
+                self.eta_min
+                + (base_lr - self.eta_min)
+                * (1 + math.cos(math.pi * curr_pos / width))
+                / 2
+                for base_lr in self.base_lrs
+            ]

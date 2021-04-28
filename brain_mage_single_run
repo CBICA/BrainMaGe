@@ -101,9 +101,10 @@ if __name__ == "__main__":
 
     print("Weight file used :", weights)
 
-
     # Running Inference
-    test_single_run.infer_single_ma(input_path, output_path, weights, mask_path, device=DEVICE)
+    test_single_run.infer_single_ma(
+        input_path, output_path, weights, mask_path, device=DEVICE
+    )
 
     print("*" * 80)
     print("Finished")
