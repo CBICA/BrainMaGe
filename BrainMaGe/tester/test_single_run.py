@@ -72,6 +72,7 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
         to_save = interpolate_image(output, patient_nib.shape)
         to_save[to_save >= 0.9] = 1
         to_save[to_save < 0.9] = 0
+        to_save = postprocess_prediction(to_save)
         to_save_nib = nib.Nifti1Image(to_save, patient_nib.affine)
         nib.save(to_save_nib, os.path.join(output_path))
 
