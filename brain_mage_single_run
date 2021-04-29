@@ -8,7 +8,7 @@ Created on Sat May 30 01:05:59 2020
 
 from __future__ import absolute_import, print_function, division
 import argparse
-import os
+import os, sys
 from BrainMaGe.tester import test_single_run
 
 import pkg_resources
@@ -95,10 +95,20 @@ if __name__ == "__main__":
     DEVICE = args.device
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
-    base_dir = os.path.join(base_dir, "BrainMaGe/weights")
-    weights = os.path.join(base_dir, "resunet_ma.pt")
+    base_dir = os.path.join(base_dir, "BrainMaGe", "weights")
+    if os.path.isdir(base_dir):
+        weights = os.path.join(base_dir, "resunet_ma.pt")
+    else:
+    # this control path is needed if someone installs brainmage into their virtual environment directly
+        base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        base_dir = os.path.join(os.path.dirname(base_dir), "BrainMaGe/weights")
+        if os.path.isdir(base_dir):
+            weights = os.path.join(base_dir, "resunet_ma.pt")
 
-    print("Weight file used :", weights)
+    if os.path.isfile(weights):
+        print("Weight file used :", weights)
+    else:
+        sys.exit('Weights file at \'' + weights + '\' was not found...')
 
     # Running Inference
     test_single_run.infer_single_ma(
