@@ -69,13 +69,12 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "-dev",
-        default="0",
+        default="cpu",
         dest="device",
         type=str,
         help="used to set on which device the prediction will run.\n"
         + "Must be either int or str. Use int for GPU id or\n"
-        + "'cpu' to run on CPU. Avoid training on CPU. \n"
-        + "Default for selecting first GPU is set to -dev 0\n",
+        + "'cpu' to run on CPU. Avoid training on CPU. \n",
         required=False,
     )
 
