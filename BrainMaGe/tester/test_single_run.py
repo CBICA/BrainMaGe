@@ -81,9 +81,8 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
 
     if mask_path is not None:
         print("You chose to save the brain. We are now saving it with the masks.")
-        brain_data = image_data
-        brain_data[to_save == 0] = 0
-        to_save_brain = nib.Nifti1Image(brain_data, patient_nib.affine)
+        image_data[to_save == 0] = 0
+        to_save_brain = nib.Nifti1Image(image_data, patient_nib.affine)
         nib.save(to_save_brain, os.path.join(mask_path))
 
     print("Thank you for using BrainMaGe")
