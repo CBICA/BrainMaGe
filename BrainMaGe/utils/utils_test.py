@@ -77,12 +77,13 @@ def process_image(image):
         DESCRIPTION.
 
     """
+    to_return = image
     new_image_temp = image[image >= image.mean()]
     p1 = np.percentile(new_image_temp, 2)
     p2 = np.percentile(new_image_temp, 95)
-    image[image > p2] = p2
-    image = (image - p1) / p2
-    return image
+    to_return[to_return > p2] = p2
+    to_return = (to_return - p1) / p2
+    return to_return
 
 
 def padder_and_cropper(image, pad_info):
