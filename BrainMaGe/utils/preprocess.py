@@ -24,29 +24,42 @@ def pad_image(image):
     # Padding on X axes
     if image.shape[0] < 240:
         # print("Image was padded on the X-axis on both sides")
-        padded_image = np.pad(padded_image, ((int((240-image.shape[0])/2),
-                                              int((240-image.shape[0])/2)),
-                                             (0, 0), (0, 0)),
-                              mode='constant', constant_values=0)
+        padded_image = np.pad(
+            padded_image,
+            (
+                (int((240 - image.shape[0]) / 2), int((240 - image.shape[0]) / 2)),
+                (0, 0),
+                (0, 0),
+            ),
+            mode="constant",
+            constant_values=0,
+        )
     # Padding on Y axes
     if image.shape[1] < 240:
         # print("Image was padded on the Y-axis on both sides")
-        padded_image = np.pad(padded_image, ((0, 0),
-                                             (int((240-image.shape[1])/2),
-                                              int((240-image.shape[1])/2)),
-                                             (0, 0)),
-                              mode='constant', constant_values=0)
+        padded_image = np.pad(
+            padded_image,
+            (
+                (0, 0),
+                (int((240 - image.shape[1]) / 2), int((240 - image.shape[1]) / 2)),
+                (0, 0),
+            ),
+            mode="constant",
+            constant_values=0,
+        )
     # Padding on Z axes
     if image.shape[2] < 160:
         # print("Image was padded on the Z-axis on top only")
-        padded_image = np.pad(padded_image, ((0, 0), (0, 0),
-                                             (0, int(160-image.shape[2]))),
-                              'constant', constant_values=0)
+        padded_image = np.pad(
+            padded_image,
+            ((0, 0), (0, 0), (0, int(160 - image.shape[2]))),
+            "constant",
+            constant_values=0,
+        )
     return padded_image
 
 
-def preprocess_image(image, is_mask=False,
-                     target_spacing=(1.875, 1.875, 1.25)):
+def preprocess_image(image, is_mask=False, target_spacing=(1.875, 1.875, 1.25)):
     """[To preprocess an image depending on whether it a mask image or not]
     [This function in general will try to preprocess a given image to a partic-
     -ular image resolution and try to return a preprocessed image]
@@ -81,8 +94,14 @@ def preprocess_image(image, is_mask=False,
                 with an isotropic resolution of (1.0, 1.0, 1.0), then we would
                 just resize the image to (128, 128, 128)]
                 """
-                new_image = resize(new_image, (128, 128, 128), order=3,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=3,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
             else:
                 """[Checking if it is an isotropic image with need to incorrect
                 shape]
@@ -98,8 +117,14 @@ def preprocess_image(image, is_mask=False,
                 # print("Image shape wasn't perfect")
                 new_image = pad_image(new_image)
                 # print("Trying to pad the image now")
-                new_image = resize(new_image, (128, 128, 128), order=3,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=3,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
         else:
             """[Checking if it is not isotropic image with resolution needed]
             ________________________________________
@@ -111,40 +136,82 @@ def preprocess_image(image, is_mask=False,
             a isotropic resolution of (1.0, 1.0, 1.0), then we would just
             resize the image to (128, 128, 128)]
             """
-            new_shape = (int(np.round(old_spacing[0]/new_spacing[0]*float(image.shape[0]))),
-                         int(np.round(old_spacing[1]/new_spacing[1]*float(image.shape[1]))),
-                         int(np.round(old_spacing[2]/new_spacing[2]*float(image.shape[2]))))
-            new_image = resize(new_image, new_shape, order=1,
-                               mode='edge', cval=0, anti_aliasing=False)
+            new_shape = (
+                int(np.round(old_spacing[0] / new_spacing[0] * float(image.shape[0]))),
+                int(np.round(old_spacing[1] / new_spacing[1] * float(image.shape[1]))),
+                int(np.round(old_spacing[2] / new_spacing[2] * float(image.shape[2]))),
+            )
+            new_image = resize(
+                new_image, new_shape, order=1, mode="edge", cval=0, anti_aliasing=False
+            )
             if new_shape == [240, 240, 160]:
-                new_image = resize(new_image, (128, 128, 128), order=3,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=3,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
             else:
                 new_image = pad_image(new_image)
-                new_image = resize(new_image, (128, 128, 128), order=3,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=3,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
     else:
         if old_spacing == (1.0, 1.0, 1.0):
             if shape == [240, 240, 160]:
-                new_image = resize(new_image, (128, 128, 128), order=0,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=0,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
             else:
                 new_image = pad_image(new_image)
-                new_image = resize(new_image, (128, 128, 128), order=0,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=0,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
         else:
-            new_shape = (int(np.round(old_spacing[0]/new_spacing[0]*float(image.shape[0]))),
-                         int(np.round(old_spacing[1]/new_spacing[1]*float(image.shape[1]))),
-                         int(np.round(old_spacing[2]/new_spacing[2]*float(image.shape[2]))))
-            new_image = resize(new_image, new_shape, order=0,
-                               mode='edge', cval=0, anti_aliasing=False)
+            new_shape = (
+                int(np.round(old_spacing[0] / new_spacing[0] * float(image.shape[0]))),
+                int(np.round(old_spacing[1] / new_spacing[1] * float(image.shape[1]))),
+                int(np.round(old_spacing[2] / new_spacing[2] * float(image.shape[2]))),
+            )
+            new_image = resize(
+                new_image, new_shape, order=0, mode="edge", cval=0, anti_aliasing=False
+            )
             if new_shape == [240, 240, 160]:
-                new_image = resize(new_image, (128, 128, 128), order=0,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=0,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
             else:
                 new_image = pad_image(new_image)
-                new_image = resize(new_image, (128, 128, 128), order=0,
-                                   mode='edge', cval=0, anti_aliasing=False)
+                new_image = resize(
+                    new_image,
+                    (128, 128, 128),
+                    order=0,
+                    mode="edge",
+                    cval=0,
+                    anti_aliasing=False,
+                )
 
     if is_mask:  # Retrun if mask
         return new_image.astype(np.int8)
@@ -153,5 +220,5 @@ def preprocess_image(image, is_mask=False,
         p1 = np.percentile(new_image_temp, 2)
         p2 = np.percentile(new_image_temp, 95)
         new_image[new_image > p2] = p2
-        new_image = (new_image - p1)/p2
+        new_image = (new_image - p1) / p2
         return new_image.astype(np.float32)

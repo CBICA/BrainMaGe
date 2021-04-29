@@ -19,22 +19,22 @@ class unet(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.ins = in_conv(self.n_channels, base_filters)
-        self.ds_0 = DownsamplingModule(base_filters, base_filters*2)
-        self.en_1 = EncodingModule(base_filters*2, base_filters*2)
-        self.ds_1 = DownsamplingModule(base_filters*2, base_filters*4)
-        self.en_2 = EncodingModule(base_filters*4, base_filters*4)
-        self.ds_2 = DownsamplingModule(base_filters*4, base_filters*8)
-        self.en_3 = EncodingModule(base_filters*8, base_filters*8)
-        self.ds_3 = DownsamplingModule(base_filters*8, base_filters*16)
-        self.en_4 = EncodingModule(base_filters*16, base_filters*16)
-        self.us_3 = UpsamplingModule(base_filters*16, base_filters*8)
-        self.de_3 = DecodingModule(base_filters*16, base_filters*8)
-        self.us_2 = UpsamplingModule(base_filters*8, base_filters*4)
-        self.de_2 = DecodingModule(base_filters*8, base_filters*4)
-        self.us_1 = UpsamplingModule(base_filters*4, base_filters*2)
-        self.de_1 = DecodingModule(base_filters*4, base_filters*2)
-        self.us_0 = UpsamplingModule(base_filters*2, 16)
-        self.out = out_conv(base_filters*2, self.n_classes-1)
+        self.ds_0 = DownsamplingModule(base_filters, base_filters * 2)
+        self.en_1 = EncodingModule(base_filters * 2, base_filters * 2)
+        self.ds_1 = DownsamplingModule(base_filters * 2, base_filters * 4)
+        self.en_2 = EncodingModule(base_filters * 4, base_filters * 4)
+        self.ds_2 = DownsamplingModule(base_filters * 4, base_filters * 8)
+        self.en_3 = EncodingModule(base_filters * 8, base_filters * 8)
+        self.ds_3 = DownsamplingModule(base_filters * 8, base_filters * 16)
+        self.en_4 = EncodingModule(base_filters * 16, base_filters * 16)
+        self.us_3 = UpsamplingModule(base_filters * 16, base_filters * 8)
+        self.de_3 = DecodingModule(base_filters * 16, base_filters * 8)
+        self.us_2 = UpsamplingModule(base_filters * 8, base_filters * 4)
+        self.de_2 = DecodingModule(base_filters * 8, base_filters * 4)
+        self.us_1 = UpsamplingModule(base_filters * 4, base_filters * 2)
+        self.de_1 = DecodingModule(base_filters * 4, base_filters * 2)
+        self.us_0 = UpsamplingModule(base_filters * 2, 16)
+        self.out = out_conv(base_filters * 2, self.n_classes - 1)
 
     def forward(self, x):
         x1 = self.ins(x)
@@ -64,22 +64,22 @@ class resunet(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.ins = in_conv(self.n_channels, base_filters, res=True)
-        self.ds_0 = DownsamplingModule(base_filters, base_filters*2)
-        self.en_1 = EncodingModule(base_filters*2, base_filters*2, res=True)
-        self.ds_1 = DownsamplingModule(base_filters*2, base_filters*4)
-        self.en_2 = EncodingModule(base_filters*4, base_filters*4, res=True)
-        self.ds_2 = DownsamplingModule(base_filters*4, base_filters*8)
-        self.en_3 = EncodingModule(base_filters*8, base_filters*8, res=True)
-        self.ds_3 = DownsamplingModule(base_filters*8, base_filters*16)
-        self.en_4 = EncodingModule(base_filters*16, base_filters*16, res=True)
-        self.us_3 = UpsamplingModule(base_filters*16, base_filters*8)
-        self.de_3 = DecodingModule(base_filters*16, base_filters*8, res=True)
-        self.us_2 = UpsamplingModule(base_filters*8, base_filters*4)
-        self.de_2 = DecodingModule(base_filters*8, base_filters*4, res=True)
-        self.us_1 = UpsamplingModule(base_filters*4, base_filters*2)
-        self.de_1 = DecodingModule(base_filters*4, base_filters*2, res=True)
-        self.us_0 = UpsamplingModule(base_filters*2, base_filters)
-        self.out = out_conv(base_filters*2, self.n_classes-1, res=True)
+        self.ds_0 = DownsamplingModule(base_filters, base_filters * 2)
+        self.en_1 = EncodingModule(base_filters * 2, base_filters * 2, res=True)
+        self.ds_1 = DownsamplingModule(base_filters * 2, base_filters * 4)
+        self.en_2 = EncodingModule(base_filters * 4, base_filters * 4, res=True)
+        self.ds_2 = DownsamplingModule(base_filters * 4, base_filters * 8)
+        self.en_3 = EncodingModule(base_filters * 8, base_filters * 8, res=True)
+        self.ds_3 = DownsamplingModule(base_filters * 8, base_filters * 16)
+        self.en_4 = EncodingModule(base_filters * 16, base_filters * 16, res=True)
+        self.us_3 = UpsamplingModule(base_filters * 16, base_filters * 8)
+        self.de_3 = DecodingModule(base_filters * 16, base_filters * 8, res=True)
+        self.us_2 = UpsamplingModule(base_filters * 8, base_filters * 4)
+        self.de_2 = DecodingModule(base_filters * 8, base_filters * 4, res=True)
+        self.us_1 = UpsamplingModule(base_filters * 4, base_filters * 2)
+        self.de_1 = DecodingModule(base_filters * 4, base_filters * 2, res=True)
+        self.us_0 = UpsamplingModule(base_filters * 2, base_filters)
+        self.out = out_conv(base_filters * 2, self.n_classes - 1, res=True)
 
     def forward(self, x):
         x1 = self.ins(x)
@@ -109,21 +109,27 @@ class fcn(nn.Module):
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.ins = in_conv(self.n_channels, base_filters)
-        self.ds_0 = DownsamplingModule(base_filters, base_filters*2)
-        self.en_1 = EncodingModule(base_filters*2, base_filters*2)
-        self.ds_1 = DownsamplingModule(base_filters*2, base_filters*4)
-        self.en_2 = EncodingModule(base_filters*4, base_filters*4)
-        self.ds_2 = DownsamplingModule(base_filters*4, base_filters*8)
-        self.en_3 = EncodingModule(base_filters*8, base_filters*8)
-        self.ds_3 = DownsamplingModule(base_filters*8, base_filters*16)
-        self.en_4 = EncodingModule(base_filters*16, base_filters*16)
-        self.us_4 = FCNUpsamplingModule(base_filters*16, 1, scale_factor=5)
-        self.us_3 = FCNUpsamplingModule(base_filters*8, 1, scale_factor=4)
-        self.us_2 = FCNUpsamplingModule(base_filters*4, 1, scale_factor=3)
-        self.us_1 = FCNUpsamplingModule(base_filters*2, 1, scale_factor=2)
+        self.ds_0 = DownsamplingModule(base_filters, base_filters * 2)
+        self.en_1 = EncodingModule(base_filters * 2, base_filters * 2)
+        self.ds_1 = DownsamplingModule(base_filters * 2, base_filters * 4)
+        self.en_2 = EncodingModule(base_filters * 4, base_filters * 4)
+        self.ds_2 = DownsamplingModule(base_filters * 4, base_filters * 8)
+        self.en_3 = EncodingModule(base_filters * 8, base_filters * 8)
+        self.ds_3 = DownsamplingModule(base_filters * 8, base_filters * 16)
+        self.en_4 = EncodingModule(base_filters * 16, base_filters * 16)
+        self.us_4 = FCNUpsamplingModule(base_filters * 16, 1, scale_factor=5)
+        self.us_3 = FCNUpsamplingModule(base_filters * 8, 1, scale_factor=4)
+        self.us_2 = FCNUpsamplingModule(base_filters * 4, 1, scale_factor=3)
+        self.us_1 = FCNUpsamplingModule(base_filters * 2, 1, scale_factor=2)
         self.us_0 = FCNUpsamplingModule(base_filters, 1, scale_factor=1)
-        self.conv_0 = nn.Conv3d(in_channels=5, out_channels=self.n_classes-1,
-                                kernel_size=1, stride=1, padding=0, bias=True)
+        self.conv_0 = nn.Conv3d(
+            in_channels=5,
+            out_channels=self.n_classes - 1,
+            kernel_size=1,
+            stride=1,
+            padding=0,
+            bias=True,
+        )
 
     def forward(self, x):
         x1 = self.ins(x)
@@ -147,13 +153,15 @@ class fcn(nn.Module):
 
 
 def fetch_model(modelname, num_channels, num_classes, num_filters):
-    if modelname == 'resunet':
+    if modelname == "resunet":
         model = resunet(num_channels, num_classes, num_filters)
-    elif modelname == 'unet':
+    elif modelname == "unet":
         model = resunet(num_channels, num_classes, num_filters)
-    elif modelname == 'fcn':
+    elif modelname == "fcn":
         model = fcn(num_channels, num_classes, num_filters)
     else:
-        raise ValueError('Check Model spelling, should be one of resunet, unet, fcn in the config'+\
-                         'file!')
+        raise ValueError(
+            "Check Model spelling, should be one of resunet, unet, fcn in the config"
+            + "file!"
+        )
     return model

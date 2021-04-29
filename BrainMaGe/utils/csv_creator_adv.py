@@ -29,30 +29,34 @@ def rex_o4a_csv(folder_path, to_save, ftype, modalities):
                                   :  ['t1', 't2', 't1ce']]
     """
     modalities = modalities[1:-1]
-    modalities = re.findall('[^, \']+', modalities)
+    modalities = re.findall("[^, ']+", modalities)
     if not modalities:
-        print("Could not find modalities! Are you sure you have put in \
-              something in the modalities field?")
+        print(
+            "Could not find modalities! Are you sure you have put in \
+              something in the modalities field?"
+        )
         sys.exit(0)
-    if ftype == 'test':
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,Image_Path\n')
+    if ftype == "test":
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,Image_Path\n")
     else:
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,gt_path,Image_path\n')
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,gt_path,Image_path\n")
     folders = os.listdir(folder_path)
     for folder in folders:
         for modality in modalities:
-            csv_file.write(folder+'_'+modality+',')
-            if ftype != 'test':
-                ground_truth = glob.glob(os.path.join(folder_path, folder,
-                                                      '*mask.nii.gz'))[0]
+            csv_file.write(folder + "_" + modality + ",")
+            if ftype != "test":
+                ground_truth = glob.glob(
+                    os.path.join(folder_path, folder, "*mask.nii.gz")
+                )[0]
                 csv_file.write(ground_truth)
-                csv_file.write(',')
-            img = glob.glob(os.path.join(folder_path, folder,
-                                         '*'+modality+'.nii.gz'))[0]
+                csv_file.write(",")
+            img = glob.glob(
+                os.path.join(folder_path, folder, "*" + modality + ".nii.gz")
+            )[0]
             csv_file.write(img)
-            csv_file.write('\n')
+            csv_file.write("\n")
     csv_file.close()
 
 
@@ -70,35 +74,39 @@ def rex_sin_csv(folder_path, to_save, ftype, modalities):
                                   :  ['t1']]
     """
     modalities = modalities[1:-1]
-    modalities = re.findall('[^, \']+', modalities)
+    modalities = re.findall("[^, ']+", modalities)
     if len(modalities) > 1:
         print("Found more than one modality, exiting!")
         sys.exit(0)
     if not modalities:
-        print("Could not find modalities! Are you sure you have put in \
-              something in the modalities field?")
+        print(
+            "Could not find modalities! Are you sure you have put in \
+              something in the modalities field?"
+        )
         sys.exit(0)
-    if ftype == 'test':
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,')
+    if ftype == "test":
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,")
     else:
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,gt_path,")
     modality = modalities[0]
-    csv_file.write(modality+'_path\n')
+    csv_file.write(modality + "_path\n")
     folders = os.listdir(folder_path)
     for folder in folders:
         csv_file.write(folder)
-        csv_file.write(',')
-        if ftype != 'test':
-            ground_truth = glob.glob(os.path.join(folder_path, folder,
-                                                  '*mask.nii.gz'))[0]
+        csv_file.write(",")
+        if ftype != "test":
+            ground_truth = glob.glob(os.path.join(folder_path, folder, "*mask.nii.gz"))[
+                0
+            ]
             csv_file.write(ground_truth)
-            csv_file.write(',')
-        img = glob.glob(os.path.join(folder_path, folder,
-                                     '*'+modality+'.nii.gz'))[0]
+            csv_file.write(",")
+        img = glob.glob(os.path.join(folder_path, folder, "*" + modality + ".nii.gz"))[
+            0
+        ]
         csv_file.write(img)
-        csv_file.write('\n')
+        csv_file.write("\n")
     csv_file.close()
 
 
@@ -116,40 +124,45 @@ def rex_mul_csv(folder_path, to_save, ftype, modalities):
                                   :  ['t1']]
     """
     modalities = modalities[1:-1]
-    modalities = re.findall('[^, \']+', modalities)
+    modalities = re.findall("[^, ']+", modalities)
     if not modalities:
-        print("Could not find modalities! Are you sure you have put in \
-              something in the modalities field?")
+        print(
+            "Could not find modalities! Are you sure you have put in \
+              something in the modalities field?"
+        )
         sys.exit(0)
-    if ftype == 'test':
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,')
+    if ftype == "test":
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,")
     else:
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,gt_path,")
     for modality in modalities[:-1]:
-        csv_file.write(modality+'_path,')
+        csv_file.write(modality + "_path,")
     modality = modalities[-1]
-    csv_file.write(modality+'_path\n')
+    csv_file.write(modality + "_path\n")
     folders = os.listdir(folder_path)
     for folder in folders:
         csv_file.write(folder)
-        csv_file.write(',')
-        if ftype != 'test':
-            ground_truth = glob.glob(os.path.join(folder_path, folder,
-                                                  '*mask.nii.gz'))[0]
+        csv_file.write(",")
+        if ftype != "test":
+            ground_truth = glob.glob(os.path.join(folder_path, folder, "*mask.nii.gz"))[
+                0
+            ]
             csv_file.write(ground_truth)
-            csv_file.write(',')
+            csv_file.write(",")
         for modality in modalities[:-1]:
-            img = glob.glob(os.path.join(folder_path, folder,
-                                         '*'+modality+'.nii.gz'))[0]
+            img = glob.glob(
+                os.path.join(folder_path, folder, "*" + modality + ".nii.gz")
+            )[0]
             csv_file.write(img)
-            csv_file.write(',')
+            csv_file.write(",")
         modality = modalities[-1]
-        img = glob.glob(os.path.join(folder_path, folder,
-                                     '*'+modality+'.nii.gz'))[0]
+        img = glob.glob(os.path.join(folder_path, folder, "*" + modality + ".nii.gz"))[
+            0
+        ]
         csv_file.write(img)
-        csv_file.write('\n')
+        csv_file.write("\n")
     csv_file.close()
 
 
@@ -164,20 +177,20 @@ def rex_bids_csv(folder_path, to_save, ftype):
                              if file type is set to test, it does not look for
                              ground truths]
     """
-    if ftype == 'test':
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,')
+    if ftype == "test":
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,")
     else:
-        csv_file = open(os.path.join(to_save, ftype+'.csv'), 'w+')
-        csv_file.write('ID,gt_path,')
+        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
+        csv_file.write("ID,gt_path,")
     # load BIDS dataset into memory
     layout = BIDSLayout(folder_path)
     bids_df = layout.to_df()
     bids_modality_df = {
-        't1': bids_df[bids_df['suffix'] == "T1w"],
-        't2': bids_df[bids_df['suffix'] == "T2w"],
-        'flair': bids_df[bids_df['suffix'] == "FLAIR"],
-        't1ce': bids_df[bids_df['suffix'] == "T1CE"]
+        "t1": bids_df[bids_df["suffix"] == "T1w"],
+        "t2": bids_df[bids_df["suffix"] == "T2w"],
+        "flair": bids_df[bids_df["suffix"] == "FLAIR"],
+        "t1ce": bids_df[bids_df["suffix"] == "T1CE"],
     }
     # check what modalities the dataset contains
     modalities = []
@@ -186,26 +199,27 @@ def rex_bids_csv(folder_path, to_save, ftype):
             modalities.append(modality)
     # write headers for those modalities
     for modality in modalities[:-1]:
-        csv_file.write(modality+'_path,')
+        csv_file.write(modality + "_path,")
     modality = modalities[-1]
-    csv_file.write(modality+'_path\n')
+    csv_file.write(modality + "_path\n")
     # write image paths for each subject
     for sub in layout.get_subjects():
         csv_file.write(sub)
-        csv_file.write(',')
-        if ftype != 'test':
-            ground_truth = glob.glob(os.path.join(folder_path, sub, '*mask.nii.gz'))[0]
+        csv_file.write(",")
+        if ftype != "test":
+            ground_truth = glob.glob(os.path.join(folder_path, sub, "*mask.nii.gz"))[0]
             csv_file.write(ground_truth)
-            csv_file.write(',')
+            csv_file.write(",")
         for modality in modalities[:-1]:
-            img = bids_modality_df[modality][bids_df['subject'] == sub].path.values
+            img = bids_modality_df[modality][bids_df["subject"] == sub].path.values
             csv_file.write(img[0])
-            csv_file.write(',')
+            csv_file.write(",")
         modality = modalities[-1]
-        img = bids_modality_df[modality][bids_df['subject'] == sub].path.values
+        img = bids_modality_df[modality][bids_df["subject"] == sub].path.values
         csv_file.write(img[0])
-        csv_file.write('\n')
+        csv_file.write("\n")
     csv_file.close()
+
 
 def generate_csv(folder_path, to_save, mode, ftype, modalities):
     """[Function to generate CSV]
@@ -218,14 +232,14 @@ def generate_csv(folder_path, to_save, mode, ftype, modalities):
         ftype {[string]} -- [description]
         modalities {[string]} -- [description]
     """
-    print("Generating ", ftype, '.csv', sep='')
-    if mode.lower() == 'ma':
+    print("Generating ", ftype, ".csv", sep="")
+    if mode.lower() == "ma":
         rex_o4a_csv(folder_path, to_save, ftype, modalities)
-    elif mode.lower() == 'single':
+    elif mode.lower() == "single":
         rex_sin_csv(folder_path, to_save, ftype, modalities)
-    elif mode.lower() == 'multi':
+    elif mode.lower() == "multi":
         rex_mul_csv(folder_path, to_save, ftype, modalities)
-    elif mode.lower() == 'bids':
+    elif mode.lower() == "bids":
         rex_bids_csv(folder_path, to_save, ftype)
     else:
         print("Sorry, this mode is not supported")
