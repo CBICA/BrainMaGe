@@ -95,8 +95,8 @@ if __name__ == "__main__":
     mask_path = args.mask_path
     DEVICE = args.device
 
-    base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    base_dir = os.path.join(os.path.dirname(base_dir), "BrainMaGe/weights")
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    base_dir = os.path.join(base_dir, "BrainMaGe/weights")
     weights = os.path.join(base_dir, "resunet_ma.pt")
 
     print("Weight file used :", weights)
