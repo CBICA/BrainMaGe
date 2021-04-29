@@ -48,7 +48,8 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
     model = fetch_model(
         modelname="resunet", num_channels=1, num_classes=2, num_filters=16
     )
-    checkpoint = torch.load(weights)
+    
+    checkpoint = torch.load(weights, map_location=torch.device('cpu'))
     model.load_state_dict(checkpoint["model_state_dict"])
 
     if device != "cpu":
@@ -56,9 +57,9 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
     model.eval()
 
     patient_nib = nib.load(input_path)
-    image = patient_nib.get_fdata()
+    image_data = patient_nib.get_fdata()
     old_shape = patient_nib.shape
-    image = process_image(image)
+    image = process_image(image_data)
     image = resize(
         image, (128, 128, 128), order=3, mode="edge", cval=0, anti_aliasing=False
     )
@@ -82,7 +83,7 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
         print("You chose to save the brain. We are now saving it with the masks.")
         brain_data = image_data
         brain_data[to_save == 0] = 0
-        to_save_brain = nib.Nifti1Image(brain_data, image.affine)
+        to_save_brain = nib.Nifti1Image(brain_data, patient_nib.affine)
         nib.save(to_save_brain, os.path.join(mask_path))
 
     print("Thank you for using BrainMaGe")
