@@ -26,6 +26,7 @@ setup(
         "scikit-image",
         "nibabel",
         "pytorch-lightning==0.8.1",
+        "bids"
     ],
     scripts=[
         "brain_mage_run",
