@@ -1,8 +1,8 @@
 # Converting to OpenVINO IR and Benchmarking
 
-## Prereqs for running:
+## Prereqs for running
 
-- ### Clone this repo of BrainMaGe and Install BrainMaGe
+### Clone this repo of BrainMaGe and Install BrainMaGe
 
 ```bash
 git clone https://github.com/ravi9/BrainMaGe.git BrainMaGe-ravi9
@@ -14,16 +14,16 @@ conda activate brainmage # activate it
 python setup.py install
 ```
 
-- ### Install OpenVINO
+### Install OpenVINO
 
 ```bash
 # Install this specific version of OpenCV to prevent libGl errors
 pip uninstall -y opencv-python
-pip install -U opencv-python-headless==4.2.0.32 --user
+pip install -U opencv-python-headless==4.2.0.32
 pip install --ignore-installed PyYAML openvino-dev
 ```
 
-- ### Install OpenVINO Contrib
+### Install OpenVINO Contrib
 
 Install this custom contrib to convert PyTorch models to OpenVINO IR without converting to ONNX
 
@@ -33,7 +33,9 @@ git clone -b mo_resunet https://github.com/dkurt/openvino_contrib/
 export PYTHONPATH=/path/to/openvino_contrib/modules/mo_pytorch/:$PYTHONPATH
 ```
 
-## After above steps:
+## After above steps
+
+Following steps are to download the dataset, generate the manifest for the dataset, export PyTorch to OpenVINO, quantize the OV model, benchmark
 
 ```bash
 cd BrainMaGe-ravi9/openvino
@@ -44,13 +46,13 @@ python quantize.py
 python benchmark-pt-ov.py
 ```
 
-- ### Benchmarking with OpenVINO Benchmark App
+### Benchmarking with OpenVINO Benchmark App
 
 ```bash
 bash ./run-benchmark-app.sh
 ```
 
-- ### Memory Profiling
+### Memory Profiling
 
 ```bash
 conda install memory_profiler
