@@ -20,6 +20,7 @@ from pathlib import Path
 from timeit import default_timer as timer
 from datetime import timedelta
 
+from openvino.inference_engine import IECore
 
 brainmage_root = Path('../')
 
@@ -45,15 +46,12 @@ print("Number of rows:", nfbs_dataset_df.shape[0])
 
 
 def bench_pytorch_fp32():
-
     ### Load PyTorch model
-
     pt_model = fetch_model(modelname="resunet", num_channels=1, num_classes=2, num_filters=16)
     checkpoint = torch.load(pytorch_model_path, map_location=torch.device('cpu'))
     pt_model.load_state_dict(checkpoint["model_state_dict"])
 
     ### Run PyTorch Inference
-
     print (f"Starting PyTorch inference with {pytorch_model_path} ...")
 
     _ = pt_model.eval()
@@ -96,11 +94,8 @@ def bench_pytorch_fp32():
 
 def bench_ov_fp32():
     #### Load OpenVINO model
-
     ov_model_dir = brainmage_root / 'BrainMaGe/weights/ov/fp32'
     modelname = "resunet_ma"
-
-    from openvino.inference_engine import IECore
 
     model_xml = f'{ov_model_dir}/{modelname}.xml'
     model_bin = f'{ov_model_dir}/{modelname}.bin'
@@ -114,9 +109,7 @@ def bench_ov_fp32():
     input_layer = next(iter(exec_net.input_info))
     output_layer = next(iter(exec_net.outputs))
 
-
     # # #### Run OpenVINO Inference
-
     print (f"Starting OpenVINO FP32 inference with {ov_model_dir} ...")
 
     ov_stats =[]
@@ -157,12 +150,8 @@ def bench_ov_fp32():
 def bench_ov_int8():
 
     # #### Load INT8 OpenVINO model
-
     ov_model_dir = brainmage_root / 'openvino/int8_openvino_model'
     modelname = "resunet_ma_int8"
-
-
-    from openvino.inference_engine import IECore
 
     model_xml = f'{ov_model_dir}/{modelname}.xml'
     model_bin = f'{ov_model_dir}/{modelname}.bin'
@@ -176,9 +165,7 @@ def bench_ov_int8():
     input_layer = next(iter(exec_net.input_info))
     output_layer = next(iter(exec_net.outputs))
 
-
     # #### Run OpenVINO Inference
-
     print (f"Starting OpenVINO inference with {ov_model_dir} ...")
 
     ov_int8_stats =[]
@@ -248,8 +235,3 @@ print()
 print (f"Speedup with OpenVINO FP32 for {pt_stats_df.shape[0]} images: {speedup_fp32:.1f}x")
 print (f"Speedup with OpenVINO INT8 for {pt_stats_df.shape[0]} images: {speedup_int8:.1f}x")
 print (f"Speedup with OpenVINO INT8 over FP32: {speedup_fp32_int8:.1f}x")
-
-
-
-
-
