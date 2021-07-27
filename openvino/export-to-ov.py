@@ -15,6 +15,7 @@ from BrainMaGe.models.networks import fetch_model
 
 brainmage_root = Path('../')
 pytorch_model_path = brainmage_root / 'BrainMaGe/weights/resunet_ma.pt'
+#ov_model_dir = brainmage_root / 'BrainMaGe/weights/ov/fp16'
 ov_model_dir = brainmage_root / 'BrainMaGe/weights/ov/fp32'
 
 if not os.path.exists(ov_model_dir):
@@ -47,7 +48,7 @@ from openvino.inference_engine import IECore
 ov_model_name = 'resunet_ma'
 model_name = ov_model_dir / ov_model_name
 
-mo_pytorch.convert(pt_model, input_shape=[1, 1, 128, 128, 128], model_name=model_name)
+mo_pytorch.convert(pt_model, input_shape=[1, 1, 128, 128, 128], data_type="FP32", model_name=model_name)
 
 print (f"\nOpenVINO model saved at {ov_model_dir} \n")
 

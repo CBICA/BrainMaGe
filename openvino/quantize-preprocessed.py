@@ -61,19 +61,22 @@ parser.add_argument("--xml_file", default=brainmage_root+"BrainMaGe/weights/ov/f
                     help="XML file for OpenVINO to quantize")
 parser.add_argument("--bin_file", default=brainmage_root+"BrainMaGe/weights/ov/fp32/resunet_ma.bin",
                 help="BIN file for OpenVINO to quantize")
-parser.add_argument("--manifest", default=brainmage_root+"openvino/nfbs-dataset-test.csv",
+parser.add_argument("--manifest", default=brainmage_root+"openvino/nfbs-dataset-test-preprocessed.csv",
                 help="Manifest file (CSV with filenames of images and labels)")
 parser.add_argument("--data_dir", default="./data",
                 help="Data directory root")
 parser.add_argument("--int8_directory", default="./int8_openvino_model",
                 help="INT8 directory for calibrated OpenVINO model")
-parser.add_argument("--maximum_metric_drop", default=1.0,
+parser.add_argument("--maximum_metric_drop", default=0.03,
                 help="AccuracyAwareQuantization: Maximum allowed drop in metric")
 parser.add_argument("--accuracy_aware_quantization",
                     help="use accuracy aware quantization",
-                    action="store_true", default=False)
+                    action="store_true", default=True)
 
 args = parser.parse_args()
+
+image_path_idx = 1 # 0th col is sub-id, 1st col is input path, 2nd col is mask_path
+mask_path_idx = 2
 
 class bcolors:
     """
@@ -111,8 +114,8 @@ class MyDataLoader(DataLoader):
         dataset_df = pd.read_csv(self.manifest, header = None)
         
         for i, row in dataset_df.iterrows():
-            self.images.append(row[2]) #image path
-            self.labels.append(row[3]) #mask path
+            self.images.append(row[image_path_idx]) #image path
+            self.labels.append(row[mask_path_idx]) #mask path
         
         self.items = np.arange(dataset_df.shape[0])
         self.batch_size = 1
@@ -264,22 +267,43 @@ default_quantization_algorithm = [
 ]
 
 
+# accuracy_aware_quantization_algorithm = [
+#     {
+#         "name": "AccuracyAwareQuantization", # compression algorithm name
+#         "params": {
+#             "target_device": "CPU",
+#             "preset": "performance",
+#             "stat_subset_size": 10,
+#             "metric_subset_ratio": 0.5, # A part of the validation set that is used to compare full-precision and quantized models
+#             "ranking_subset_size": 300, # A size of a subset which is used to rank layers by their contribution to the accuracy drop
+#             "max_iter_num": 10,    # Maximum number of iterations of the algorithm (maximum of layers that may be reverted back to full-precision)
+#             "maximal_drop": args.maximum_metric_drop,      # Maximum metric drop which has to be achieved after the quantization
+#             "drop_type": "absolute",    # Drop type of the accuracy metric: relative or absolute (default)
+#             "use_prev_if_drop_increase": True,     # Whether to use NN snapshot from the previous algorithm iteration in case if drop increases
+#             "base_algorithm": "DefaultQuantization" # Base algorithm that is used to quantize model at the beginning
+#         }
+#     }
+# ]
+        
 accuracy_aware_quantization_algorithm = [
     {
         "name": "AccuracyAwareQuantization", # compression algorithm name
         "params": {
             "target_device": "CPU",
             "preset": "performance",
-            "stat_subset_size": 10,
-            "metric_subset_ratio": 0.5, # A part of the validation set that is used to compare full-precision and quantized models
             "ranking_subset_size": 300, # A size of a subset which is used to rank layers by their contribution to the accuracy drop
-            "max_iter_num": 10,    # Maximum number of iterations of the algorithm (maximum of layers that may be reverted back to full-precision)
-            "maximal_drop": args.maximum_metric_drop,      # Maximum metric drop which has to be achieved after the quantization
+            "max_iter_num": 30,    # Maximum number of iterations of the algorithm (maximum of layers that may be reverted back to full-precision)
+            "maximal_drop": args.maximum_metric_drop,      # Maximum accuracy drop which has to be achieved after the quantization
             "drop_type": "absolute",    # Drop type of the accuracy metric: relative or absolute (default)
-            "use_prev_if_drop_increase": True,     # Whether to use NN snapshot from the previous algorithm iteration in case if drop increases
-            "base_algorithm": "DefaultQuantization" # Base algorithm that is used to quantize model at the beginning
-        }
+            "use_prev_if_drop_increase": False,      # Whether to use NN snapshot from the previous algorithm iteration in case if drop increases
+            "base_algorithm": "DefaultQuantization", # Base algorithm that is used to quantize model at the beginning
+            "convert_to_mixed_preset": True,  # Whether to convert the model to mixed mode if the accuracy criteria 
+                                               # of the symmetrically quantized model are not satisfied
+            "metric_subset_ratio": 0.5  # A part of the validation set that is used to compare element-wise full-precision and 
+                                        # quantized models in case of predefined metric values of the original model
+         }
     }
+   
 ]
 
 class GraphAttrs(object):

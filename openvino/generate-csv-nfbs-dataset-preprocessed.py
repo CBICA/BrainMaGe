@@ -17,16 +17,16 @@ sub_dirs = list(set(sub_dirs) - set(skip_sub_dirs))
 for sub_dir in sub_dirs:
     sub_dir_path = data_dir + '/' + sub_dir
     f_names = sorted(os.listdir(sub_dir_path))
-    row = [ sub_dir_path + '/' + f for f in f_names ]
+    row = [ sub_dir_path + '/' + f for f in f_names if "_reg.nii.gz" in f ]
     row.insert(0, sub_dir)
     rows.append(row)
 
 # Sample Row:
 # A00037112,/home/sdp/ravi/upenn/data/NFBS_Dataset/A00037112/sub-A00037112_ses-NFB3_T1w.nii.gz,/home/sdp/ravi/upenn/data/NFBS_Dataset/A00037112/sub-A00037112_ses-NFB3_T1w_brain.nii.gz,/home/sdp/ravi/upenn/data/NFBS_Dataset/A00037112/sub-A00037112_ses-NFB3_T1w_brainmask.nii.gz
 
-nfbs_ds_csv = 'nfbs-dataset.csv'
-nfbs_ds_train_csv = 'nfbs-dataset-train.csv'
-nfbs_ds_test_csv = 'nfbs-dataset-test.csv'
+nfbs_ds_csv = 'nfbs-dataset-preprocessed.csv'
+nfbs_ds_train_csv = 'nfbs-dataset-train-preprocessed.csv'
+nfbs_ds_test_csv = 'nfbs-dataset-test-preprocessed.csv'
 
 nfbs_dataset_df = pd.DataFrame(rows)
 nfbs_dataset_df.to_csv(nfbs_ds_csv, sep=',', header=False, index=False)
