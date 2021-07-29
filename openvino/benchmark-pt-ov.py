@@ -27,15 +27,21 @@ brainmage_root = Path('../')
 # dataset_csv = 'nfbs-dataset-test-1.csv'
 # dataset_csv = 'nfbs-dataset-preprocessed.csv'
 # dataset_csv = 'nfbs-dataset-test-preprocessed.csv'
+dataset_csv = 'nfbs-dataset-preprocessed.csv'
+dataset_csv = 'nfbs-dataset-test-preprocessed.csv'
+# For NFBS dataset - 0th col is sub-id, 1st col is input path, 2nd col is mask_path
+sub_idx = 0 
+input_path_idx = 1
+mask_path_idx = 2
 
 # dataset_csv = 'upenn-baseline-dataset.csv'
 # dataset_csv = 'upenn-baseline-dataset-test.csv'
 # dataset_csv = 'upenn-baseline-dataset-test-10.csv'
-dataset_csv = 'upenn-baseline-dataset-test-2.csv'
-
-sub_idx = 0 # 0th col is sub-id, 1st col is input path, 2nd col is mask_path
-input_path_idx = 3
-mask_path_idx = 2
+# dataset_csv = 'upenn-baseline-dataset-test-2.csv'
+# # For UPENN-Baseline dataset - 0th col is sub-id, 3rd col is input path, 2nd col is mask_path
+# sub_idx = 0 
+# input_path_idx = 3
+# mask_path_idx = 2
 
 pt_output_path = 'pt-outfile' # PyTorch output file
 ov_output_path = 'ov-outfile' # ONNX output file
