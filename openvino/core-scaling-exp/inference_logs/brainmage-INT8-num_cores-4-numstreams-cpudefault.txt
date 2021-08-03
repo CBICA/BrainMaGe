@@ -1,4 +1,0 @@
-Number of rows: 23
-Input Image Sample: /home/dkarkada/upenn_collab/brainmage_core_scaling/data/NFBS_Dataset//A00040151/sub-A00040151_ses-NFB3_T1w_brain_reg.nii.gz
-Mask Image Sample: /home/dkarkada/upenn_collab/brainmage_core_scaling/data/NFBS_Dataset//A00040151/sub-A00040151_ses-NFB3_T1w_brainmask_reg.nii.gz
-Starting OpenVINO inference with datatype: INT8 Num Cores: 4 ...
