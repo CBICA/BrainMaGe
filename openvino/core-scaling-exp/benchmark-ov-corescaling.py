@@ -178,8 +178,8 @@ if __name__ == '__main__':
     dataset_csv = args.dataset_csv
 
     sub_idx = 0 # 0th col is sub-id, for upenn-baseline-dataset 3st col is input path, 2nd col is mask_path
-    input_path_idx = 1
-    mask_path_idx = 2
+    input_path_idx = args.input_path_idx
+    mask_path_idx = args.mask_path_idx
 
     ov_output_path = 'ov-outfile' # ONNX output file
 
