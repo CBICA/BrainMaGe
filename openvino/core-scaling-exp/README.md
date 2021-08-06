@@ -1,5 +1,6 @@
 ## Script to run core scaling experiments for BrainMaGe
 
+### This script assumes the models have been converted to OpenVINO IR
 To use the core scaling experiments core_scale_infer.sh script, specify the path to the dataset csv file in the script (for ex. if the data path is /home/user/BrainMaGe/openvino/dataset.csv, specify the data path as --data_path /home/user/BrainMaGe/openvino/dataset.csv in the core_scale_infer.sh script). <br>
 If the input and mask indexes are different, specify those, for ex: --input_path_idx 1, --mask_path_idx 2 etc. <br>
 <br> Modify the log_path to point to an existing directory where the benchmarks logs should be stored. 
