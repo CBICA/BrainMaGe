@@ -10,5 +10,5 @@ Modify the num cores configuration (line 16) for which you'd like to run the ben
 
 ### To run the script on a DevCloud node
 Login to DevCloud and open a new terminal
-<br> Login to the node on which you'd like to run the benchmarking using qsub: qsub -I -l nodes=1:<node ID>
- <br> cd into the benchmarks script directory and run the core_scale_infer.sh script (Refer to the above run script instructions to make the necessary modifications)
+<br> Login to the node on which you'd like to run the benchmarking using qsub: `qsub -I -l nodes=1:<node ID>`
+<br> cd into the benchmarks script directory and run the core_scale_infer.sh script (Refer to the above run script instructions to make the necessary modifications)
