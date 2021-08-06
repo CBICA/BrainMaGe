@@ -9,6 +9,6 @@ Modify the precision (line 7) for which you'd like to run the benchmarking for. 
 Modify the num cores configuration (line 16) for which you'd like to run the benchmarking for. (A range can be specified for ex: 1 2 4 to run tests for number of cores 1, 2 and 4). <br>
 
 ### To run the script on a DevCloud node
-login to DevCloud and open a new terminal
+Login to DevCloud and open a new terminal
 <br> Login to the node on which you'd like to run the benchmarking using qsub: qsub -I -l nodes=1:<node ID>
  <br> cd into the benchmarks script directory and run the core_scale_infer.sh script (Refer to the above run script instructions to make the necessary modifications)
