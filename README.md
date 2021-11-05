@@ -19,7 +19,13 @@ The following citations are previous conference presentations of related results
 
 ## Installation Instructions
 
-Please note that python3 is required and [conda](https://www.anaconda.com/) is preferred.
+### Requirements
+- Python 3
+- [Anaconda packaging manager](https://www.anaconda.com/)
+- Git
+- [Git LFS](https://git-lfs.github.com/)
+
+Run the following commands:
 
 ```bash
 git clone https://github.com/CBICA/BrainMaGe.git
