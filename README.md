@@ -39,6 +39,14 @@ git checkout ${latesttag}
 python setup.py install # install dependencies and BrainMaGe
 ```
 
+### Alternative to LFS
+
+In case `git lfs pull` fails, the weights can be obtained using the following commands:
+```bash
+wget https://github.com/CBICA/BrainMaGe/raw/master/BrainMaGe/weights/resunet_ma.pt ./BrainMaGe/weights
+wget https://github.com/CBICA/BrainMaGe/raw/master/BrainMaGe/weights/resunet_multi_4.pt ./BrainMaGe/weights
+```
+
 ## Generating brain masks for your data using our pre-trained models
 
 - This application currently has two modes (more coming soon):
