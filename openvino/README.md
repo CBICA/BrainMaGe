@@ -17,9 +17,6 @@ python setup.py install
 ### Install OpenVINO
 
 ```bash
-# Install this specific version of OpenCV to prevent libGl errors
-pip uninstall -y opencv-python
-pip install -U opencv-python-headless==4.2.0.32
 pip install --ignore-installed PyYAML openvino-dev
 ```
 
