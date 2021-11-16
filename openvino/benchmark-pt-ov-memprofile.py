@@ -24,10 +24,6 @@ from datetime import timedelta
 brainmage_root = Path('../')
 
 nfbs_dataset_csv = 'nfbs-dataset.csv'
-nfbs_dataset_csv = 'nfbs-dataset-test.csv'
-nfbs_dataset_csv = 'nfbs-dataset-test-10.csv'
-nfbs_dataset_csv = 'nfbs-dataset-test-5.csv'
-#nfbs_dataset_csv = 'nfbs-dataset-test-1.csv'
 
 pt_output_path = 'pt-outfile' # PyTorch output file
 ov_output_path = 'ov-outfile' # ONNX output file
@@ -37,7 +33,7 @@ ov_model_dir = brainmage_root / 'BrainMaGe/weights/ov/fp32/'
 
 device="cpu"
 
-    
+
 # ### Load Dataset csv
 
 nfbs_dataset_df = pd.read_csv(nfbs_dataset_csv, header = None)
@@ -87,10 +83,10 @@ def bench_pytorch_fp32():
 
     print (f"Done PyTorch inference with {pytorch_model_path} ...")
     pt_stats_df = pd.DataFrame(pt_stats)
-    
+
     pt_stats_df.to_csv('pt_stats.csv', sep=',', header=False, index=False)
     print (f"Saved pt_stats.csv ...")
-    
+
     return pt_stats_df
 
 @profile
@@ -147,10 +143,10 @@ def bench_ov_fp32():
 
     print (f"Done OpenVINO inference with {ov_model_dir} ...")
     ov_stats_df = pd.DataFrame(ov_stats)
-    
+
     ov_stats_df.to_csv('ov_fp32_stats.csv', sep=',', header=False, index=False)
     print (f"Saved ov_fp32_stats.csv ...")
-    
+
     return ov_stats_df
 
 @profile
@@ -159,7 +155,7 @@ def bench_ov_int8():
     # #### Load INT8 OpenVINO model
 
     ov_model_dir = brainmage_root / 'openvino/int8_openvino_model'
-    modelname = "resunet_ma_int8" 
+    modelname = "resunet_ma_int8"
 
 
     from openvino.inference_engine import IECore
@@ -209,73 +205,20 @@ def bench_ov_int8():
 
     print (f"Done OpenVINO inference with {ov_model_dir} ...")
     ov_int8_stats_df = pd.DataFrame(ov_int8_stats)
-    
+
     ov_int8_stats_df.to_csv('ov_int8_stats.csv', sep=',', header=False, index=False)
     print (f"Saved ov_int8_stats.csv ...")
-    
+
     return ov_int8_stats_df
 
 ##
 ## Run Benchmark
+## Uncomment to select which model you want to do memory-profiling
 ##
 
 # pt_stats_df = bench_pytorch_fp32()
 # ov_stats_df = bench_ov_fp32()
 ov_int8_stats_df = bench_ov_int8()
-
-
-# dice_diff_pt_ov = pt_stats_df[:][2] - ov_stats_df[:][2]
-# dice_diff_pt_ov_int8 = pt_stats_df[:][2] - ov_int8_stats_df[:][2]
-# print()
-# print(f"Accuracy Dice difference with OV FP32 {dice_diff_pt_ov.sum():.6f}")
-# #print(dice_diff_pt_ov.value_counts())
-# print(f"Accuracy Dice difference with OV INT8 {dice_diff_pt_ov_int8.sum():.6f}")
-# #print(dice_diff_pt_ov_int8.value_counts())
-
-# pt_total_inf_time = pt_stats_df[:][3].sum()
-# ov_total_inf_time = ov_stats_df[:][3].sum()
-# ov_int8_total_inf_time = ov_int8_stats_df[:][3].sum()
-# print()
-# print(f"Total Inference Time (sec) for {pt_stats_df.shape[0]} images")
-# print (f"PyTorch: {pt_total_inf_time:.2f} , Mean: {pt_stats_df[:][3].mean():.2f}")
-# print (f"OpenVINO FP32: {ov_total_inf_time:.2f} , Mean: {ov_stats_df[:][3].mean():.2f}")
-# print (f"OpenVINO INT8: {ov_int8_total_inf_time:.2f} , Mean: {ov_int8_stats_df[:][3].mean():.2f}")
-
-# speedup_fp32 = pt_total_inf_time/ov_total_inf_time
-# speedup_int8 = pt_total_inf_time/ov_int8_total_inf_time
-# speedup_fp32_int8 = ov_total_inf_time/ov_int8_total_inf_time
-# print()
-# print (f"Speedup with OpenVINO FP32 for {pt_stats_df.shape[0]} images: {speedup_fp32:.1f}x")
-# print (f"Speedup with OpenVINO INT8 for {pt_stats_df.shape[0]} images: {speedup_int8:.1f}x")
-# print (f"Speedup with OpenVINO INT8 over FP32: {speedup_fp32_int8:.1f}x")
-
-
-# pt_stats_df
-
-# pt_stats_df.shape[0]
-
-# dice_diff = pt_stats_df[:][2] - ov_stats_df[:][2]
-# dice_diff.value_counts()
-
-# pt_total_inf_time = pt_stats_df[:][3].sum()
-# ov_total_inf_time = ov_stats_df[:][3].sum()
-
-# print(f"Total Inference Time for {pt_stats_df.shape[0]} images")
-# print (f"PyTorch: {pt_total_inf_time}")
-# print (f"OpenVINO: {ov_total_inf_time}")
-
-# speedup = pt_total_inf_time/ov_total_inf_time
-# print (f"Speedup with OpenVINO for {pt_stats_df.shape[0]} images: {speedup:.1f}x")
-
-# pt_mean_inf_time = pt_stats_df[:][3].mean()
-# ov_mean_inf_time = ov_stats_df[:][3].mean()
-
-# print(f"Average Inference Time for {pt_stats_df.shape[0]} images")
-# print (f"PyTorch: {pt_mean_inf_time}")
-# print (f"OpenVINO: {ov_mean_inf_time}")
-
-# speedup = pt_mean_inf_time/ov_mean_inf_time
-# print (f"Speedup with OpenVINO for {pt_stats_df.shape[0]} images: {speedup:.1f}x")
 
 
 
