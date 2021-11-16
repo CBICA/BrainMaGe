@@ -1,9 +1,8 @@
 """
 Prereqs for running this script:
 
-git clone -b mo_resunet https://github.com/dkurt/openvino_contrib/
-source /opt/intel/openvino_2021.4.582/bin/setupvars.sh
-export PYTHONPATH=/path/to/openvino_contrib/modules/mo_pytorch/:$PYTHONPATH
+git clone https://github.com/openvinotoolkit/openvino_contrib.git
+export PYTHONPATH=`pwd`/openvino_contrib/modules/mo_pytorch/:$PYTHONPATH
 
 """
 

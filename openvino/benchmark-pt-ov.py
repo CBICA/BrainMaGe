@@ -25,7 +25,7 @@ from openvino.inference_engine import IECore
 
 brainmage_root = Path('../')
 dataset_csv = 'nfbs-dataset-test.csv'
-dataset_csv = 'nfbs-dataset-test-2.csv'
+
 # For NFBS dataset - 0th col is sub-id, 1st col is input path, 2nd col is mask_path
 sub_idx = 0
 input_path_idx = 1
