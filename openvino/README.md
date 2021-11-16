@@ -73,6 +73,14 @@ benchmark_app -m ./int8_openvino_model/resunet_ma_int8.xml -nireq 1 -nstreams 1 
 
 Follow the [compare-pyt-ov-single-infer.ipynb](compare-pyt-ov-single-infer.ipynb) for step-by-step instructions.
 
+### Core Scaling Benchmarking
+
+```bash
+# Assuming you are in BrainMaGe/openvino folder
+# Update the script as per your needs.
+bash ./core_scale_infer.sh
+
+```
 
 ### Memory Profiling
 
