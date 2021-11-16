@@ -29,7 +29,7 @@ Setup `openvino_contrib` which has PyTorch extensions for Model Optimizer which 
 
 ```bash
 cd ~
-git clone -b https://github.com/openvinotoolkit/openvino_contrib.git
+git clone https://github.com/openvinotoolkit/openvino_contrib.git
 export PYTHONPATH=`pwd`/openvino_contrib/modules/mo_pytorch/:$PYTHONPATH
 ```
 
