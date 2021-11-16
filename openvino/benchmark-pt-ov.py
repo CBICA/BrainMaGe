@@ -20,28 +20,16 @@ from pathlib import Path
 from timeit import default_timer as timer
 from datetime import datetime
 
+from medpy.metric.binary import hd95
 from openvino.inference_engine import IECore
 
 brainmage_root = Path('../')
-
-# dataset_csv = 'nfbs-dataset-test-1.csv'
-# dataset_csv = 'nfbs-dataset-preprocessed.csv'
-# dataset_csv = 'nfbs-dataset-test-preprocessed.csv'
-dataset_csv = 'nfbs-dataset-preprocessed.csv'
-dataset_csv = 'nfbs-dataset-test-preprocessed.csv'
+dataset_csv = 'nfbs-dataset-test.csv'
+dataset_csv = 'nfbs-dataset-test-2.csv'
 # For NFBS dataset - 0th col is sub-id, 1st col is input path, 2nd col is mask_path
-sub_idx = 0 
+sub_idx = 0
 input_path_idx = 1
 mask_path_idx = 2
-
-# dataset_csv = 'upenn-baseline-dataset.csv'
-# dataset_csv = 'upenn-baseline-dataset-test.csv'
-# dataset_csv = 'upenn-baseline-dataset-test-10.csv'
-# dataset_csv = 'upenn-baseline-dataset-test-2.csv'
-# # For UPENN-Baseline dataset - 0th col is sub-id, 3rd col is input path, 2nd col is mask_path
-# sub_idx = 0 
-# input_path_idx = 3
-# mask_path_idx = 2
 
 pt_output_path = 'pt-outfile' # PyTorch output file
 ov_output_path = 'ov-outfile' # ONNX output file
@@ -89,13 +77,16 @@ def bench_pytorch_fp32():
                 p_start = timer()
                 pt_output = pt_output.cpu().numpy()[0][0]
                 pt_to_save = postprocess_output(pt_output, patient_nib.shape)
-                pt_dice_score = dice(pt_to_save, mask_image)
                 p_end = timer()
 
-                pt_stat = [i, sub_id, pt_dice_score, i_end-i_start, p_end-p_start]
+                pt_dice_score = dice(pt_to_save, mask_image)
+                pt_hdorff_score = hd95(pt_to_save, mask_image)
+
+                pt_stat = [i, sub_id, pt_hdorff_score, i_end-i_start, p_end-p_start]
                 pt_stats.append(pt_stat)
-            except:
+            except Exception as e:
                 print (f" Inference Failed: {sub_id} ")
+                print(e)
 
     print (f"Done PyTorch inference with {pytorch_model_path} ...")
     pt_stats_df = pd.DataFrame(pt_stats)
@@ -105,7 +96,7 @@ def bench_pytorch_fp32():
     pt_stats_df.to_csv(csv_name, sep=',', header=False, index=False)
     print (f"Saved {csv_name} ...")
 
-    print (f"\n PyTorch Dice Mean: {pt_stats_df[:][2].mean():.5f}")
+    print (f"\n PyTorch Hausdorff Distance Mean: {pt_stats_df[:][2].mean():.5f}")
     print (f"PyTorch Total Inf Time: {pt_stats_df[:][3].sum():.2f} sec, Mean: {pt_stats_df[:][3].mean():.2f} sec")
 
     return pt_stats_df
@@ -117,11 +108,10 @@ def bench_ov_fp32():
     modelname = "resunet_ma"
 
     model_xml = f'{ov_model_dir}/{modelname}.xml'
-    model_bin = f'{ov_model_dir}/{modelname}.bin'
 
     # Load network to the plugin
     ie = IECore()
-    net = ie.read_network(model=model_xml, weights=model_bin)
+    net = ie.read_network(model=model_xml)
     exec_net = ie.load_network(network=net, device_name="CPU")
     del net
 
@@ -149,10 +139,12 @@ def bench_ov_fp32():
             p_start = timer()
             ov_output = ov_output[output_layer][0][0]
             ov_to_save = postprocess_output(ov_output, patient_nib.shape)
-            ov_dice_score = dice(ov_to_save, mask_image)
             p_end = timer()
 
-            ov_stat = [i, sub_id, ov_dice_score, i_end-i_start, p_end-p_start]
+            ov_dice_score = dice(ov_to_save, mask_image)
+            ov_hdorff_score = hd95(ov_to_save, mask_image)
+
+            ov_stat = [i, sub_id, ov_hdorff_score, i_end-i_start, p_end-p_start]
             ov_stats.append(ov_stat)
         except:
             print (f" Inference Failed: {sub_id} ")
@@ -165,7 +157,7 @@ def bench_ov_fp32():
     ov_stats_df.to_csv(csv_name, sep=',', header=False, index=False)
     print (f"Saved {csv_name} ...")
 
-    print (f"\n OpenVINO FP32 Dice Mean: {ov_stats_df[:][2].mean():.5f}")
+    print (f"\n OpenVINO FP32 Hausdorff Distance Mean: {ov_stats_df[:][2].mean():.5f}")
     print (f"OpenVINO FP32 Total Inf Time: {ov_stats_df[:][3].sum():.2f} sec, Mean: {ov_stats_df[:][3].mean():.2f}")
 
     return ov_stats_df
@@ -178,11 +170,10 @@ def bench_ov_int8():
     modelname = "resunet_ma_int8"
 
     model_xml = f'{ov_model_dir}/{modelname}.xml'
-    model_bin = f'{ov_model_dir}/{modelname}.bin'
 
     # Load network to the plugin
     ie = IECore()
-    net = ie.read_network(model=model_xml, weights=model_bin)
+    net = ie.read_network(model=model_xml)
     exec_net = ie.load_network(network=net, device_name="CPU")
     del net
 
@@ -210,11 +201,13 @@ def bench_ov_int8():
             p_start = timer()
             ov_output = ov_output[output_layer][0][0]
             ov_to_save = postprocess_output(ov_output, patient_nib.shape)
-            ov_dice_score = dice(ov_to_save, mask_image)
             p_end = timer()
 
-            ov_int8_stat = [i, sub_id, ov_dice_score, i_end-i_start, p_end-p_start]
-            ov_int8_stats.append(ov_int8_stat)
+            ov_dice_score = dice(ov_to_save, mask_image)
+            ov_hdorff_score = hd95(ov_to_save, mask_image)
+
+            ov_stat = [i, sub_id, ov_hdorff_score, i_end-i_start, p_end-p_start]
+            ov_int8_stats.append(ov_stat)
         except:
             print (f" Inference Failed: {sub_id} ")
 
@@ -226,7 +219,7 @@ def bench_ov_int8():
     ov_int8_stats_df.to_csv(csv_name, sep=',', header=False, index=False)
     print (f"Saved {csv_name} ...")
 
-    print (f"\n OpenVINO INT8 Dice Mean: {ov_int8_stats_df[:][2].mean():.5f}")
+    print (f"\n OpenVINO INT8 Hausdorff Distance Mean: {ov_int8_stats_df[:][2].mean():.5f}")
     print (f"OpenVINO INT8 Total Inf Time: {ov_int8_stats_df[:][3].sum():.2f}  sec, Mean: {ov_int8_stats_df[:][3].mean():.2f} sec")
 
     return ov_int8_stats_df
@@ -243,17 +236,17 @@ ov_int8_stats_df = bench_ov_int8()
 ## Print Summary
 ##
 
-print(f"\n Mean Dice Scores for {dataset_df.shape[0]} images")
-print (f"PyTorch Dice Mean +/- STD: {pt_stats_df[:][2].mean():.5f} +/- {pt_stats_df[:][2].std():.1f}")
-print (f"OpenVINO FP32 Dice Mean +/- STD: {ov_stats_df[:][2].mean():.5f} +/- {ov_stats_df[:][2].std():.1f}")
-print (f"OpenVINO INT8 Dice Mean +/- STD: {ov_int8_stats_df[:][2].mean():.5f} +/- {ov_int8_stats_df[:][2].std():.1f}")
+print(f"\n Mean Hausdorff Distance Scores for {dataset_df.shape[0]} images")
+print (f"PyTorch Hausdorff Distance Mean +/- STD: {pt_stats_df[:][2].mean():.5f} +/- {pt_stats_df[:][2].std():.1f}")
+print (f"OpenVINO FP32 Hausdorff Distance Mean +/- STD: {ov_stats_df[:][2].mean():.5f} +/- {ov_stats_df[:][2].std():.1f}")
+print (f"OpenVINO INT8 Hausdorff Distance Mean +/- STD: {ov_int8_stats_df[:][2].mean():.5f} +/- {ov_int8_stats_df[:][2].std():.1f}")
 
 dice_diff_pt_ov = pt_stats_df[:][2] - ov_stats_df[:][2]
 dice_diff_pt_ov_int8 = pt_stats_df[:][2] - ov_int8_stats_df[:][2]
 print()
-print(f"\n Accuracy Dice difference with OV FP32 {dice_diff_pt_ov.sum():.6f}")
+print(f"\n Accuracy Hausdorff Distance difference with OV FP32 {dice_diff_pt_ov.sum():.6f}")
 #print(dice_diff_pt_ov.value_counts())
-print(f" Accuracy Dice difference with OV INT8 {dice_diff_pt_ov_int8.sum():.6f}")
+print(f" Accuracy Hausdorff Distance difference with OV INT8 {dice_diff_pt_ov_int8.sum():.6f}")
 #print(dice_diff_pt_ov_int8.value_counts())
 
 pt_total_inf_time = pt_stats_df[:][3].sum()
