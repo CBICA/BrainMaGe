@@ -25,12 +25,12 @@ pip install --ignore-installed PyYAML openvino-dev
 
 ### Install OpenVINO Contrib
 
-Install this custom contrib to convert PyTorch models to OpenVINO IR without converting to ONNX
+Setup `openvino_contrib` which has PyTorch extensions for Model Optimizer which can be used to convert native PyTorch to OpenVINO IR. 
 
 ```bash
 cd ~
-git clone -b mo_resunet https://github.com/dkurt/openvino_contrib/
-export PYTHONPATH=/path/to/openvino_contrib/modules/mo_pytorch/:$PYTHONPATH
+git clone -b https://github.com/openvinotoolkit/openvino_contrib.git
+export PYTHONPATH=`pwd`/openvino_contrib/modules/mo_pytorch/:$PYTHONPATH
 ```
 
 ## After above steps
