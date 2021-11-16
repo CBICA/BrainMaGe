@@ -19,7 +19,13 @@ The following citations are previous conference presentations of related results
 
 ## Installation Instructions
 
-Please note that python3 is required and [conda](https://www.anaconda.com/) is preferred.
+### Requirements
+- Python 3
+- [Anaconda packaging manager](https://www.anaconda.com/)
+- Git
+- [Git LFS](https://git-lfs.github.com/)
+
+Run the following commands:
 
 ```bash
 git clone https://github.com/CBICA/BrainMaGe.git
@@ -31,6 +37,14 @@ latesttag=$(git describe --tags) # get the latest tag [bash-only]
 echo checking out ${latesttag}
 git checkout ${latesttag}
 python setup.py install # install dependencies and BrainMaGe
+```
+
+### Alternative to LFS
+
+In case `git lfs pull` fails, the weights can be obtained using the following commands:
+```bash
+wget https://github.com/CBICA/BrainMaGe/raw/master/BrainMaGe/weights/resunet_ma.pt ./BrainMaGe/weights
+wget https://github.com/CBICA/BrainMaGe/raw/master/BrainMaGe/weights/resunet_multi_4.pt ./BrainMaGe/weights
 ```
 
 ## Generating brain masks for your data using our pre-trained models

@@ -31,6 +31,7 @@ setup(
     scripts=[
         "brain_mage_run",
         "brain_mage_single_run",
+        "brain_mage_single_run_multi_4",
         "brain_mage_intensity_standardize",
     ],
     classifiers=[

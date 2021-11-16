@@ -1,0 +1,119 @@
+#!usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Created on Sat May 30 01:05:59 2020
+
+@author: siddhesh
+"""
+
+from __future__ import absolute_import, print_function, division
+import argparse
+import os, sys
+from BrainMaGe.tester import test_single_multi_4
+
+import pkg_resources
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="BrainMaGe",
+        formatter_class=argparse.RawTextHelpFormatter,
+        description="\nThis code was implemented for Deep Learning "
+        + "based training and inference of 3D-U-Net,\n3D-Res-U-Net models for "
+        + "Brain Extraction a.k.a Skull Stripping in biomedical NIfTI volumes.\n"
+        + "The project is hosted at: https://github.com/CBICA/BrainMaGe * \n"
+        + "See the documentation for details on its use.\n"
+        + "If you are using this tool, please cite out paper."
+        "This software accompanies the research presented in:\n"
+        + "Thakur et al., 'Brain Extraction on MRI Scans in Presence of Diffuse\n"
+        + "Glioma:Multi-institutional Performance Evaluation of Deep Learning Methods"
+        + "and Robust Modality-Agnostic Training'.\n"
+        + "DOI: 10.1016/j.neuroimage.2020.117081\n"
+        + "We hope our work helps you in your endeavours.\n"
+        + "\n"
+        "Copyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.\n"
+        "For questions and feedback contact: software@cbica.upenn.edu",
+    )
+
+    parser.add_argument(
+        "-i",
+        "--inputs",
+        dest="input_paths",
+        help="Should be the paths to the four modalities .nii.gz files in the"
+        + " order `T1_path,T2_path,T1ce_path,Flair_path`.",
+        required=True,
+        type=str,
+    )
+
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output_path",
+        help="Should be either a filename or a folder.\n"
+        + "In the case of single file or a folder for input",
+        required=True,
+        type=str,
+    )
+
+    parser.add_argument(
+        "-m",
+        "--mask_path",
+        dest="mask_path",
+        help="Should be either a filename or a folder.\n"
+        + "In the case of single file or a folder for input",
+        required=False,
+        default=None,
+        type=str,
+    )
+
+    parser.add_argument(
+        "-dev",
+        default="cpu",
+        dest="device",
+        type=str,
+        help="used to set on which device the prediction will run.\n"
+        + "Must be either int or str. Use int for GPU id or\n"
+        + "'cpu' to run on CPU. Avoid training on CPU. \n",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=pkg_resources.require("BrainMaGe")[0].version
+        + "\n\nCopyright: Center for Biomedical Image Computing and Analytics (CBICA), University of Pennsylvania.",
+        help="Show program's version number and exit.",
+    )
+
+    args = parser.parse_args()
+
+    input_paths = args.input_paths.split(',')
+    output_path = args.output_path
+    mask_path = args.mask_path
+    DEVICE = args.device
+
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    base_dir = os.path.join(base_dir, "BrainMaGe", "weights")
+    if os.path.isdir(base_dir):
+        weights = os.path.join(base_dir, "resunet_multi_4.pt")
+    else:
+    # this control path is needed if someone installs brainmage into their virtual environment directly
+        base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        base_dir = os.path.join(os.path.dirname(base_dir), "BrainMaGe/weights")
+        if os.path.isdir(base_dir):
+            weights = os.path.join(base_dir, "resunet_ma.pt")
+
+    if os.path.isfile(weights):
+        print("Weight file used :", weights)
+    else:
+        sys.exit('Weights file at \'' + weights + '\' was not found...')
+
+    # Running Inference
+    test_single_multi_4.infer_single_multi_4(
+        input_paths, output_path, weights, mask_path, device=DEVICE
+    )
+
+    print("*" * 80)
+    print("Finished")
+    print("*" * 80)
