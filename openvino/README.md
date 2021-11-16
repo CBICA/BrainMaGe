@@ -5,7 +5,7 @@
 ### Clone repo BrainMaGe, checkout openvino branch and Install BrainMaGe
 
 ```bash
-git clone https://github.com/ravi9/BrainMaGe.git
+git clone https://github.com/CBICA/BrainMaGe.git
 cd BrainMaGe
 git checkout openvino
 git lfs pull
