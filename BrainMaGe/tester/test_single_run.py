@@ -48,8 +48,8 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
     model = fetch_model(
         modelname="resunet", num_channels=1, num_classes=2, num_filters=16
     )
-    
-    checkpoint = torch.load(weights, map_location=torch.device('cpu'))
+
+    checkpoint = torch.load(weights, map_location=torch.device("cpu"))
     model.load_state_dict(checkpoint["model_state_dict"])
 
     if device != "cpu":
@@ -73,6 +73,9 @@ def infer_single_ma(input_path, output_path, weights, mask_path=None, device="cp
         to_save = interpolate_image(output, patient_nib.shape)
         to_save[to_save >= 0.9] = 1
         to_save[to_save < 0.9] = 0
+        for i in range(to_save.shape[2]):
+            if np.any(to_save[:, :, i]):
+                to_save[:, :, i] = binary_fill_holes(to_save[:, :, i])
         to_save = postprocess_prediction(to_save)
         to_save_nib = nib.Nifti1Image(to_save, patient_nib.affine)
         nib.save(to_save_nib, os.path.join(output_path))
