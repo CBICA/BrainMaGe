@@ -23,7 +23,7 @@ setup(
     install_requires=[
         "numpy",
         "torch>=1.5.1",
-        "scikit-image",
+        "scikit-image==0.16.2",
         "nibabel",
         "pytorch-lightning==0.8.1",
         "bids"
