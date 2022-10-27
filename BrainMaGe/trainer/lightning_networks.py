@@ -6,13 +6,11 @@ Created on Sun May 24 06:12:55 2020
 @author: siddhesh
 """
 
-import torch
-from torch.utils.data import DataLoader
 import pytorch_lightning as ptl
+import torch
 from BrainMaGe.models.networks import fetch_model
 from BrainMaGe.utils.cyclicLR import CyclicCosAnnealingLR
-from BrainMaGe.utils.losses import dice_loss, dice
-from BrainMaGe.utils.data import SkullStripDataset
+from BrainMaGe.utils.losses import dice, dice_loss
 from BrainMaGe.utils.optimizers import fetch_optimizer
 
 
@@ -79,29 +77,3 @@ class SkullStripper(ptl.LightningModule):
             eta_min=5e-6,
         )
         return [optimizer], [scheduler]
-
-    @ptl.data_loader
-    def train_dataloader(self):
-        dataset_train = SkullStripDataset(
-            self.params["train_csv"], self.params, test=False
-        )
-        return DataLoader(
-            dataset_train,
-            batch_size=int(self.params["batch_size"]),
-            shuffle=True,
-            num_workers=4,
-            pin_memory=True,
-        )
-
-    @ptl.data_loader
-    def val_dataloader(self):
-        dataset_valid = SkullStripDataset(
-            self.params["validation_csv"], self.params, test=False
-        )
-        return DataLoader(
-            dataset_valid,
-            batch_size=int(self.params["batch_size"]),
-            shuffle=False,
-            num_workers=4,
-            pin_memory=True,
-        )
