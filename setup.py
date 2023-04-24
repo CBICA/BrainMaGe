@@ -15,18 +15,18 @@ setup(
     version="1.0.5-dev",
     description="Skull stripping using multiple and single modalities",
     url="https://github.com/CBICA/BrainMaGe",
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     author="Siddhesh Thakur",
     author_email="software@cbica.upenn.edu",
     license="BSD-3-Clause",
     zip_safe=False,
     install_requires=[
         "numpy",
-        "torch==1.8.2",
+        "torch==1.13.1",
         "scikit-image",
         "nibabel",
-        "pytorch-lightning==1.6.0",
-        "bids"
+        "pytorch-lightning==2.0.2",
+        "bids",
     ],
     scripts=[
         "brain_mage_run",

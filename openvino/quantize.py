@@ -36,7 +36,7 @@ from compare_utils import (
     postprocess_output,
     dice,
     get_mask_image,
-    get_input_image
+    get_input_image,
 )
 
 from compression.api import Metric, DataLoader
@@ -55,43 +55,63 @@ brainmage_root = "../"
 
 parser = argparse.ArgumentParser(
     description="Quantizes an OpenVINO model to INT8.",
-    add_help=True, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    add_help=True,
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+)
 
-parser.add_argument("--xml_file", default=brainmage_root+"BrainMaGe/weights/ov/fp32/resunet_ma.xml",
-                    help="XML file for OpenVINO to quantize")
-parser.add_argument("--bin_file", default=brainmage_root+"BrainMaGe/weights/ov/fp32/resunet_ma.bin",
-                help="BIN file for OpenVINO to quantize")
-parser.add_argument("--manifest", default=brainmage_root+"openvino/nfbs-dataset-test.csv",
-                help="Manifest file (CSV with filenames of images and labels)")
-parser.add_argument("--data_dir", default="./data",
-                help="Data directory root")
-parser.add_argument("--int8_directory", default="./int8_openvino_model",
-                help="INT8 directory for calibrated OpenVINO model")
-parser.add_argument("--maximum_metric_drop", default=1.0,
-                help="AccuracyAwareQuantization: Maximum allowed drop in metric")
-parser.add_argument("--accuracy_aware_quantization",
-                    help="use accuracy aware quantization",
-                    action="store_true", default=False)
+parser.add_argument(
+    "--xml_file",
+    default=brainmage_root + "BrainMaGe/weights/ov/fp32/resunet_ma.xml",
+    help="XML file for OpenVINO to quantize",
+)
+parser.add_argument(
+    "--bin_file",
+    default=brainmage_root + "BrainMaGe/weights/ov/fp32/resunet_ma.bin",
+    help="BIN file for OpenVINO to quantize",
+)
+parser.add_argument(
+    "--manifest",
+    default=brainmage_root + "openvino/nfbs-dataset-test.csv",
+    help="Manifest file (CSV with filenames of images and labels)",
+)
+parser.add_argument("--data_dir", default="./data", help="Data directory root")
+parser.add_argument(
+    "--int8_directory",
+    default="./int8_openvino_model",
+    help="INT8 directory for calibrated OpenVINO model",
+)
+parser.add_argument(
+    "--maximum_metric_drop",
+    default=1.0,
+    help="AccuracyAwareQuantization: Maximum allowed drop in metric",
+)
+parser.add_argument(
+    "--accuracy_aware_quantization",
+    help="use accuracy aware quantization",
+    action="store_true",
+    default=False,
+)
 
 args = parser.parse_args()
+
 
 class bcolors:
     """
     Just gives us some colors for the text
     """
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+
 
 class MyDataLoader(DataLoader):
-
     def __init__(self, config):
-
         super().__init__(config)
 
         """
@@ -104,25 +124,34 @@ class MyDataLoader(DataLoader):
         bounding boxes if using a localization model).
         """
 
-        self.manifest = config["manifest"]  # Filename for manifest file with image and label filenames
+        self.manifest = config[
+            "manifest"
+        ]  # Filename for manifest file with image and label filenames
         self.images = []
         self.labels = []
-        
-        dataset_df = pd.read_csv(self.manifest, header = None)
-        
+
+        dataset_df = pd.read_csv(self.manifest, header=None)
+
         for i, row in dataset_df.iterrows():
-            self.images.append(row[2]) #image path
-            self.labels.append(row[3]) #mask path
-        
+            self.images.append(row[2])  # image path
+            self.labels.append(row[3])  # mask path
+
         self.items = np.arange(dataset_df.shape[0])
         self.batch_size = 1
 
-        print(bcolors.UNDERLINE + "\nQuantizing FP32 OpenVINO model to INT8\n" + bcolors.ENDC)
+        print(
+            bcolors.UNDERLINE
+            + "\nQuantizing FP32 OpenVINO model to INT8\n"
+            + bcolors.ENDC
+        )
 
-        print(bcolors.OKBLUE + "There are {:,} samples in the test dataset ".format(len(self.items)) + \
-            bcolors.OKGREEN + "{}\n".format(self.manifest) + bcolors.ENDC)
-
-
+        print(
+            bcolors.OKBLUE
+            + "There are {:,} samples in the test dataset ".format(len(self.items))
+            + bcolors.OKGREEN
+            + "{}\n".format(self.manifest)
+            + bcolors.ENDC
+        )
 
     def set_subset(self, indices):
         self._subset = None
@@ -144,14 +173,12 @@ class MyDataLoader(DataLoader):
         For this example, we show how to process the brain tumor data.
         Change this to preprocess you data as necessary.
         """
- 
 
         """
         Load the image and label for this item
         """
         msk = get_mask_image(label_filename)
         img, patient_nib = get_input_image(image_filename)
-
 
         return img, msk
 
@@ -174,10 +201,11 @@ class MyDataLoader(DataLoader):
 
         # IMPORTANT!
         # OpenVINO expects channels first so transpose channels to first dimension
-#         image = np.transpose(image, [3,0,1,2]) # Channels first
-#         label = np.transpose(label, [3,0,1,2]) # Channels first
+        #         image = np.transpose(image, [3,0,1,2]) # Channels first
+        #         label = np.transpose(label, [3,0,1,2]) # Channels first
 
         return (item, label), image
+
 
 class MyMetric(Metric):
     def __init__(self):
@@ -188,12 +216,12 @@ class MyMetric(Metric):
 
     @property
     def value(self):
-        """ Returns accuracy metric value for the last model output. """
+        """Returns accuracy metric value for the last model output."""
         return {self.name: [self._values[-1]]}
 
     @property
     def avg_value(self):
-        """ Returns accuracy metric value for all model outputs. """
+        """Returns accuracy metric value for all model outputs."""
         value = np.ravel(self._values).mean()
         print("Round #{}    Mean {} = {}".format(self.round, self.name, value))
 
@@ -202,7 +230,7 @@ class MyMetric(Metric):
         return {self.name: value}
 
     def update(self, outputs, labels):
-        """ Updates prediction matches.
+        """Updates prediction matches.
 
         Args:
             outputs: model output
@@ -220,10 +248,10 @@ class MyMetric(Metric):
             metric = dice(labels[0], pt_to_save)
             self._values.append(metric)
         except:
-            print (f" Inference Failed. ")
+            print(f" Inference Failed. ")
 
     def reset(self):
-        """ Resets collected matches """
+        """Resets collected matches"""
         self._values = []
 
     @property
@@ -234,23 +262,16 @@ class MyMetric(Metric):
     def get_attributes(self):
         return {self.name: {"direction": "higher-better", "type": ""}}
 
-model_config = Dict({
-    "model_name": "resunet_ma",
-    "model": args.xml_file,
-    "weights": args.bin_file
-})
 
-engine_config = Dict({
-    "device": "CPU",
-    "stat_requests_number": 4,
-    "eval_requests_number": 4
-})
+model_config = Dict(
+    {"model_name": "resunet_ma", "model": args.xml_file, "weights": args.bin_file}
+)
 
-dataset_config = {
-    "manifest": args.manifest,
-    "images": "image",
-    "labels": "label"
-}
+engine_config = Dict(
+    {"device": "CPU", "stat_requests_number": 4, "eval_requests_number": 4}
+)
+
+dataset_config = {"manifest": args.manifest, "images": "image", "labels": "label"}
 
 default_quantization_algorithm = [
     {
@@ -258,29 +279,30 @@ default_quantization_algorithm = [
         "params": {
             "target_device": "CPU",
             "preset": "performance",
-            #"stat_subset_size": 10
-        }
+            # "stat_subset_size": 10
+        },
     }
 ]
 
 
 accuracy_aware_quantization_algorithm = [
     {
-        "name": "AccuracyAwareQuantization", # compression algorithm name
+        "name": "AccuracyAwareQuantization",  # compression algorithm name
         "params": {
             "target_device": "CPU",
             "preset": "performance",
             "stat_subset_size": 10,
-            "metric_subset_ratio": 0.5, # A part of the validation set that is used to compare full-precision and quantized models
-            "ranking_subset_size": 300, # A size of a subset which is used to rank layers by their contribution to the accuracy drop
-            "max_iter_num": 10,    # Maximum number of iterations of the algorithm (maximum of layers that may be reverted back to full-precision)
-            "maximal_drop": args.maximum_metric_drop,      # Maximum metric drop which has to be achieved after the quantization
-            "drop_type": "absolute",    # Drop type of the accuracy metric: relative or absolute (default)
-            "use_prev_if_drop_increase": True,     # Whether to use NN snapshot from the previous algorithm iteration in case if drop increases
-            "base_algorithm": "DefaultQuantization" # Base algorithm that is used to quantize model at the beginning
-        }
+            "metric_subset_ratio": 0.5,  # A part of the validation set that is used to compare full-precision and quantized models
+            "ranking_subset_size": 300,  # A size of a subset which is used to rank layers by their contribution to the accuracy drop
+            "max_iter_num": 10,  # Maximum number of iterations of the algorithm (maximum of layers that may be reverted back to full-precision)
+            "maximal_drop": args.maximum_metric_drop,  # Maximum metric drop which has to be achieved after the quantization
+            "drop_type": "absolute",  # Drop type of the accuracy metric: relative or absolute (default)
+            "use_prev_if_drop_increase": True,  # Whether to use NN snapshot from the previous algorithm iteration in case if drop increases
+            "base_algorithm": "DefaultQuantization",  # Base algorithm that is used to quantize model at the beginning
+        },
     }
 ]
+
 
 class GraphAttrs(object):
     def __init__(self):
@@ -314,12 +336,24 @@ metric_results_FP32 = pipeline.evaluate(model)
 
 compressed_model = pipeline.run(model)
 
-compression.graph.model_utils.save_model(compressed_model, save_path=args.int8_directory, model_name="resunet_ma_int8", for_stat_collection=False)
+compression.graph.model_utils.save_model(
+    compressed_model,
+    save_path=args.int8_directory,
+    model_name="resunet_ma_int8",
+    for_stat_collection=False,
+)
 
-print(bcolors.BOLD + "\nThe INT8 version of the model has been saved to the directory ".format(args.int8_directory) + \
-    bcolors.HEADER + "{}\n".format(args.int8_directory) + bcolors.ENDC)
+print(
+    bcolors.BOLD
+    + "\nThe INT8 version of the model has been saved to the directory ".format(
+        args.int8_directory
+    )
+    + bcolors.HEADER
+    + "{}\n".format(args.int8_directory)
+    + bcolors.ENDC
+)
 
-#save_model(compressed_model, "./int8_openvino_model/")
+# save_model(compressed_model, "./int8_openvino_model/")
 
 print(bcolors.BOLD + "\Evaluating INT8 Model..." + bcolors.ENDC)
 
@@ -333,5 +367,3 @@ if metric_results_FP32:
 if metric_results_INT8:
     for name, value in metric_results_INT8.items():
         print(bcolors.OKBLUE + "{: <27s} INT8: {}".format(name, value) + bcolors.ENDC)
-
-

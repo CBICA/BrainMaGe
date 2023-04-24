@@ -11,7 +11,6 @@ from argparse import ArgumentParser
 import torch
 
 if __name__ == "__main__":
-
     parser = ArgumentParser(description="Convert the .ckpt files to .pt files")
     parser.add_argument(
         "-i",
