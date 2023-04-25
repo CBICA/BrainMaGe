@@ -76,7 +76,6 @@ dependencies:
       - attrs==23.1.0
       - bids==0.0
       - bids-validator==1.11.1.dev0
-      - brainmage==1.0.5.dev0
       - certifi==2022.12.7
       - charset-normalizer==3.1.0
       - click==8.1.3
