@@ -11,7 +11,7 @@ import argparse
 import os
 import pandas as pd
 from BrainMaGe.trainer import trainer_main
-from BrainMaGe.tester import test_ma, test_multi_4
+from BrainMaGe.tester import test_ma_new, test_multi_4
 import pkg_resources
 
 
