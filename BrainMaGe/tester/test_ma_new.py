@@ -97,8 +97,6 @@ def infer_ma(cfg, device, save_brain, weights):
     temp_dir = os.path.join(params["results_dir"], "Temp")
     os.makedirs(temp_dir, exist_ok=True)
 
-    patients_dict = {}
-
     print("Resampling the images to isotropic resolution of 1mm x 1mm x 1mm")
     print("Also Converting the images to RAI and brats for smarter use.")
 
@@ -128,7 +126,7 @@ def infer_ma(cfg, device, save_brain, weights):
             for i in range(to_save.shape[2]):
                 if np.any(to_save[:, :, i]):
                     to_save[:, :, i] = binary_fill_holes(to_save[:, :, i])
-            to_save = postprocess_prediction(to_save)
+            to_save = postprocess_prediction(to_save).astype(np.uint8)
             to_save_nib = nib.Nifti1Image(to_save, patient_nib.affine)
 
             os.makedirs(
