@@ -102,13 +102,13 @@ def infer_ma(cfg, device, save_brain, weights):
     print("Resampling the images to isotropic resolution of 1mm x 1mm x 1mm")
     print("Also Converting the images to RAI and brats for smarter use.")
 
-    for patient in tqdm.tqdm(test_df.values):
-        os.makedirs(os.path.join(temp_dir, patient[0]), exist_ok=True)
-        patient_path = patient[1]
+    for index, patient in tqdm.tqdm(test_df.iterrows()):
+        os.makedirs(os.path.join(temp_dir, patient["ID"]), exist_ok=True)
+        patient_path = patient["Image_path"]
 
-        image = nib.load(patient_path)
+        patient_nib = nib.load(patient_path)
 
-        image_data = image.get_fdata()
+        image_data = patient_nib.get_fdata()
         image = process_image(image_data)
         image = resize(
             image, (128, 128, 128), order=3, mode="edge", cval=0, anti_aliasing=False
@@ -131,32 +131,37 @@ def infer_ma(cfg, device, save_brain, weights):
             to_save = postprocess_prediction(to_save)
             to_save_nib = nib.Nifti1Image(to_save, patient_nib.affine)
 
-            os.makedirs(os.path.join(params["results_dir"], patient[0]), exist_ok=True)
+            os.makedirs(
+                os.path.join(params["results_dir"], patient["ID"]), exist_ok=True
+            )
 
             output_path = os.path.join(
-                params["results_dir"], patient[0], patient[0] + "_mask.nii.gz"
+                params["results_dir"], patient["ID"], patient["ID"] + "_mask.nii.gz"
             )
 
             nib.save(to_save_nib, output_path)
 
         if save_brain:
-            for patient in tqdm.tqdm(test_df.values):
-                image = nib.load(patient[1])
-                image_data = image.get_fdata()
-                mask = nib.load(
-                    os.path.join(
-                        params["results_dir"], patient[0], patient[0] + "_mask.nii.gz"
-                    )
+            image = nib.load(patient["Image_path"])
+            image_data = image.get_fdata()
+            mask = nib.load(
+                os.path.join(
+                    params["results_dir"],
+                    patient["ID"],
+                    patient["ID"] + "_mask.nii.gz",
                 )
-                mask_data = mask.get_fdata().astype(np.int8)
-                image_data[mask_data == 0] = 0
-                to_save_brain = nib.Nifti1Image(image_data, image.affine)
-                nib.save(
-                    to_save_brain,
-                    os.path.join(
-                        params["results_dir"], patient[0], patient[0] + "_brain.nii.gz"
-                    ),
-                )
+            )
+            mask_data = mask.get_fdata().astype(np.int8)
+            image_data[mask_data == 0] = 0
+            to_save_brain = nib.Nifti1Image(image_data, image.affine)
+            nib.save(
+                to_save_brain,
+                os.path.join(
+                    params["results_dir"],
+                    patient["ID"],
+                    patient["ID"] + "_brain.nii.gz",
+                ),
+            )
 
     print("*" * 60)
     print("Final output stored in : %s" % (params["results_dir"]))

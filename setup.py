@@ -22,7 +22,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "numpy",
-        "torch==1.12.0",
+        "torch>=1.8.2",
         "scikit-image",
         "nibabel",
         "pytorch-lightning==2.0.2",
