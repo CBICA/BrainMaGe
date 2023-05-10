@@ -56,54 +56,49 @@ def rex_o4a_csv(folder_path, save_folder, file_type, modalities):
     print("CSV file saved successfully at:", csv_path)
 
 
-def rex_sin_csv(folder_path, to_save, ftype, modalities):
-    """[CSV generation for Single Modalities]
-    [This function is used to generate a csv for Single mode and creates a csv]
-    Arguments:
-        folder_path {[string]} -- [Takes the folder to see where to look for
-                                   the different modaliies]
-        to_save {[string]} -- [Takes the folder as a string to save the csv]
-        ftype {[string]} -- [Are you trying to save train, validation or test,
-                             if file type is set to test, it does not look for
-                             ground truths]
-        modalities {[string]} -- [usually a string which looks like this
-                                  :  ['t1']]
+def rex_sin_csv(folder_path, save_folder, file_type, modalities):
+    """
+    CSV generation for Single Modalities.
+    This function generates a csv for Single mode and creates a csv.
+
+    Args:
+        folder_path (str): The folder to see where to look for the different modalities
+        save_folder (str): The folder to save the csv
+        file_type (str): train, validation or test. If file_type is set to test, it does not look for ground truths.
+        modalities (list of str): The modalities to include in the csv.
     """
     modalities = modalities[1:-1]
     modalities = re.findall("[^, ']+", modalities)
     if len(modalities) > 1:
-        print("Found more than one modality, exiting!")
-        sys.exit(0)
+        raise ValueError("Found more than one modality, exiting!")
     if not modalities:
-        print(
-            "Could not find modalities! Are you sure you have put in \
-              something in the modalities field?"
-        )
-        sys.exit(0)
-    if ftype == "test":
-        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
-        csv_file.write("ID,")
+        raise ValueError("Could not find modalities! Are you sure you have put in something in the modalities field?")
+        
+    if file_type == "test":
+        csv_path = os.path.join(save_folder, file_type + ".csv")
+        with open(csv_path, "w+") as csv_file:
+            csv_file.write("ID,")
     else:
-        csv_file = open(os.path.join(to_save, ftype + ".csv"), "w+")
-        csv_file.write("ID,gt_path,")
+        csv_path = os.path.join(save_folder, file_type + ".csv")
+        with open(csv_path, "w+") as csv_file:
+            csv_file.write("ID,gt_path,")
+            
     modality = modalities[0]
     csv_file.write(modality + "_path\n")
     folders = os.listdir(folder_path)
     for folder in folders:
         csv_file.write(folder)
         csv_file.write(",")
-        if ftype != "test":
-            ground_truth = glob.glob(os.path.join(folder_path, folder, "*mask.nii.gz"))[
-                0
-            ]
-            csv_file.write(ground_truth)
+        if file_type != "test":
+            ground_truth_path = glob.glob(os.path.join(folder_path, folder, "*mask.nii.gz"))[0]
+            csv_file.write(ground_truth_path)
             csv_file.write(",")
-        img = glob.glob(os.path.join(folder_path, folder, "*" + modality + ".nii.gz"))[
-            0
-        ]
-        csv_file.write(img)
+            
+        image_path = glob.glob(os.path.join(folder_path, folder, "*" + modality + ".nii.gz"))[0]
+        csv_file.write(image_path)
         csv_file.write("\n")
-    csv_file.close()
+            
+    print("CSV file saved successfully at:", csv_path)
 
 
 def rex_mul_csv(folder_path, to_save, ftype, modalities):
