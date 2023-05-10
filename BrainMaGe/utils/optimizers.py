@@ -7,35 +7,31 @@ Created on Fri May 22 14:44:32 2020
 """
 
 
+
 import torch.optim as optim
 import sys
 
 
 def fetch_optimizer(optimizer, lr, model):
+    # Mapping optimizer name to class
+    optimizer_map = {
+        "sgd": optim.SGD,
+        "adam": optim.Adam,
+        "rms": optim.RMSprop,
+        "adagrad": optim.Adagrad,
+    }
+
     # Setting up the optimizer
-    if optimizer.lower() == "sgd":
-        optimizer = optim.SGD(
-            model.parameters(), lr=float(lr), momentum=0.9, nesterov=True
-        )
-    elif optimizer.lower() == "adam":
-        optimizer = optim.Adam(
-            model.parameters(), lr=float(lr), betas=(0.9, 0.999), weight_decay=0.00005
-        )
-    elif optimizer.lower() == "rms":
-        optimizer = optim.RMSprop(
-            model.parameters(), lr=float(lr), momentum=0.9, weight_decay=0.00005
-        )
-    elif optimizer.lower() == "adagrad":
-        optimizer = optim.Adagrad(
-            model.parameters(), lr=float(lr), weight_decay=0.00005
-        )
-    else:
-        print(
-            "Sorry, {} is not supported or some sort of spell error. Please\
-               choose from the given options!".format(
-                optimizer
-            )
-        )
-        sys.stdout.flush()
-        sys.exit(0)
+    optimizer_class = optimizer_map.get(optimizer.lower())
+    if optimizer_class is None:
+        print(f"Sorry, {optimizer} is not supported. Please choose from the given options!")
+        sys.exit(1)
+    optimizer = optimizer_class(
+        model.parameters(),
+        lr=float(lr),
+        **({"momentum": 0.9, "nesterov": True} if optimizer.lower() == "sgd" else {}),
+        **({"betas": (0.9, 0.999), "weight_decay": 0.00005} if optimizer.lower() == "adam" else {}),
+        **({"momentum": 0.9, "weight_decay": 0.00005} if optimizer.lower() == "rms" else {}),
+        **({"weight_decay": 0.00005} if optimizer.lower() == "adagrad" else {}),
+    )
     return optimizer
