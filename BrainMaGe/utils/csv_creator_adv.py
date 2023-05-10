@@ -200,8 +200,7 @@ def rex_bids_csv(folder_path, save_folder, file_type):
 
 def generate_csv(folder_path, to_save, mode, ftype, modalities):
     """[Function to generate CSV]
-    [This function takes a look at the data directory and the modes and
-     generates a csv]
+    [This function takes a look at the data directory and the modes and generates a csv]
     Arguments:
         folder_path {[strin]} -- [description]
         to_save {[strin]} -- [description]
@@ -209,15 +208,16 @@ def generate_csv(folder_path, to_save, mode, ftype, modalities):
         ftype {[string]} -- [description]
         modalities {[string]} -- [description]
     """
-    print("Generating ", ftype, ".csv", sep="")
-    if mode.lower() == "ma":
-        rex_o4a_csv(folder_path, to_save, ftype, modalities)
-    elif mode.lower() == "single":
-        rex_sin_csv(folder_path, to_save, ftype, modalities)
-    elif mode.lower() == "multi":
-        rex_mul_csv(folder_path, to_save, ftype, modalities)
-    elif mode.lower() == "bids":
-        rex_bids_csv(folder_path, to_save, ftype)
+    print(f"Generating {ftype}.csv")
+    modes = {
+        "ma": rex_o4a_csv,
+        "single": rex_sin_csv,
+        "multi": rex_mul_csv,
+        "bids": rex_bids_csv
+    }
+    func = modes.get(mode.lower())
+    if func:
+        func(folder_path, to_save, ftype, modalities)
     else:
         print("Sorry, this mode is not supported")
         sys.exit(0)
