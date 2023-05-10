@@ -32,14 +32,16 @@ if __name__ == "__main__":
     ckpt_file = os.path.abspath(args.input)
     pt_file = os.path.abspath(args.output)
 
-    print("Attempting to load file : ", ckpt_file)
-    weight_load = torch.load(ckpt_file)
-    print("Load Successful! Converting file.")
+    print("Attempting to load file:", ckpt_file)
+    with open(ckpt_file, "rb") as f:
+        weight_load = torch.load(f, map_location=torch.device("cpu"))
+    print("Load successful! Converting file.")
     new_state_dict = {}
-    for key in weight_load["state_dict"].keys():
+    for key, value in weight_load["state_dict"].items():
         new_key = key[6:]
-        new_state_dict[new_key] = weight_load["state_dict"][key]
+        new_state_dict[new_key] = value
     model_state_dict = {"model_state_dict": new_state_dict}
     print("Conversion successful!")
-    torch.save(model_state_dict, pt_file)
-    print("File saved successfully at :", pt_file)
+    with open(pt_file, "wb") as f:
+        torch.save(model_state_dict, f)
+    print("File saved successfully at:", pt_file)
