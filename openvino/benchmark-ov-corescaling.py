@@ -1,4 +1,3 @@
-
 import os
 import sys
 import torch
@@ -12,7 +11,7 @@ from compare_utils import (
     postprocess_output,
     dice,
     get_mask_image,
-    get_input_image
+    get_input_image,
 )
 from tqdm import tqdm
 import pandas as pd
@@ -23,21 +22,25 @@ import argparse
 
 from openvino.inference_engine import IECore
 
-def bench_pytorch_fp32(num_cores):
 
-    pytorch_model_path = brainmage_root / 'BrainMaGe/weights/resunet_ma.pt'
+def bench_pytorch_fp32(num_cores):
+    pytorch_model_path = brainmage_root / "BrainMaGe/weights/resunet_ma.pt"
 
     ### Load PyTorch model
-    pt_model = fetch_model(modelname="resunet", num_channels=1, num_classes=2, num_filters=16)
-    checkpoint = torch.load(pytorch_model_path, map_location=torch.device('cpu'))
+    pt_model = fetch_model(
+        modelname="resunet", num_channels=1, num_classes=2, num_filters=16
+    )
+    checkpoint = torch.load(pytorch_model_path, map_location=torch.device("cpu"))
     pt_model.load_state_dict(checkpoint["model_state_dict"])
 
     ### Run PyTorch Inference
-    print (f"\n Starting PyTorch inference with {pytorch_model_path} using {num_cores} cores...")
+    print(
+        f"\n Starting PyTorch inference with {pytorch_model_path} using {num_cores} cores..."
+    )
 
     _ = pt_model.eval()
 
-    pt_stats =[]
+    pt_stats = []
 
     torch.set_num_threads(int(num_cores))
 
@@ -61,38 +64,40 @@ def bench_pytorch_fp32(num_cores):
                 pt_dice_score = dice(pt_to_save, mask_image)
                 p_end = timer()
 
-                pt_stat = [i, sub_id, pt_dice_score, i_end-i_start, p_end-p_start]
+                pt_stat = [i, sub_id, pt_dice_score, i_end - i_start, p_end - p_start]
                 pt_stats.append(pt_stat)
             except:
-                print (f" Inference Failed: {sub_id} ")
+                print(f" Inference Failed: {sub_id} ")
 
-    print (f"Done PyTorch inference with {pytorch_model_path} ...")
+    print(f"Done PyTorch inference with {pytorch_model_path} ...")
     pt_stats_df = pd.DataFrame(pt_stats)
 
     date_time_str = datetime.now().strftime("%b-%d-%Y_%H-%M-%S")
     csv_name = f"pt_fp32_stats_nc_{num_cores}_{date_time_str}.csv"
-    pt_stats_df.to_csv(csv_name, sep=',', header=False, index=False)
-    print (f"Saved {csv_name} ...")
+    pt_stats_df.to_csv(csv_name, sep=",", header=False, index=False)
+    print(f"Saved {csv_name} ...")
 
-    print (f"\n PyTorch Dice Mean: {pt_stats_df[:][2].mean():.5f}")
-    print (f"PyTorch Total Inf Time: {pt_stats_df[:][3].sum():.2f} sec, Mean: {pt_stats_df[:][3].mean():.2f} sec")
+    print(f"\n PyTorch Dice Mean: {pt_stats_df[:][2].mean():.5f}")
+    print(
+        f"PyTorch Total Inf Time: {pt_stats_df[:][3].sum():.2f} sec, Mean: {pt_stats_df[:][3].mean():.2f} sec"
+    )
 
     return pt_stats_df
 
 
 def bench_ov_fp32(num_cores, device):
     #### Load OpenVINO model
-    ov_model_dir = brainmage_root / 'BrainMaGe/weights/ov/fp32'
+    ov_model_dir = brainmage_root / "BrainMaGe/weights/ov/fp32"
     modelname = "resunet_ma"
 
-    model_xml = f'{ov_model_dir}/{modelname}.xml'
-    model_bin = f'{ov_model_dir}/{modelname}.bin'
+    model_xml = f"{ov_model_dir}/{modelname}.xml"
+    model_bin = f"{ov_model_dir}/{modelname}.bin"
 
     # Load network to the plugin
     ie = IECore()
     net = ie.read_network(model=model_xml, weights=model_bin)
     config = {}
-    config['CPU_THREADS_NUM'] = str(num_cores)
+    config["CPU_THREADS_NUM"] = str(num_cores)
     exec_net = ie.load_network(network=net, device_name=device, config=config)
     del net
 
@@ -100,9 +105,11 @@ def bench_ov_fp32(num_cores, device):
     output_layer = next(iter(exec_net.outputs))
 
     # # #### Run OpenVINO Inference
-    print (f"Starting OpenVINO FP32 inference with {ov_model_dir} using {num_cores} cores...")
+    print(
+        f"Starting OpenVINO FP32 inference with {ov_model_dir} using {num_cores} cores..."
+    )
 
-    ov_stats =[]
+    ov_stats = []
 
     for i, row in tqdm(dataset_df.iterrows()):
         sub_id = row[sub_idx]
@@ -123,18 +130,18 @@ def bench_ov_fp32(num_cores, device):
             ov_dice_score = dice(ov_to_save, mask_image)
             p_end = timer()
 
-            ov_stat = [i, sub_id, ov_dice_score, i_end-i_start, p_end-p_start]
+            ov_stat = [i, sub_id, ov_dice_score, i_end - i_start, p_end - p_start]
             ov_stats.append(ov_stat)
         except:
-            print (f" Inference Failed: {sub_id} ")
+            print(f" Inference Failed: {sub_id} ")
 
-    print (f"Done OpenVINO inference with {ov_model_dir} ...")
+    print(f"Done OpenVINO inference with {ov_model_dir} ...")
     ov_stats_df = pd.DataFrame(ov_stats)
 
     date_time_str = datetime.now().strftime("%b-%d-%Y_%H-%M-%S")
     csv_name = f"ov_fp32_stats_nc_{num_cores}_{date_time_str}.csv"
-    ov_stats_df.to_csv(csv_name, sep=',', header=False, index=False)
-    print (f"Saved {csv_name} ...")
+    ov_stats_df.to_csv(csv_name, sep=",", header=False, index=False)
+    print(f"Saved {csv_name} ...")
 
     print_stats("FP32", ov_stats_df)
 
@@ -142,19 +149,18 @@ def bench_ov_fp32(num_cores, device):
 
 
 def bench_ov_int8(num_cores, device):
-
     # #### Load INT8 OpenVINO model
-    ov_model_dir = brainmage_root / 'openvino/int8_openvino_model'
+    ov_model_dir = brainmage_root / "openvino/int8_openvino_model"
     modelname = "resunet_ma_int8"
 
-    model_xml = f'{ov_model_dir}/{modelname}.xml'
-    model_bin = f'{ov_model_dir}/{modelname}.bin'
+    model_xml = f"{ov_model_dir}/{modelname}.xml"
+    model_bin = f"{ov_model_dir}/{modelname}.bin"
 
     # Load network to the plugin
     ie = IECore()
     net = ie.read_network(model=model_xml, weights=model_bin)
     config = {}
-    config['CPU_THREADS_NUM'] = str(num_cores)
+    config["CPU_THREADS_NUM"] = str(num_cores)
     exec_net = ie.load_network(network=net, device_name=device, config=config)
     del net
 
@@ -162,9 +168,9 @@ def bench_ov_int8(num_cores, device):
     output_layer = next(iter(exec_net.outputs))
 
     # #### Run OpenVINO Inference
-    print (f"Starting OpenVINO inference with {ov_model_dir} using {num_cores} cores...")
+    print(f"Starting OpenVINO inference with {ov_model_dir} using {num_cores} cores...")
 
-    ov_int8_stats =[]
+    ov_int8_stats = []
 
     for i, row in tqdm(dataset_df.iterrows()):
         sub_id = row[sub_idx]
@@ -185,18 +191,18 @@ def bench_ov_int8(num_cores, device):
             ov_dice_score = dice(ov_to_save, mask_image)
             p_end = timer()
 
-            ov_int8_stat = [i, sub_id, ov_dice_score, i_end-i_start, p_end-p_start]
+            ov_int8_stat = [i, sub_id, ov_dice_score, i_end - i_start, p_end - p_start]
             ov_int8_stats.append(ov_int8_stat)
         except:
-            print (f" Inference Failed: {sub_id} ")
+            print(f" Inference Failed: {sub_id} ")
 
-    print (f"Done OpenVINO inference with {ov_model_dir} ...")
+    print(f"Done OpenVINO inference with {ov_model_dir} ...")
     ov_int8_stats_df = pd.DataFrame(ov_int8_stats)
 
     date_time_str = datetime.now().strftime("%b-%d-%Y_%H-%M-%S")
     csv_name = f"ov_int8_stats_nc_{num_cores}_{date_time_str}.csv"
-    ov_int8_stats_df.to_csv(csv_name, sep=',', header=False, index=False)
-    print (f"Saved {csv_name} ...")
+    ov_int8_stats_df.to_csv(csv_name, sep=",", header=False, index=False)
+    print(f"Saved {csv_name} ...")
 
     print_stats("INT8", ov_int8_stats_df)
 
@@ -205,37 +211,61 @@ def bench_ov_int8(num_cores, device):
 
 ## Print Summary
 def print_stats(data_type, stats_df):
-    print (f"OpenVINO {data_type} Dice Mean +/- STD: {stats_df[:][2].mean():.5f} +/- {stats_df[:][2].std():.1f}")
-    print (f"OpenVINO {data_type}: Total Inf Time (sec) : {stats_df[:][3].sum():.2f} ")
-    print (f"OpenVINO {data_type}: Mean Inf Time (sec) +/- STD: {stats_df[:][3].mean():.2f} +/- {stats_df[:][3].std():.2f} ")
+    print(
+        f"OpenVINO {data_type} Dice Mean +/- STD: {stats_df[:][2].mean():.5f} +/- {stats_df[:][2].std():.1f}"
+    )
+    print(f"OpenVINO {data_type}: Total Inf Time (sec) : {stats_df[:][3].sum():.2f} ")
+    print(
+        f"OpenVINO {data_type}: Mean Inf Time (sec) +/- STD: {stats_df[:][3].mean():.2f} +/- {stats_df[:][3].std():.2f} "
+    )
     print("\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--dataset_csv', dest='dataset_csv', default='nfbs-dataset-test', help='Path to dataset used for testing')
-    parser.add_argument('--device', dest='device', default='cpu', help='Device to be used for inference')
-    parser.add_argument('--nc', dest='num_cores', default=1, help='Number of cores used for inference')
-    parser.add_argument('--data_type', dest='data_type', default='FP32', help='Inference datatype')
-    parser.add_argument('--sub_idx', dest='sub_idx', default=0, help='0th col is sub-id')
-    parser.add_argument('--input_path_idx', dest='input_path_idx', default=1, help='1st col is input path')
-    parser.add_argument('--mask_path_idx', dest='mask_path_idx', default=2, help='2nd col is mask_path')
+    parser.add_argument(
+        "--dataset_csv",
+        dest="dataset_csv",
+        default="nfbs-dataset-test",
+        help="Path to dataset used for testing",
+    )
+    parser.add_argument(
+        "--device", dest="device", default="cpu", help="Device to be used for inference"
+    )
+    parser.add_argument(
+        "--nc", dest="num_cores", default=1, help="Number of cores used for inference"
+    )
+    parser.add_argument(
+        "--data_type", dest="data_type", default="FP32", help="Inference datatype"
+    )
+    parser.add_argument(
+        "--sub_idx", dest="sub_idx", default=0, help="0th col is sub-id"
+    )
+    parser.add_argument(
+        "--input_path_idx",
+        dest="input_path_idx",
+        default=1,
+        help="1st col is input path",
+    )
+    parser.add_argument(
+        "--mask_path_idx", dest="mask_path_idx", default=2, help="2nd col is mask_path"
+    )
 
     args = parser.parse_args()
 
-    brainmage_root = Path('../')
+    brainmage_root = Path("../")
     dataset_csv = args.dataset_csv
     sub_idx = args.sub_idx
     input_path_idx = args.input_path_idx
     mask_path_idx = args.mask_path_idx
-    pt_output_path = 'pt-outfile' # PyTorch output file
-    ov_output_path = 'ov-outfile' # ONNX output file
+    pt_output_path = "pt-outfile"  # PyTorch output file
+    ov_output_path = "ov-outfile"  # ONNX output file
 
-    device=args.device
+    device = args.device
 
     # ### Load Dataset csv
-    dataset_df = pd.read_csv(dataset_csv, header = None)
+    dataset_df = pd.read_csv(dataset_csv, header=None)
     print(f"Number of rows: {dataset_df.shape[0]}")
     print(f"Input Image Sample: {dataset_df.iloc[0][input_path_idx]}")
     print(f"Mask Image Sample: {dataset_df.iloc[0][mask_path_idx]}")
@@ -243,12 +273,13 @@ if __name__ == '__main__':
     ##
     ## Run Benchmark
     ##
-    print (f"Starting inference with datatype: {args.data_type} Num Cores: {args.num_cores} ...")
+    print(
+        f"Starting inference with datatype: {args.data_type} Num Cores: {args.num_cores} ..."
+    )
 
-    if 'FP32' == args.data_type:
+    if "FP32" == args.data_type:
         ov_stats_df = bench_ov_fp32(args.num_cores, args.device)
-    elif 'INT8' == args.data_type:
+    elif "INT8" == args.data_type:
         ov_int8_stats_df = bench_ov_int8(args.num_cores, args.device)
-    elif 'PTFP32' == args.data_type:
+    elif "PTFP32" == args.data_type:
         pt_stats_df = bench_pytorch_fp32(args.num_cores)
-

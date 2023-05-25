@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    input_paths = args.input_paths.split(',')
+    input_paths = args.input_paths.split(",")
     output_path = args.output_path
     mask_path = args.mask_path
     DEVICE = args.device
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     if os.path.isdir(base_dir):
         weights = os.path.join(base_dir, "resunet_multi_4.pt")
     else:
-    # this control path is needed if someone installs brainmage into their virtual environment directly
+        # this control path is needed if someone installs brainmage into their virtual environment directly
         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         base_dir = os.path.join(os.path.dirname(base_dir), "BrainMaGe/weights")
         if os.path.isdir(base_dir):
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     if os.path.isfile(weights):
         print("Weight file used :", weights)
     else:
-        sys.exit('Weights file at \'' + weights + '\' was not found...')
+        sys.exit("Weights file at '" + weights + "' was not found...")
 
     # Running Inference
     test_single_multi_4.infer_single_multi_4(

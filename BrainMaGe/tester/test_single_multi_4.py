@@ -32,7 +32,9 @@ def postprocess_prediction(seg):
     return seg
 
 
-def infer_single_multi_4(input_paths, output_path, weights, mask_path=None, device="cpu"):
+def infer_single_multi_4(
+    input_paths, output_path, weights, mask_path=None, device="cpu"
+):
     """
     Inference using multi modality network
 
@@ -69,7 +71,7 @@ def infer_single_multi_4(input_paths, output_path, weights, mask_path=None, devi
         num_filters=16,
     )
 
-    checkpoint = torch.load(str(weights), map_location=torch.device('cpu'))
+    checkpoint = torch.load(str(weights), map_location=torch.device("cpu"))
     model.load_state_dict(checkpoint["model_state_dict"])
 
     if device != "cpu":
@@ -105,7 +107,7 @@ def infer_single_multi_4(input_paths, output_path, weights, mask_path=None, devi
     print("Done with running the model.")
 
     if mask_path is not None:
-        raise NotImplementedError('Sorry, masking is not implemented (yet).')
+        raise NotImplementedError("Sorry, masking is not implemented (yet).")
 
     print("Final output stored in : %s" % (output_path))
     print("Thank you for using BrainMaGe")

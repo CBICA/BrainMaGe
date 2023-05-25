@@ -8,14 +8,17 @@ Created on Sun May 24 06:08:37 2020
 
 
 import os
-import time
 import sys
-import torch
+import time
+
 import pandas as pd
-from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-from BrainMaGe.utils.csv_creator_adv import generate_csv
+import torch
 from BrainMaGe.trainer.lightning_networks import SkullStripper
+from BrainMaGe.utils.csv_creator_adv import generate_csv
+from BrainMaGe.utils.data import SkullStripDataset
+from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
+from torch.utils.data import DataLoader
 
 
 def train_network(cfg, device, weights):
@@ -99,8 +102,8 @@ def train_network(cfg, device, weights):
     print("Using device:", device)
     if device.type == "cuda":
         print("Memory Usage:")
-        print("Allocated:", round(torch.cuda.memory_allocated(0) / 1024 ** 3, 1), "GB")
-        print("Cached: ", round(torch.cuda.memory_cached(0) / 1024 ** 3, 1), "GB")
+        print("Allocated:", round(torch.cuda.memory_allocated(0) / 1024**3, 1), "GB")
+        print("Cached: ", round(torch.cuda.memory_cached(0) / 1024**3, 1), "GB")
     sys.stdout.flush()
 
     # We generate CSV for training if not provided
@@ -163,4 +166,23 @@ def train_network(cfg, device, weights):
         num_sanity_val_steps=5,
         resume_from_checkpoint=res_ckpt,
     )
-    trainer.fit(model)
+
+    dataset_train = SkullStripDataset(params["train_csv"], params, test=False)
+    train_dataloader = DataLoader(
+        dataset_train,
+        batch_size=int(params["batch_size"]),
+        shuffle=True,
+        num_workers=4,
+        pin_memory=True,
+    )
+
+    dataset_valid = SkullStripDataset(params["validation_csv"], params, test=False)
+    val_dataloader = DataLoader(
+        dataset_valid,
+        batch_size=int(params["batch_size"]),
+        shuffle=False,
+        num_workers=4,
+        pin_memory=True,
+    )
+
+    trainer.fit(model, train_dataloader, val_dataloader)

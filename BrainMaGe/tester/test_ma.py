@@ -38,7 +38,6 @@ def postprocess_prediction(seg):
 
 
 def infer_ma(cfg, device, save_brain, weights):
-
     cfg = os.path.abspath(cfg)
 
     if os.path.isfile(cfg):
@@ -152,7 +151,7 @@ def infer_ma(cfg, device, save_brain, weights):
         int(params["num_classes"]),
         int(params["base_filters"]),
     )
-    checkpoint = torch.load(str(params["weights"]),map_location=torch.device(device))
+    checkpoint = torch.load(str(params["weights"]), map_location=torch.device(device))
     model.load_state_dict(checkpoint["model_state_dict"])
 
     if device != "cpu":
