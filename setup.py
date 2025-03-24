@@ -25,7 +25,7 @@ setup(
         "torch>=1.5.1",
         "scikit-image==0.16.2",
         "nibabel",
-        "pytorch-lightning==0.8.1",
+        "pytorch-lightning==2.4.0",
         "bids"
     ],
     scripts=[
