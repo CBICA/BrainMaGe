@@ -6,6 +6,7 @@ Created on Wed Mar 25 19:18:35 2020
 @author: siddhesh
 """
 
+
 from __future__ import print_function, division
 import os
 import sys
@@ -90,7 +91,7 @@ def infer_ma(cfg, device, save_brain, weights):
     print("Resampling the images to isotropic resolution of 1mm x 1mm x 1mm")
     print("Also Converting the images to RAI and brats for smarter use.")
     for patient in tqdm.tqdm(test_df.values):
-        os.makedirs(os.path.join(temp_dir, patient[0]), exist_ok=True)
+        os.makedirs(os.path.join(temp_dir, str(patient[0])), exist_ok=True)
         patient_path = patient[1]
         image = nib.load(patient_path)
         old_spacing = image.header.get_zooms()
@@ -119,7 +120,7 @@ def infer_ma(cfg, device, save_brain, weights):
         temp_image = nib.Nifti1Image(new_image, new_affine)
         nib.save(
             temp_image,
-            os.path.join(temp_dir, patient[0], patient[0] + "_resamp111.nii.gz"),
+            os.path.join(temp_dir, str(patient[0]), str(patient[0]) + "_resamp111.nii.gz"),
         )
 
         temp_dict = {}
@@ -132,7 +133,7 @@ def infer_ma(cfg, device, save_brain, weights):
         temp_dict["new_shape"] = new_shape
 
         patient_path = os.path.join(
-            temp_dir, patient[0], patient[0] + "_resamp111.nii.gz"
+            temp_dir, str(patient[0]), str(patient[0]) + "_resamp111.nii.gz"
         )
         patient_nib = nib.load(patient_path)
         patient_data = patient_nib.get_fdata()
@@ -141,10 +142,10 @@ def infer_ma(cfg, device, save_brain, weights):
         temp_image = nib.Nifti1Image(patient_data, patient_affine)
         nib.save(
             temp_image,
-            os.path.join(temp_dir, patient[0], patient[0] + "_bratsized.nii.gz"),
+            os.path.join(temp_dir, str(patient[0]), str(patient[0]) + "_bratsized.nii.gz"),
         )
         temp_dict["pad_info"] = pad_info
-        patients_dict[patient[0]] = temp_dict
+        patients_dict[str(patient[0])] = temp_dict
 
     model = fetch_model(
         params["model"],
@@ -164,7 +165,7 @@ def infer_ma(cfg, device, save_brain, weights):
     print("Running the model on the subjects")
     for patient in tqdm.tqdm(test_df.values):
         patient_path = os.path.join(
-            temp_dir, patient[0], patient[0] + "_bratsized.nii.gz"
+            temp_dir, str(patient[0]), str(patient[0]) + "_bratsized.nii.gz"
         )
         patient_nib = nib.load(patient_path)
         image = patient_nib.get_fdata()
@@ -186,16 +187,16 @@ def infer_ma(cfg, device, save_brain, weights):
             nib.save(
                 to_save_nib,
                 os.path.join(
-                    temp_dir, patient[0], patient[0] + "_bratsized_mask.nii.gz"
+                    temp_dir, str(patient[0]), str(patient[0]) + "_bratsized_mask.nii.gz"
                 ),
             )
-            current_patient_dict = patients_dict[patient[0]]
+            current_patient_dict = patients_dict[str(patient[0])]
             new_image = padder_and_cropper(to_save, current_patient_dict["pad_info"])
             to_save_new_nib = nib.Nifti1Image(new_image, patient_nib.affine)
             nib.save(
                 to_save_new_nib,
                 os.path.join(
-                    temp_dir, patient[0], patient[0] + "_resample111_mask.nii.gz"
+                    temp_dir, str(patient[0]), str(patient[0]) + "_resample111_mask.nii.gz"
                 ),
             )
             to_save_final = resize(
@@ -215,12 +216,12 @@ def infer_ma(cfg, device, save_brain, weights):
                 to_save_final, current_patient_dict["old_affine"]
             )
 
-            os.makedirs(os.path.join(params["results_dir"], patient[0]), exist_ok=True)
+            os.makedirs(os.path.join(params["results_dir"], str(patient[0])), exist_ok=True)
 
             nib.save(
                 to_save_final_nib,
                 os.path.join(
-                    params["results_dir"], patient[0], patient[0] + "_mask.nii.gz"
+                    params["results_dir"], str(patient[0]), str(patient[0]) + "_mask.nii.gz"
                 ),
             )
 
@@ -232,7 +233,7 @@ def infer_ma(cfg, device, save_brain, weights):
             image_data = image.get_fdata()
             mask = nib.load(
                 os.path.join(
-                    params["results_dir"], patient[0], patient[0] + "_mask.nii.gz"
+                    params["results_dir"], str(patient[0]), str(patient[0]) + "_mask.nii.gz"
                 )
             )
             mask_data = mask.get_fdata().astype(np.int8)
@@ -241,7 +242,7 @@ def infer_ma(cfg, device, save_brain, weights):
             nib.save(
                 to_save_brain,
                 os.path.join(
-                    params["results_dir"], patient[0], patient[0] + "_brain.nii.gz"
+                    params["results_dir"], str(patient[0]), str(patient[0]) + "_brain.nii.gz"
                 ),
             )
 
